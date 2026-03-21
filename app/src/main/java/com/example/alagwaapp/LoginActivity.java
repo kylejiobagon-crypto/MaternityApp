@@ -201,6 +201,15 @@ public class LoginActivity extends AppCompatActivity {
                     
                     JSONObject json = new JSONObject(rawJson);
                     
+                    // CHECK FOR MAINTENANCE MODE
+                    if (json.optBoolean("maintenance", false)) {
+                        showMaintenanceDialog(json.optString("message", "System is under maintenance. Please try again later."));
+                        btnLogin.setEnabled(true);
+                        loadingOverlay.setVisibility(View.GONE);
+                        if (progressAnimator != null) progressAnimator.cancel();
+                        return;
+                    }
+                    
                     // CHECK FOR MULTIPLE ACCOUNTS
                     if (json.optString("status").equals("multiple_accounts")) {
                         showClinicSelectionDialog(username, password, json.getJSONArray("accounts"));
@@ -273,6 +282,16 @@ public class LoginActivity extends AppCompatActivity {
         });
         builder.setCancelable(false);
         builder.show();
+    }
+
+    private void showMaintenanceDialog(String message) {
+        new AlertDialog.Builder(this)
+            .setTitle("System Maintenance")
+            .setMessage(message)
+            .setPositiveButton("Okay", (dialog, which) -> dialog.dismiss())
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setCancelable(false)
+            .show();
     }
 
     private void showError(String msg) {
