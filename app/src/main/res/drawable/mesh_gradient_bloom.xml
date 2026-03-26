@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Deep Depth Indigo Shadow -->
+    <item android:top="16dp" android:left="16dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="45dp" />
+            <solid android:color="#266366F1" />
+        </shape>
+    </item>
+
+    <!-- Frosted Body -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="45dp" />
+            <gradient
+                android:type="linear"
+                android:angle="225"
+                android:startColor="#FFFFFF"
+                android:centerColor="#F1F5FE"
+                android:endColor="#EBF0FF" />
+        </shape>
+    </item>
+
+    <!-- Radial Indigo Bloom Glow (The "Mesh" effect) -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="45dp" />
+            <gradient
+                android:type="radial"
+                android:gradientRadius="450dp"
+                android:centerX="0.05"
+                android:centerY="0.05"
+                android:startColor="#263B82F6"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- Inner Gloss Rim (Level 1) -->
+    <item android:bottom="4dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="45dp" />
+            <stroke android:width="1.2dp" android:color="#99FFFFFF" />
+        </shape>
+    </item>
+
+    <!-- Silk Edge Stroke (Level 2) -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="45dp" />
+            <stroke android:width="1dp" android:color="#1A3B82F6" />
+        </shape>
+    </item>
+
+    <!-- Specular Gloss Reflection (The "3D Shine") -->
+    <item android:bottom="120dp" android:left="32dp" android:right="32dp" android:top="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="45dp" />
+            <gradient
+                android:type="linear"
+                android:angle="270"
+                android:startColor="#4DFFFFFF"
+                android:endColor="#00FFFFFF" />
+        </shape>
+    </item>
+</layer-list>

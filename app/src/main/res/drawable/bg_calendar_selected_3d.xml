@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Blue Outer Glow -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#4D0071E3" />
+        </shape>
+    </item>
+    <!-- 3D Beveled Surface -->
+    <item android:bottom="2dp" android:left="1dp" android:right="1dp" android:top="0dp">
+        <shape android:shape="oval">
+            <gradient
+                android:startColor="#0071E3"
+                android:centerColor="#0088FF"
+                android:endColor="#33A6FF"
+                android:angle="135"
+                android:type="linear" />
+            <stroke android:width="0.5dp" android:color="#FFFFFF" />
+        </shape>
+    </item>
+    <!-- Peak Highlight -->
+    <item android:bottom="16dp" android:left="6dp" android:right="6dp" android:top="2dp">
+        <shape android:shape="oval">
+            <gradient
+                android:startColor="#66FFFFFF"
+                android:endColor="#00FFFFFF"
+                android:angle="90" />
+        </shape>
+    </item>
+</layer-list>

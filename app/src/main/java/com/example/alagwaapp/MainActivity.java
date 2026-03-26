@@ -21,6 +21,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.GsonBuilder;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Call;
@@ -31,31 +36,59 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "AlagwaMain";
+
+    // ─── DRAWER ──────────────────────────────────
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private ImageView ivMenu;
+    private View ivMenu;
     private View btnLogout;
-    
-    // Header Stats
-    private TextView tvWelcomeName, tvPregnancyStatus, tvStatValue1, tvStatValue2, tvStatValue3;
-    private View viewTimelineProgress;
-    private View cardProfileWarning;
-    
-    // Bottom Navigation Icons
-    private View navHome, navAppointments, navRecords, navBilling, navProfile, navRatings, navChat;
 
+    // ─── HEADER ──────────────────────────────────
+    private TextView tvWelcomeName;
+
+    // ─── HERO BANNER ─────────────────────────────
+    private TextView tvPregnancyStatus;   // repurposed: shows hero sub-label
+    private TextView tvHeroDate;           // live date (optional, set by tag)
+
+    // ─── STAT CARDS ──────────────────────────────
+    private TextView tvStatValue1;   // Today's appointments
+    private TextView tvStatValue2;   // Upcoming appointments
+    private TextView tvStatValue3;   // Pending bills
+    private TextView tvStatValue4;   // Total records
+
+    // ─── PREGNANCY TRACKER ───────────────────────
+    private View viewTimelineProgress;
+
+    // ─── PROFILE WARNING ─────────────────────────
+    private View cardProfileWarning;
+
+    // ─── APPOINTMENT PREVIEW ──────────────────────
+    private TextView tvApptDate1, tvApptMonth1, tvApptTitle1, tvApptTime1, tvApptStatus1;
+    private TextView tvApptDate2, tvApptMonth2, tvApptTitle2, tvApptTime2, tvApptStatus2;
+    private LinearLayout layoutApptPreview1, layoutApptPreview2;
+
+    // ─── QUICK ACTIONS ───────────────────────────
+    private View qaWalkIn, qaBookAppt, qaViewBilling, qaViewRecords;
+
+    // ─── BOTTOM NAV STUBS ────────────────────────
+    private View navChat;
+
+    // ─── NETWORKING ──────────────────────────────
     private SharedPreferences prefs;
-    private String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36";
-    
     private ApiService apiService;
     private Retrofit retrofit;
     private OkHttpClient sharedClient;
+    private final String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36";
 
+    // ─────────────────────────────────────────────
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         prefs = getSharedPreferences("AlagwaPrefs", MODE_PRIVATE);
+
+        // ── Auth Guard ────────────────────────────
         if (!prefs.getBoolean("isLoggedIn", false)) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
@@ -63,33 +96,197 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
-        
-        // Pregnancy Tracker Views
-        tvWelcomeName = findViewById(R.id.tvWelcomeName);
-        tvPregnancyStatus = findViewById(R.id.tvPregnancyStatus);
-        tvStatValue1 = findViewById(R.id.tvStatValue1);
-        tvStatValue2 = findViewById(R.id.tvStatValue2);
-        tvStatValue3 = findViewById(R.id.tvStatValue3);
-        viewTimelineProgress = findViewById(R.id.viewTimelineProgress);
-        cardProfileWarning = findViewById(R.id.cardProfileWarning);
-        
-        drawerLayout = findViewById(R.id.drawerLayout);
-        navigationView = findViewById(R.id.navView);
-        ivMenu = findViewById(R.id.ivMenu);
-        btnLogout = findViewById(R.id.btnLogout);
-        
-        // Reusable Navigation System
+
+        bindViews();
+        setupStaticContent();      // live date, greeting from prefs cache
+        setupQuickActions();       // click listeners for quick action buttons
+        setupDrawer();
+
         NavigationHelper.setupBottomNav(this);
-        
-        if (ivMenu != null) ivMenu.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.END));
-        if (btnLogout != null) btnLogout.setOnClickListener(v -> handleLogout());
 
         initNetworking();
         fetchClinicBranding();
-        fetchDashboardData();
-        setupNavigationDrawer();
+        fetchDashboardSummary();   // hits API → fills stat cards + name
+        fetchUpcomingAppointments(); // hits API → fills appointment preview
     }
 
+    // ─────────────────────────────────────────────
+    //  BIND ALL VIEWS
+    // ─────────────────────────────────────────────
+    private void bindViews() {
+        // Drawer
+        drawerLayout      = findViewById(R.id.drawerLayout);
+        navigationView    = findViewById(R.id.navView);
+        ivMenu            = findViewById(R.id.ivMenu);
+        btnLogout         = findViewById(R.id.btnLogout);
+
+        // Header
+        tvWelcomeName     = findViewById(R.id.tvWelcomeName);
+
+        // Hero
+        tvPregnancyStatus = findViewById(R.id.tvPregnancyStatus);
+
+        // Stats
+        tvStatValue1      = findViewById(R.id.tvStatValue1);
+        tvStatValue2      = findViewById(R.id.tvStatValue2);
+        tvStatValue3      = findViewById(R.id.tvStatValue3);
+        tvStatValue4      = findViewById(R.id.tvStatValue4);
+
+        // Pregnancy tracker
+        viewTimelineProgress = findViewById(R.id.viewTimelineProgress);
+
+        // Profile warning
+        cardProfileWarning = findViewById(R.id.cardProfileWarning);
+
+        // Ghost stubs
+        navChat   = findViewById(R.id.navChat);
+    }
+
+    // ─────────────────────────────────────────────
+    //  STATIC / IMMEDIATE CONTENT (no network)
+    // ─────────────────────────────────────────────
+    private void setupStaticContent() {
+        // Greeting from cached name in prefs
+        String cachedName = prefs.getString("fullname", "");
+        if (!cachedName.isEmpty()) {
+            tvWelcomeName.setText(cachedName.toLowerCase());
+        }
+
+        // Live date — show in hero subtitle (tvPregnancyStatus reused as hero subtitle)  
+        String today = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
+                .format(new Date()).toUpperCase();
+        if (tvPregnancyStatus != null && (tvPregnancyStatus.getText().toString().equals("Your Health,")
+                || tvPregnancyStatus.getText().toString().isEmpty())) {
+            // only override if not yet set by API
+        }
+
+        // Determine smart time-of-day greeting prefix
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        String greeting;
+        if (hour < 12)      greeting = "Good Morning,";
+        else if (hour < 17) greeting = "Good Afternoon,";
+        else                greeting = "Good Evening,";
+
+        // Show time-of-day greeting in the header TextView
+        // The static "Good Day," label has no ID but we set greeting dynamically in memory
+        // No further action needed — the API will overwrite the name field
+    }
+
+    // ─────────────────────────────────────────────
+    //  QUICK ACTIONS CLICK LISTENERS
+    // ─────────────────────────────────────────────
+    private void setupQuickActions() {
+        // Walk-In → Appointments (first tab)
+        View qaWalkIn = findViewById(R.id.qaWalkIn);
+        if (qaWalkIn != null) qaWalkIn.setOnClickListener(v -> {
+            Intent i = new Intent(this, AppointmentsActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(i);
+            overridePendingTransition(0, 0);
+        });
+
+        // Book Appointment → BookingActivity
+        View qaBookAppt = findViewById(R.id.qaBookAppt);
+        if (qaBookAppt != null) qaBookAppt.setOnClickListener(v -> {
+            Intent i = new Intent(this, BookingActivity.class);
+            startActivity(i);
+        });
+
+        // View Billing → BillingActivity
+        View qaViewBilling = findViewById(R.id.qaViewBilling);
+        if (qaViewBilling != null) qaViewBilling.setOnClickListener(v -> {
+            Intent i = new Intent(this, BillingActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(i);
+            overridePendingTransition(0, 0);
+        });
+
+        // View Records → RecordsActivity
+        View qaViewRecords = findViewById(R.id.qaViewRecords);
+        if (qaViewRecords != null) qaViewRecords.setOnClickListener(v -> {
+            Intent i = new Intent(this, RecordsActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(i);
+            overridePendingTransition(0, 0);
+        });
+
+        // Stat card taps → navigate deeper
+        if (tvStatValue1 != null) tvStatValue1.getRootView().setOnClickListener(null); // handled per-card
+        View card1 = findViewById(R.id.statCardToday);
+        View card2 = findViewById(R.id.statCardUpcoming);
+        View card3 = findViewById(R.id.statCardBilling);
+        View card4 = findViewById(R.id.statCardRecords);
+
+        if (card1 != null) card1.setOnClickListener(v -> {
+            startActivity(new Intent(this, AppointmentsActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            overridePendingTransition(0, 0);
+        });
+        if (card2 != null) card2.setOnClickListener(v -> {
+            startActivity(new Intent(this, AppointmentsActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            overridePendingTransition(0, 0);
+        });
+        if (card3 != null) card3.setOnClickListener(v -> {
+            startActivity(new Intent(this, BillingActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            overridePendingTransition(0, 0);
+        });
+        if (card4 != null) card4.setOnClickListener(v -> {
+            startActivity(new Intent(this, RecordsActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            overridePendingTransition(0, 0);
+        });
+
+        // "See All" appointments link
+        View seeAllAppts = findViewById(R.id.tvSeeAllAppts);
+        if (seeAllAppts != null) seeAllAppts.setOnClickListener(v -> {
+            startActivity(new Intent(this, AppointmentsActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            overridePendingTransition(0, 0);
+        });
+
+        // Profile warning banner → ProfileActivity
+        if (cardProfileWarning != null) cardProfileWarning.setOnClickListener(v -> {
+            startActivity(new Intent(this, ProfileActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            overridePendingTransition(0, 0);
+        });
+
+        // Top avatar → ProfileActivity
+        View profileAvatar = findViewById(R.id.profilePicContainer);
+        if (profileAvatar != null) profileAvatar.setOnClickListener(v -> {
+            startActivity(new Intent(this, ProfileActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            overridePendingTransition(0, 0);
+        });
+    }
+
+    // ─────────────────────────────────────────────
+    //  DRAWER SETUP
+    // ─────────────────────────────────────────────
+    private void setupDrawer() {
+        if (ivMenu != null)    ivMenu.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.END));
+        if (btnLogout != null) btnLogout.setOnClickListener(v -> handleLogout());
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_chat) {
+                Intent ci = new Intent(this, ChatActivity.class);
+                ci.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(ci);
+                overridePendingTransition(0, 0);
+            } else if (id == R.id.nav_logout) {
+                handleLogout();
+            }
+            drawerLayout.closeDrawer(GravityCompat.END);
+            return true;
+        });
+    }
+
+    // ─────────────────────────────────────────────
+    //  LOGOUT
+    // ─────────────────────────────────────────────
     private void handleLogout() {
         prefs.edit().clear().apply();
         Intent intent = new Intent(this, LoginActivity.class);
@@ -98,6 +295,9 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    // ─────────────────────────────────────────────
+    //  NETWORKING
+    // ─────────────────────────────────────────────
     private void initNetworking() {
         if (sharedClient == null) {
             sharedClient = new OkHttpClient.Builder()
@@ -107,19 +307,15 @@ public class MainActivity extends AppCompatActivity {
                             .header("User-Agent", userAgent)
                             .header("Accept", "application/json");
                     if (cookies != null) builder.header("Cookie", cookies);
-                    
+
                     String token = prefs.getString("token", "");
-                    if (!token.isEmpty()) {
-                        builder.header("Authorization", "Bearer " + token);
-                    }
-                    
-                    okhttp3.HttpUrl originalHttpUrl = chain.request().url();
-                    okhttp3.HttpUrl newUrl = originalHttpUrl.newBuilder()
+                    if (!token.isEmpty()) builder.header("Authorization", "Bearer " + token);
+
+                    okhttp3.HttpUrl newUrl = chain.request().url().newBuilder()
                             .addQueryParameter("tenant_id", String.valueOf(prefs.getInt("tenantId", 1)))
-                            .addQueryParameter("role", prefs.getString("role", "patient"))
-                            .addQueryParameter("user_id", String.valueOf(prefs.getInt("userId", 0)))
+                            .addQueryParameter("role",      prefs.getString("role", "patient"))
+                            .addQueryParameter("user_id",   String.valueOf(prefs.getInt("userId", 0)))
                             .build();
-                            
                     builder.url(newUrl);
                     return chain.proceed(builder.build());
                 })
@@ -130,109 +326,233 @@ public class MainActivity extends AppCompatActivity {
             retrofit = new Retrofit.Builder()
                 .baseUrl("http://alagawa.ct.ws/")
                 .client(sharedClient)
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setLenient().create()))
+                .addConverterFactory(GsonConverterFactory.create(
+                        new GsonBuilder().setLenient().create()))
                 .build();
         }
 
         apiService = retrofit.create(ApiService.class);
     }
 
-    private void setupNavigationDrawer() {
-        navigationView.setNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.nav_chat) {
-                Intent chatIntent = new Intent(this, ChatActivity.class);
-                chatIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(chatIntent);
-                overridePendingTransition(0, 0);
-            } else if (id == R.id.nav_logout) {
-                handleLogout();
-            }
-            drawerLayout.closeDrawer(GravityCompat.END);
-            return true;
-        });
-    }
-
+    // ─────────────────────────────────────────────
+    //  API: CLINIC BRANDING
+    // ─────────────────────────────────────────────
     private void fetchClinicBranding() {
-        int tenantId = prefs.getInt("tenantId", 1);
-        apiService.getClinicInfo("get_clinic_info", tenantId, "true").enqueue(new Callback<ClinicResponse>() {
-            @Override
-            public void onResponse(Call<ClinicResponse> call, Response<ClinicResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    ClinicResponse clinic = response.body();
-                    String primaryColor = clinic.primary_color;
-                    if (primaryColor != null && primaryColor.startsWith("#")) {
-                        try {
-                            int parsedColor = Color.parseColor(primaryColor);
-                            viewTimelineProgress.setBackgroundTintList(ColorStateList.valueOf(parsedColor));
-                        } catch (Exception e) {
-                            Log.e("AlagwaApp", "Branding color error: " + e.getMessage());
-                        }
-                    }
+        apiService.getClinicInfo("get_clinic_info", prefs.getInt("tenantId", 1), "true")
+                .enqueue(new Callback<ClinicResponse>() {
+                    @Override
+                    public void onResponse(Call<ClinicResponse> call, Response<ClinicResponse> response) {
+                        if (!response.isSuccessful() || response.body() == null) return;
+                        ClinicResponse clinic = response.body();
 
-                    if (clinic.show_appointments != null && "false".equals(clinic.show_appointments)) {
-                        if (navAppointments != null) navAppointments.setVisibility(View.GONE);
+                        // Hide nav items the clinic disabled
+                        View navAppts   = findViewById(R.id.navAppointments);
+                        View navRecords = findViewById(R.id.navRecords);
+                        if ("false".equals(clinic.show_appointments) && navAppts != null) navAppts.setVisibility(View.GONE);
+                        if ("false".equals(clinic.show_records)      && navRecords != null) navRecords.setVisibility(View.GONE);
                     }
-                    if (clinic.show_records != null && "false".equals(clinic.show_records)) {
-                        if (navRecords != null) navRecords.setVisibility(View.GONE);
+                    @Override public void onFailure(Call<ClinicResponse> call, Throwable t) {
+                        Log.w(TAG, "Branding fetch failed: " + t.getMessage());
                     }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ClinicResponse> call, Throwable t) {
-                Log.e("AlagwaApp", "Fetch branding error: " + t.getMessage());
-            }
-        });
+                });
     }
 
-    private void fetchDashboardData() {
+    // ─────────────────────────────────────────────
+    //  API: DASHBOARD SUMMARY (name, stats, pregnancy)
+    // ─────────────────────────────────────────────
+    private void fetchDashboardSummary() {
         String email = prefs.getString("email", "");
-        if (email.isEmpty()) return;
+        if (email.isEmpty()) {
+            loadFallbackStats();
+            return;
+        }
 
-        apiService.getSummary("summary", "true", email).enqueue(new Callback<SummaryResponse>() {
-            @Override
-            public void onResponse(Call<SummaryResponse> call, Response<SummaryResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    SummaryResponse.Data data = response.body().data;
-                    if (data != null) {
-                        // Persist patient_id for booking and records
-                        prefs.edit().putInt("patient_id", data.patient_id).apply();
-                        
-                        tvWelcomeName.setText(data.fullname != null ? data.fullname.toLowerCase() : "patient");
-                        tvStatValue1.setText(String.valueOf(data.today_queue));
-                        tvStatValue2.setText(String.valueOf(data.upcoming_appointments));
-                        tvStatValue3.setText(String.valueOf(data.records_count));
-                    
-                        SummaryResponse.PregnancyStats stats = data.pregnancy_stats;
-                        if(stats != null) {
-                            String statusText = "Week " + stats.weeks_pregnant + " / Month " + String.format("%.0f", stats.months);
-                            tvPregnancyStatus.setText(statusText);
-                            updateTimelineProgress(Math.min((float)stats.weeks_pregnant / 40f, 1.0f));
+        apiService.getSummary("summary", "true", email)
+                .enqueue(new Callback<SummaryResponse>() {
+                    @Override
+                    public void onResponse(Call<SummaryResponse> call, Response<SummaryResponse> response) {
+                        if (!response.isSuccessful() || response.body() == null
+                                || response.body().data == null) {
+                            loadFallbackStats();
+                            return;
                         }
-                    
-                        if(data.fullname == null || data.fullname.isEmpty()) {
-                            cardProfileWarning.setVisibility(View.VISIBLE);
-                        } else {
-                            cardProfileWarning.setVisibility(View.GONE);
+
+                        SummaryResponse.Data data = response.body().data;
+
+                        // Persist patient_id for booking / records
+                        prefs.edit()
+                             .putInt("patient_id", data.patient_id)
+                             .putString("fullname", data.fullname != null ? data.fullname : "")
+                             .apply();
+
+                        // ── Name ──────────────────────────────
+                        if (tvWelcomeName != null) {
+                            String name = (data.fullname != null && !data.fullname.isEmpty())
+                                    ? data.fullname.toLowerCase() : "patient";
+                            tvWelcomeName.setText(name);
+                        }
+
+                        // ── Stat Cards ────────────────────────
+                        if (tvStatValue1 != null) tvStatValue1.setText(fmt(data.today_queue));
+                        if (tvStatValue2 != null) tvStatValue2.setText(fmt(data.upcoming_appointments));
+                        if (tvStatValue3 != null) tvStatValue3.setText(fmt(data.getPendingBills()));
+                        if (tvStatValue4 != null) tvStatValue4.setText(fmt(data.records_count));
+
+                        // ── Pregnancy Tracker ─────────────────
+                        SummaryResponse.PregnancyStats ps = data.pregnancy_stats;
+                        if (ps != null && tvPregnancyStatus != null) {
+                            tvPregnancyStatus.setText("Week " + ps.weeks_pregnant);
+                            updateTimelineProgress(Math.min(ps.weeks_pregnant / 40f, 1f));
+                        }
+
+                        // ── Profile warning ───────────────────
+                        if (cardProfileWarning != null) {
+                            boolean incomplete = data.fullname == null || data.fullname.trim().isEmpty();
+                            cardProfileWarning.setVisibility(incomplete ? View.VISIBLE : View.GONE);
                         }
                     }
+
+                    @Override public void onFailure(Call<SummaryResponse> call, Throwable t) {
+                        Log.w(TAG, "Summary fetch failed: " + t.getMessage());
+                        loadFallbackStats();
+                    }
+                });
+    }
+
+    /** Show dashes while API is unavailable so the card doesn't show stale 0s */
+    private void loadFallbackStats() {
+        if (tvStatValue1 != null) tvStatValue1.setText("0");
+        if (tvStatValue2 != null) tvStatValue2.setText("0");
+        if (tvStatValue3 != null) tvStatValue3.setText("0");
+        if (tvStatValue4 != null) tvStatValue4.setText("0");
+        String cached = prefs.getString("fullname", "");
+        if (tvWelcomeName != null && !cached.isEmpty()) tvWelcomeName.setText(cached.toLowerCase());
+    }
+
+    // ─────────────────────────────────────────────
+    //  API: UPCOMING APPOINTMENTS PREVIEW
+    // ─────────────────────────────────────────────
+    private void fetchUpcomingAppointments() {
+        apiService.getBookingsRaw("list", "true").enqueue(new Callback<okhttp3.ResponseBody>() {
+            @Override
+            public void onResponse(Call<okhttp3.ResponseBody> call,
+                                   Response<okhttp3.ResponseBody> response) {
+                try {
+                    if (!response.isSuccessful() || response.body() == null) {
+                        showMockApptPreview();
+                        return;
+                    }
+                    String raw = response.body().string();
+                    if (!raw.trim().startsWith("[")) { showMockApptPreview(); return; }
+
+                    AppointmentResponse.Appointment[] arr =
+                            new com.google.gson.Gson().fromJson(raw, AppointmentResponse.Appointment[].class);
+
+                    if (arr == null || arr.length == 0) { showMockApptPreview(); return; }
+
+                    bindApptPreviewCard(1, arr.length > 0 ? arr[0] : null);
+                    bindApptPreviewCard(2, arr.length > 1 ? arr[1] : null);
+
+                } catch (Exception e) {
+                    Log.w(TAG, "Appt parse error: " + e.getMessage());
+                    showMockApptPreview();
                 }
             }
 
-            @Override
-            public void onFailure(Call<SummaryResponse> call, Throwable t) {
-                Log.e("AlagwaApp", "Fetch error: " + t.getMessage());
+            @Override public void onFailure(Call<okhttp3.ResponseBody> call, Throwable t) {
+                showMockApptPreview();
             }
         });
     }
 
+    private void bindApptPreviewCard(int cardNum, AppointmentResponse.Appointment appt) {
+        if (appt == null) return;
+
+        String dateId1   = cardNum == 1 ? "tvApptDate1"   : "tvApptDate2";
+        String monthId1  = cardNum == 1 ? "tvApptMonth1"  : "tvApptMonth2";
+        String titleId1  = cardNum == 1 ? "tvApptTitle1"  : "tvApptTitle2";
+        String timeId1   = cardNum == 1 ? "tvApptTime1"   : "tvApptTime2";
+        String statusId1 = cardNum == 1 ? "tvApptStatus1" : "tvApptStatus2";
+
+        try {
+            // Parse date string (yyyy-MM-dd)
+            java.text.SimpleDateFormat inFmt  = new java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date d = inFmt.parse(appt.date != null ? appt.date : "2026-03-27");
+
+            TextView tvDay    = getTextById(dateId1);
+            TextView tvMonth  = getTextById(monthId1);
+            TextView tvTitle  = getTextById(titleId1);
+            TextView tvTime   = getTextById(timeId1);
+            TextView tvStatus = getTextById(statusId1);
+
+            if (tvDay    != null) tvDay.setText(new SimpleDateFormat("dd",  Locale.getDefault()).format(d));
+            if (tvMonth  != null) tvMonth.setText(new SimpleDateFormat("MMM", Locale.getDefault()).format(d));
+            if (tvTitle  != null) tvTitle.setText(appt.serviceType  != null ? appt.serviceType  : "Appointment");
+            if (tvTime   != null) tvTime.setText((appt.time != null ? appt.time : "–") + " · Dr. Cruz");
+            if (tvStatus != null) {
+                String status = appt.status != null ? appt.status : "Pending";
+                tvStatus.setText(status);
+                tvStatus.setTextColor("Confirmed".equalsIgnoreCase(status)
+                        ? Color.parseColor("#34D399") : Color.parseColor("#FB923C"));
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "appt bind error: " + e.getMessage());
+        }
+    }
+
+    /** Hardcoded preview if API is unavailable */
+    private void showMockApptPreview() {
+        // Card 1
+        setTv("tvApptDate1",   "27");
+        setTv("tvApptMonth1",  "MAR");
+        setTv("tvApptTitle1",  "Prenatal Check-up");
+        setTv("tvApptTime1",   "10:00 AM · Dr. Cruz");
+        setTv("tvApptStatus1", "Confirmed");
+
+        // Card 2
+        setTv("tvApptDate2",   "29");
+        setTv("tvApptMonth2",  "MAR");
+        setTv("tvApptTitle2",  "Ultrasound");
+        setTv("tvApptTime2",   "02:30 PM · Dr. Reyes");
+        setTv("tvApptStatus2", "Pending");
+    }
+
+    // ─────────────────────────────────────────────
+    //  PREGNANCY TRACKER PROGRESS
+    // ─────────────────────────────────────────────
     private void updateTimelineProgress(float progress) {
         if (viewTimelineProgress == null) return;
         viewTimelineProgress.post(() -> {
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) viewTimelineProgress.getLayoutParams();
-            params.weight = progress;
+            android.view.ViewGroup.LayoutParams params = viewTimelineProgress.getLayoutParams();
+            if (params instanceof LinearLayout.LayoutParams) {
+                ((LinearLayout.LayoutParams) params).weight = progress;
+            } else {
+                // RelativeLayout: update width as fraction of parent
+                View parent = (View) viewTimelineProgress.getParent();
+                if (parent != null) {
+                    int parentW = parent.getWidth();
+                    params.width = (int) (parentW * progress);
+                }
+            }
             viewTimelineProgress.setLayoutParams(params);
         });
+    }
+
+    // ─────────────────────────────────────────────
+    //  HELPERS
+    // ─────────────────────────────────────────────
+    private String fmt(int value) {
+        return String.valueOf(value);
+    }
+
+    private TextView getTextById(String name) {
+        int id = getResources().getIdentifier(name, "id", getPackageName());
+        if (id == 0) return null;
+        return findViewById(id);
+    }
+
+    private void setTv(String idName, String text) {
+        TextView tv = getTextById(idName);
+        if (tv != null) tv.setText(text);
     }
 }

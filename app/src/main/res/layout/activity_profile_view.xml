@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F7F8"> <!-- Billing-Style Clean Background -->
+
+    <!-- ✅ SECTION 1: MATERNITY STATUS BANNER (Floating with 3D Avatar) -->
+    <RelativeLayout
+        android:id="@+id/profileHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_profile_premium_header"
+        android:elevation="12dp"
+        android:padding="20dp">
+
+        <!-- Ultra-Premium 3D Avatar Placement -->
+        <RelativeLayout
+            android:id="@+id/avatarContainer"
+            android:layout_width="86dp"
+            android:layout_height="86dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bg_avatar_glow_aura"
+            android:elevation="6dp">
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/premium_maternity_3d_avatar"
+                app:shapeAppearanceOverlay="@style/RoundedProfileAvatar" />
+            <View
+                android:id="@+id/syncDot"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="4dp"
+                android:background="@drawable/bg_dot_emerald_glow" />
+        </RelativeLayout>
+
+        <!-- Dynamic Status Badge -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_glass_pill"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp">
+            <View
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:background="@drawable/bg_dot_3d"
+                android:layout_marginEnd="6dp"
+                app:tint="#00F49C" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Identity Fully Verified"
+                android:textColor="#FFFFFF"
+                android:textSize="9sp"
+                android:fontFamily="sans-serif-black"
+                android:letterSpacing="0.05" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvProfileNameHero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="Maternity Hub"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:fontFamily="sans-serif-black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvProfileNameHero"
+            android:text="Health Profile — Cloud Synced"
+            android:textColor="#CCFFFFFF"
+            android:textSize="10sp"
+            android:fontFamily="sans-serif-bold"
+            android:letterSpacing="0.05" />
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/profileHeader"
+        android:clipToPadding="false"
+        android:paddingBottom="100dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- ✅ SECTION 2: 3-CARD QUICK STATS HUB (Horizontal Scroll) -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:clipToPadding="false"
+                android:paddingHorizontal="16dp"
+                android:scrollbars="none">
+                
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Card 1: Estimated Delivery -->
+                    <RelativeLayout
+                        android:layout_width="120dp"
+                        android:layout_height="110dp"
+                        android:layout_marginEnd="12dp"
+                        android:background="@drawable/bg_stat_card_indigo_aura"
+                        android:elevation="6dp"
+                        android:padding="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="DUE DATE" android:textColor="#B3FFFFFF" android:textSize="8sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:gravity="center" android:text="NOV 08\n2026" android:textColor="#FFFFFF" android:textSize="17sp" android:fontFamily="sans-serif-black" />
+                    </RelativeLayout>
+
+                    <!-- Card 2: Current Progress -->
+                    <RelativeLayout
+                        android:layout_width="120dp"
+                        android:layout_height="110dp"
+                        android:layout_marginEnd="12dp"
+                        android:background="@drawable/bg_stat_card_pink_aura"
+                        android:elevation="6dp"
+                        android:padding="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="WEEKS" android:textColor="#B3FFFFFF" android:textSize="8sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:text="32" android:textColor="#FFFFFF" android:textSize="26sp" android:fontFamily="sans-serif-black" android:shadowColor="#80FFFFFF" android:shadowRadius="6" />
+                    </RelativeLayout>
+
+                    <!-- Card 3: Trimester Status -->
+                    <RelativeLayout
+                        android:layout_width="120dp"
+                        android:layout_height="110dp"
+                        android:background="@drawable/bg_stat_card_purple_aura"
+                        android:elevation="6dp"
+                        android:padding="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TRIMESTER" android:textColor="#B3FFFFFF" android:textSize="8sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:text="3rd" android:textColor="#FFFFFF" android:textSize="26sp" android:fontFamily="sans-serif-black" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp">
+
+                <!-- ✅ SECTION 3: IDENTITY HUB -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_glass_card_aura"
+                    android:elevation="3dp"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:layout_marginBottom="16dp">
+                    
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="IDENTITY SPECS" android:textColor="#0B0E11" android:textSize="16sp" android:fontFamily="sans-serif-black" android:layout_marginBottom="20dp" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="10dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="FIRST NAME" android:textColor="#6B7280" android:textSize="8sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
+                            <EditText android:id="@+id/etFirstName" android:layout_width="match_parent" android:layout_height="48dp" android:text="Patient" android:textColor="#0B0E11" android:textSize="14sp" android:background="@drawable/bg_edittext_glow_aura" android:paddingHorizontal="12dp" android:layout_marginTop="4dp" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LAST NAME" android:textColor="#6B7280" android:textSize="8sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
+                            <EditText android:id="@+id/etLastName" android:layout_width="match_parent" android:layout_height="48dp" android:text="User" android:textColor="#0B0E11" android:textSize="14sp" android:background="@drawable/bg_edittext_glow_aura" android:paddingHorizontal="12dp" android:layout_marginTop="4dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="EMAIL CHANNEL" android:textColor="#6B7280" android:textSize="8sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
+                    <EditText android:id="@+id/etEmail" android:layout_width="match_parent" android:layout_height="48dp" android:text="patient@alagwa.ws" android:textColor="#0B0E11" android:textSize="14sp" android:background="@drawable/bg_edittext_glow_aura" android:paddingHorizontal="12dp" android:layout_marginTop="4dp" />
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="PHONE" android:textColor="#6B7280" android:textSize="8sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
+                    <EditText android:id="@+id/etPhone" android:layout_width="match_parent" android:layout_height="48dp" android:text="+63 900 000 0000" android:textColor="#0B0E11" android:textSize="14sp" android:background="@drawable/bg_edittext_glow_aura" android:paddingHorizontal="12dp" android:layout_marginTop="4dp" />
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="BIRTHDATE &amp; AGE FACTOR" android:textColor="#6B7280" android:textSize="8sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:orientation="horizontal">
+                        <EditText android:id="@+id/etDob" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:text="01/01/1996" android:textColor="#0B0E11" android:textSize="14sp" android:background="@drawable/bg_edittext_glow_aura" android:paddingHorizontal="12dp" />
+                        <EditText android:id="@+id/etAge" android:layout_width="60dp" android:layout_height="48dp" android:layout_marginStart="8dp" android:text="28" android:textColor="#0B0E11" android:textSize="14sp" android:background="@drawable/bg_edittext_glow_aura" android:gravity="center" android:enabled="false" />
+                    </LinearLayout>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="PHILHEALTH &amp; DISCOUNT" android:textColor="#6B7280" android:textSize="8sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp">
+                        <EditText android:id="@+id/etPhilHealth" android:layout_width="match_parent" android:layout_height="48dp" android:text="12-345678910-1" android:textColor="#0B0E11" android:textSize="14sp" android:background="@drawable/bg_edittext_glow_aura" android:paddingHorizontal="12dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/bg_dot_emerald_glow"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp"
+                            android:text="VERIFIED 10%"
+                            android:textColor="#FFFFFF"
+                            android:textSize="7sp"
+                            android:fontFamily="sans-serif-black" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <!-- ✅ SECTION 4: CLINICAL HUB -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_glass_card_aura"
+                    android:elevation="3dp"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:layout_marginBottom="16dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="CLINICAL HUB" android:textColor="#0B0E11" android:textSize="15sp" android:fontFamily="sans-serif-black" android:layout_marginBottom="12dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LMP (LAST PERIOD)" android:textColor="#6B7280" android:textSize="8sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
+                    <EditText android:id="@+id/etLmp" android:layout_width="match_parent" android:layout_height="44dp" android:text="Feb 02, 2026" android:textColor="#0B0E11" android:textSize="13sp" android:background="@drawable/bg_edittext_glow_aura" android:paddingHorizontal="12dp" android:layout_marginTop="4dp" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="8dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="BLOOD TYPE" android:textColor="#6B7280" android:textSize="8sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
+                            <EditText android:id="@+id/etBlood" android:layout_width="match_parent" android:layout_height="44dp" android:text="O+" android:textColor="#0B0E11" android:textSize="13sp" android:background="@drawable/bg_edittext_glow_aura" android:paddingHorizontal="12dp" android:layout_marginTop="4dp" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="MONTHS PREG." android:textColor="#6B7280" android:textSize="8sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
+                            <EditText android:id="@+id/etMonths" android:layout_width="match_parent" android:layout_height="44dp" android:text="7.4" android:textColor="#0B0E11" android:textSize="13sp" android:background="@drawable/bg_edittext_glow_aura" android:paddingHorizontal="12dp" android:layout_marginTop="4dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- ✅ SECTION 5: ADDRESS HUB -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_glass_card_aura"
+                    android:elevation="3dp"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:layout_marginBottom="16dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="RESIDENTIAL HUB" android:textColor="#0B0E11" android:textSize="15sp" android:fontFamily="sans-serif-black" android:layout_marginBottom="12dp" />
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_search_glass" android:paddingHorizontal="12dp" android:paddingVertical="4dp">
+                         <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@android:drawable/ic_menu_mylocation" android:layout_centerVertical="true" app:tint="#6366F1" />
+                         <EditText android:id="@+id/etAddress" android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginStart="28dp" android:background="@null" android:text="123 Clinic St, Healthcare City" android:textColor="#0B0E11" android:textSize="13sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <!-- ✅ SECTION 6: EMERGENCY SHIELD -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_emergency_dashed_aura"
+                    android:elevation="4dp"
+                    android:padding="20dp"
+                    android:layout_marginBottom="24dp">
+                    <TextView android:id="@+id/lblEm" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="EMERGENCY SHIELD" android:textColor="#F43F5E" android:textSize="11sp" android:fontFamily="sans-serif-black" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_below="@id/lblEm" android:layout_marginTop="16dp" android:orientation="vertical">
+                        <EditText android:id="@+id/etEmergencyName" android:layout_width="match_parent" android:layout_height="44dp" android:text="Juan Dela Cruz" android:textColor="#0B0E11" android:textSize="14sp" android:background="@drawable/bg_edittext_glow_aura" android:paddingHorizontal="12dp" />
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:orientation="horizontal">
+                            <EditText android:id="@+id/etEmergencyRel" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp" android:layout_marginEnd="8dp" android:text="Husband" android:textColor="#0B0E11" android:textSize="13sp" android:background="@drawable/bg_edittext_glow_aura" android:paddingHorizontal="12dp" />
+                            <EditText android:id="@+id/etEmergencyPhone" android:layout_width="0dp" android:layout_weight="1.2" android:layout_height="44dp" android:text="+63 912 345 6789" android:textColor="#F43F5E" android:textSize="13sp" android:background="@drawable/bg_edittext_glow_aura" android:paddingHorizontal="12dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <!-- ✅ SYNERGY ACTIONS -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="16dp">
+                    <TextView android:id="@+id/btnReset" android:layout_width="0dp" android:layout_weight="1" android:layout_height="54dp" android:layout_marginEnd="6dp" android:background="@drawable/bg_btn_glass_aura" android:text="SECURE RESET" android:textColor="#0B0E11" android:gravity="center" android:fontFamily="sans-serif-black" android:textSize="12sp" />
+                    <TextView android:id="@+id/btnEdit" android:layout_width="0dp" android:layout_weight="1" android:layout_height="54dp" android:layout_marginStart="6dp" android:background="@drawable/bg_btn_blue_aura" android:text="MODIFY IDENTITY" android:textColor="#FFFFFF" android:gravity="center" android:fontFamily="sans-serif-black" android:textSize="12sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_margin="24dp"
+        android:background="@drawable/bg_stat_card_pink_aura"
+        android:visibility="gone"
+        android:elevation="15dp"
+        android:layout_above="@+id/defaultBottomNavStub">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="SAVE CHANGES"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif-black" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/defaultBottomNavStub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <include layout="@layout/layout_bottom_nav" />
+    </RelativeLayout>
+
+</RelativeLayout>

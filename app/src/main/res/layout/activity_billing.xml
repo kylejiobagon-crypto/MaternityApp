@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F7F8">
+
+    <!-- ══════════════════════════════════════════ -->
+    <!--  SECTION 1: FISCAL SESSION BANNER          -->
+    <!-- ══════════════════════════════════════════ -->
+    <RelativeLayout
+        android:id="@+id/billingHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_billing_premium_header"
+        android:elevation="8dp"
+        android:padding="20dp">
+
+        <!-- Floating Coin Icon -->
+        <RelativeLayout
+            android:id="@+id/iconContainer"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bg_glass_circle"
+            android:elevation="4dp">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerInParent="true"
+                android:src="@android:drawable/ic_menu_save"
+                app:tint="@color/white" />
+        </RelativeLayout>
+
+        <!-- Live Badge -->
+        <LinearLayout
+            android:id="@+id/liveBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_glass_pill"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp">
+            <View
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:background="@drawable/bg_circle_red"
+                android:layout_marginEnd="6dp" />
+            <TextView
+                android:id="@+id/tvSessionDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fiscal Session: Live"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/liveBadge"
+            android:layout_marginTop="16dp"
+            android:text="Billing Overview"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            android:fontFamily="sans-serif-black" />
+
+        <TextView
+            android:id="@+id/tvBillingUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvTitle"
+            android:layout_marginTop="4dp"
+            android:text="Patient Account"
+            android:textColor="#BBFFD8"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.05" />
+
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/billingHeader"
+        android:layout_above="@+id/defaultBottomNavStub"
+        android:clipToPadding="false"
+        android:paddingBottom="80dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- ══════════════════════════════════════════ -->
+            <!--  SECTION 2: 2x2 METRICS GRID               -->
+            <!-- ══════════════════════════════════════════ -->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:columnCount="2"
+                android:rowCount="2">
+
+                <!-- Card 1: Revenue -->
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/bg_card_revenue"
+                    android:elevation="3dp"
+                    android:padding="16dp">
+                    <ImageView android:id="@+id/ic1" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_save" app:tint="#00F49C" />
+                    <TextView android:id="@+id/tvTotalRevenue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic1" android:layout_marginTop="12dp" android:text="₱0.00" android:textColor="#0B0E11" android:textSize="20sp" android:fontFamily="sans-serif-black" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvTotalRevenue" android:text="Total Settlements" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
+                </RelativeLayout>
+
+                <!-- Card 2: Pending -->
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/bg_card_pending"
+                    android:elevation="3dp"
+                    android:padding="16dp">
+                    <ImageView android:id="@+id/ic2" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#FFBC00" />
+                    <TextView android:id="@+id/tvPendingAmount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic2" android:layout_marginTop="12dp" android:text="₱0.00" android:textColor="#0B0E11" android:textSize="20sp" android:fontFamily="sans-serif-black" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvPendingAmount" android:text="Awaiting Payment" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
+                </RelativeLayout>
+
+                <!-- Card 3: Verification -->
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_card_verif"
+                    android:elevation="3dp"
+                    android:padding="16dp">
+                    <ImageView android:id="@+id/ic3" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_search" app:tint="#4299F0" />
+                    <TextView android:id="@+id/tvVerificationAmount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic3" android:layout_marginTop="12dp" android:text="₱0.00" android:textColor="#0B0E11" android:textSize="20sp" android:fontFamily="sans-serif-black" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvVerificationAmount" android:text="Under Review" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
+                </RelativeLayout>
+
+                <!-- Card 4: Downpayments -->
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginStart="6dp"
+                    android:background="@drawable/bg_card_wallet"
+                    android:elevation="3dp"
+                    android:padding="16dp">
+                    <ImageView android:id="@+id/ic4" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_agenda" app:tint="#F472B6" />
+                    <TextView android:id="@+id/tvDownpaymentTotal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic4" android:layout_marginTop="12dp" android:text="₱0.00" android:textColor="#0B0E11" android:textSize="20sp" android:fontFamily="sans-serif-black" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvDownpaymentTotal" android:text="Downpayments Wallet" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
+                </RelativeLayout>
+
+            </GridLayout>
+
+            <!-- ══════════════════════════════════════════ -->
+            <!--  SECTION 3: SMART SEARCH & FILTER          -->
+            <!-- ══════════════════════════════════════════ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_search_glass"
+                android:elevation="2dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_search" app:tint="#A0AAB5" />
+                <EditText
+                    android:id="@+id/etBillingSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="@null"
+                    android:hint="Search invoices or services…"
+                    android:textColorHint="#A0AAB5"
+                    android:textColor="#0B0E11"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:paddingHorizontal="16dp"
+                android:clipToPadding="false"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:id="@+id/chipGroupFilters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView android:id="@+id/chipAll" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_chip_selected" android:paddingHorizontal="16dp" android:paddingVertical="8dp" android:text="All" android:textColor="@color/white" android:textSize="12sp" android:fontFamily="sans-serif-bold" android:layout_marginEnd="8dp" />
+                    <TextView android:id="@+id/chipPaid" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_chip_unselected" android:paddingHorizontal="16dp" android:paddingVertical="8dp" android:text="Paid" android:textColor="#6B7280" android:textSize="12sp" android:fontFamily="sans-serif-medium" android:layout_marginEnd="8dp" />
+                    <TextView android:id="@+id/chipPending" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_chip_unselected" android:paddingHorizontal="16dp" android:paddingVertical="8dp" android:text="Pending" android:textColor="#6B7280" android:textSize="12sp" android:fontFamily="sans-serif-medium" android:layout_marginEnd="8dp" />
+                    <TextView android:id="@+id/chipVerif" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_chip_unselected" android:paddingHorizontal="16dp" android:paddingVertical="8dp" android:text="For Verification" android:textColor="#6B7280" android:textSize="12sp" android:fontFamily="sans-serif-medium" android:layout_marginEnd="8dp" />
+                    <TextView android:id="@+id/chipDownpayment" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_chip_unselected" android:paddingHorizontal="16dp" android:paddingVertical="8dp" android:text="Downpayment" android:textColor="#6B7280" android:textSize="12sp" android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- ══════════════════════════════════════════ -->
+            <!--  SECTION 4: INVOICE CARD-LIST              -->
+            <!-- ══════════════════════════════════════════ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginHorizontal="16dp"
+                android:orientation="vertical">
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginBottom="12dp">
+                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Recent Transactions" android:textColor="#0B0E11" android:textSize="18sp" android:fontFamily="sans-serif-black" />
+                    <TextView android:id="@+id/tvInvoiceCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 records" android:textColor="#6B7280" android:textSize="12sp" android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/billingLoadingLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ProgressBar android:layout_width="36dp" android:layout_height="36dp" android:indeterminateTint="#00F49C" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="Syncing financial data…" android:textColor="#6B7280" android:textSize="12sp" android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/billingEmptyLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@android:drawable/ic_menu_save" app:tint="#D1D5DB" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="No transactions found" android:textColor="#6B7280" android:textSize="14sp" android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvInvoices"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <FrameLayout android:id="@+id/defaultBottomNavStub" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true">
+        <include layout="@layout/layout_bottom_nav" />
+    </FrameLayout>
+
+</RelativeLayout>

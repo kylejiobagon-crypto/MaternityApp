@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Crimson Bloom Shadow (Depth 3D) -->
+    <item android:top="10dp" android:left="10dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="50dp" />
+            <solid android:color="#20F43F5E" />
+        </shape>
+    </item>
+
+    <!-- Silk Petal Foundation -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="50dp" />
+            <gradient
+                android:type="linear"
+                android:angle="225"
+                android:startColor="#FFF1F2"
+                android:centerColor="#FFE4E6"
+                android:endColor="#FED7D9" />
+        </shape>
+    </item>
+
+    <!-- Inner Frost Bloom (Gloss) -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="50dp" />
+            <gradient
+                android:type="radial"
+                android:gradientRadius="180dp"
+                android:centerX="0.2"
+                android:centerY="0.2"
+                android:startColor="#1AFFFFFF"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- Glass Rim Detail (The Shine) -->
+    <item android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="50dp" />
+            <stroke android:width="1.2dp" android:color="#CCFFFFFF" />
+        </shape>
+    </item>
+
+    <!-- Rose Inner Core Depth Stroke -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="50dp" />
+            <stroke android:width="2dp" android:color="#0DF43F5E" />
+        </shape>
+    </item>
+</layer-list>

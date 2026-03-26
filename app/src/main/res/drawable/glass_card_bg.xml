@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Outer Glow -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="24dp" />
+            <solid android:color="#0DFFFFFF" />
+        </shape>
+    </item>
+    <!-- Card Body (Clear Glass) -->
+    <item android:bottom="0.5dp" android:left="0.5dp" android:right="0.5dp" android:top="0.5dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="23.5dp" />
+            <solid android:color="#1AFFFFFF" />
+            <stroke android:width="0.5dp" android:color="#33FFFFFF" />
+        </shape>
+    </item>
+</layer-list>

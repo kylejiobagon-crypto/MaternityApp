@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Deep Space Black Base (Granular Texture simulation via extreme gradient) -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners
+                android:bottomLeftRadius="60dp"
+                android:bottomRightRadius="60dp" />
+            <gradient
+                android:type="linear"
+                android:angle="270"
+                android:startColor="#050914"
+                android:centerColor="#02040B"
+                android:endColor="#000000" />
+        </shape>
+    </item>
+
+    <!-- Electric Cyan Glow (Right Side) -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners
+                android:bottomLeftRadius="60dp"
+                android:bottomRightRadius="60dp" />
+            <gradient
+                android:type="radial"
+                android:gradientRadius="400dp"
+                android:centerX="1.0"
+                android:centerY="0.5"
+                android:startColor="#407CE8FF"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- Deep Cobalt Blue Aura (Center/Bottom) -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners
+                android:bottomLeftRadius="60dp"
+                android:bottomRightRadius="60dp" />
+            <gradient
+                android:type="radial"
+                android:gradientRadius="500dp"
+                android:centerX="0.6"
+                android:centerY="0.8"
+                android:startColor="#330C4A9E"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- Silk Edge Highlight (The subtle bottom 3D curve) -->
+    <item android:bottom="4dp">
+        <shape android:shape="rectangle">
+            <corners
+                android:bottomLeftRadius="60dp"
+                android:bottomRightRadius="60dp" />
+            <stroke android:width="0.8dp" android:color="#1AFFFFFF" />
+        </shape>
+    </item>
+</layer-list>

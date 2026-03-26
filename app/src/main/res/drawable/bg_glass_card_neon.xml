@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Premium 3D Glow Shadow (INSET to avoid clipping) -->
+    <item android:top="2dp" android:bottom="0dp" android:left="2dp" android:right="2dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#1A0071E3" />
+            <corners android:radius="24dp" />
+        </shape>
+    </item>
+    
+    <!-- High-Definition VIBRANT Gradient Surface -->
+    <item android:bottom="4dp" android:left="1dp" android:right="1dp" android:top="0dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#EAF2F8"
+                android:centerColor="#F5F9FD"
+                android:endColor="#FFFFFF"
+                android:angle="135"
+                android:type="linear" />
+            <corners android:radius="24dp" />
+            <!-- iOS Pro Blue Thin Bevel -->
+            <stroke android:width="1.2dp" android:color="#260071E3" />
+        </shape>
+    </item>
+
+    <!-- Crystal Highlight -->
+    <item android:bottom="56dp" android:left="12dp" android:right="12dp" android:top="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#66FFFFFF"
+                android:endColor="#00FFFFFF"
+                android:angle="90" />
+            <corners android:radius="22dp" />
+        </shape>
+    </item>
+</layer-list>

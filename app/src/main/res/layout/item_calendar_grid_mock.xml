@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    
+    <!-- Week Headers -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="S" android:gravity="center" android:textColor="#801A5276" android:textSize="10sp" android:fontFamily="sans-serif-bold"/>
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="M" android:gravity="center" android:textColor="#801A5276" android:textSize="10sp" android:fontFamily="sans-serif-bold"/>
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="T" android:gravity="center" android:textColor="#801A5276" android:textSize="10sp" android:fontFamily="sans-serif-bold"/>
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="W" android:gravity="center" android:textColor="#801A5276" android:textSize="10sp" android:fontFamily="sans-serif-bold"/>
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="T" android:gravity="center" android:textColor="#801A5276" android:textSize="10sp" android:fontFamily="sans-serif-bold"/>
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="F" android:gravity="center" android:textColor="#801A5276" android:textSize="10sp" android:fontFamily="sans-serif-bold"/>
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="S" android:gravity="center" android:textColor="#801A5276" android:textSize="10sp" android:fontFamily="sans-serif-bold"/>
+    </LinearLayout>
+
+    <!-- Calendar Dates Grid Mock (Just for visual) -->
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="7"
+        android:rowCount="1">
+        
+        <TextView android:layout_columnWeight="1" android:text="26" android:gravity="center" android:padding="8dp" android:textColor="#401A5276" android:textSize="12sp" />
+        <TextView android:layout_columnWeight="1" android:text="27" android:gravity="center" android:padding="8dp" android:textColor="#401A5276" android:textSize="12sp" />
+        <TextView android:layout_columnWeight="1" android:text="1" android:gravity="center" android:padding="8dp" android:textColor="@color/medical_blue" android:textSize="12sp" />
+        <TextView android:layout_columnWeight="1" android:text="2" android:gravity="center" android:padding="8dp" android:textColor="@color/medical_blue" android:background="@drawable/bg_3d_time_button" android:backgroundTint="#205DADE2" android:textSize="12sp" android:fontFamily="sans-serif-black" />
+        <TextView android:layout_columnWeight="1" android:text="3" android:gravity="center" android:padding="8dp" android:textColor="@color/medical_blue" android:textSize="12sp" />
+        <TextView android:layout_columnWeight="1" android:text="4" android:gravity="center" android:padding="8dp" android:textColor="@color/medical_blue" android:textSize="12sp" />
+        <TextView android:layout_columnWeight="1" android:text="5" android:gravity="center" android:padding="8dp" android:textColor="@color/medical_blue" android:textSize="12sp" />
+    </GridLayout>
+</LinearLayout>

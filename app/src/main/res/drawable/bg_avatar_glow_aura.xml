@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Layer 1: BoxShadow (Cyan-to-Purple Glow) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#6600FFFF"
+                android:centerColor="#66AF52DE"
+                android:endColor="#0000FFFF"
+                android:type="radial"
+                android:gradientRadius="100dp" />
+            <corners android:radius="26dp" />
+        </shape>
+    </item>
+
+    <!-- Layer 2: GlassFrosted Square Container -->
+    <item android:padding="6dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#26FFFFFF" /> <!-- Surface alpha 0.15 -->
+            <corners android:radius="22dp" />
+            <stroke android:width="2dp" android:color="#4DFFFFFF" />
+        </shape>
+    </item>
+
+    <!-- Glowing Top-Edge Highlight -->
+    <item android:bottom="80dp" android:right="20dp" android:left="20dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#80FFFFFF"
+                android:endColor="#00FFFFFF"
+                android:angle="270" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+</layer-list>

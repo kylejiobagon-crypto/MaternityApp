@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- DAYS HEADER -->
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="7">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp" android:gravity="center" android:text="SU" android:textColor="@color/neo_slate" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp" android:gravity="center" android:text="MO" android:textColor="@color/neo_slate" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp" android:gravity="center" android:text="TU" android:textColor="@color/neo_slate" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp" android:gravity="center" android:text="WE" android:textColor="@color/neo_slate" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp" android:gravity="center" android:text="TH" android:textColor="@color/neo_slate" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp" android:gravity="center" android:text="FR" android:textColor="@color/neo_slate" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp" android:gravity="center" android:text="SA" android:textColor="@color/neo_slate" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+    </GridLayout>
+
+    <!-- CALENDAR DATES (DYNAMIC) -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/calendarRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"
+        android:overScrollMode="never" />
+</LinearLayout>

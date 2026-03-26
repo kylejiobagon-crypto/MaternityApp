@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Pro-Max Elevation (Soft System Shadow) -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#1A000000" />
+            <corners android:radius="28dp" />
+        </shape>
+    </item>
+    <!-- Button Base (White Glass / Card) -->
+    <item android:bottom="2dp" android:left="1dp" android:right="1dp" android:top="0dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF" />
+            <corners android:radius="28dp" />
+            <stroke android:width="0.5dp" android:color="#0D1D1D1F" />
+        </shape>
+    </item>
+</layer-list>

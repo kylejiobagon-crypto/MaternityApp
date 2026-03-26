@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Ambient Shadow (Soft Grey-Blue) -->
+    <item>
+        <shape android:shape="rectangle">
+            <padding android:bottom="8dp" android:left="4dp" android:right="4dp" android:top="4dp" />
+            <solid android:color="#0D000000" />
+            <corners android:radius="28dp" />
+        </shape>
+    </item>
+
+    <!-- Frosted Surface (Surface with alpha 0.1) -> Use alpha 0.95 and high transparency -->
+    <item android:bottom="4dp" android:right="2dp" android:top="2dp" android:left="2dp">
+        <shape android:shape="rectangle">
+            <!-- Frosted Finish Layer -->
+            <solid android:color="#F2FFFFFF" /> 
+            <corners android:radius="26dp" />
+            <!-- Gradient Stroke (White 20% to Transparent) -->
+            <stroke android:width="2dp" android:color="#33FFFFFF" />
+        </shape>
+    </item>
+
+    <!-- Glass Rim Highlight -->
+    <item android:bottom="8dp" android:right="6dp" android:top="4dp" android:left="4dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#66FFFFFF"
+                android:endColor="#00FFFFFF"
+                android:angle="135" />
+            <corners android:radius="22dp" />
+        </shape>
+    </item>
+</layer-list>

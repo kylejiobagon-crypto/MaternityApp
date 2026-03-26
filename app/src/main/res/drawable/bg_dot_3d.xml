@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Bottom Shadow -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#33000000" />
+        </shape>
+    </item>
+    <!-- Vibrant Gem Surface -->
+    <item android:bottom="0.5dp" android:left="0.2dp" android:right="0.2dp" android:top="0dp">
+        <shape android:shape="oval">
+            <!-- No color specified here, using tint in layout -->
+            <solid android:color="#FFFFFF" />
+        </shape>
+    </item>
+    <!-- Gem Flare -->
+    <item android:bottom="2dp" android:left="1dp" android:right="1dp" android:top="0.5dp">
+        <shape android:shape="oval">
+            <gradient
+                android:startColor="#B3FFFFFF"
+                android:endColor="#00FFFFFF"
+                android:angle="90" />
+        </shape>
+    </item>
+</layer-list>

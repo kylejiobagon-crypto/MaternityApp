@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Glow Layer -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#33007AFF" />
+            <corners android:radius="24dp" />
+        </shape>
+    </item>
+    
+    <!-- Main Body Layer -->
+    <item android:bottom="4dp" android:right="4dp" android:top="2dp" android:left="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#007AFF"
+                android:centerColor="#00D4FF"
+                android:endColor="#00B8FF"
+                android:angle="135" />
+            <corners android:radius="24dp" />
+            <stroke android:width="1.5dp" android:color="#80FFFFFF" />
+        </shape>
+    </item>
+
+    <!-- Glowing Rim -->
+    <item android:bottom="6dp" android:right="6dp" android:top="3dp" android:left="3dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#4DFFFFFF"
+                android:endColor="#00FFFFFF"
+                android:angle="135" />
+            <corners android:radius="21dp" />
+        </shape>
+    </item>
+</layer-list>

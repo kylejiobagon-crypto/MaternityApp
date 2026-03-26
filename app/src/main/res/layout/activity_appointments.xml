@@ -3,151 +3,374 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="#F6F7F8">
 
-    <!-- Premium Curved Header (No Back Button as requested) -->
+    <!-- ══════════════════════════════════════════ -->
+    <!--  SECTION 1: APPOINTMENTS HEADER            -->
+    <!-- ══════════════════════════════════════════ -->
     <RelativeLayout
-        android:id="@+id/header"
+        android:id="@+id/appointmentsHeader"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:background="@drawable/bg_mocha_header">
-        
-        <TextView
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_billing_premium_header"
+        android:elevation="8dp"
+        android:padding="20dp">
+
+        <!-- Close Button (Floating Icon Style) -->
+        <RelativeLayout
+            android:id="@+id/btnClose"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bg_glass_circle"
+            android:clickable="true"
+            android:focusable="true"
+            android:elevation="4dp">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerInParent="true"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                app:tint="@color/white" />
+        </RelativeLayout>
+
+        <!-- Live Badge -->
+        <LinearLayout
+            android:id="@+id/liveBadge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="32dp"
+            android:background="@drawable/bg_glass_pill"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp">
+            <View
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:background="@drawable/bg_circle_red"
+                android:layout_marginEnd="6dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Booking Manager: Live"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/liveBadge"
+            android:layout_marginTop="16dp"
             android:text="Appointments"
             android:textColor="@color/white"
-            android:textSize="22sp"
+            android:textSize="28sp"
             android:fontFamily="sans-serif-black" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="64dp"
-            android:text="Manage your clinic visits"
-            android:textColor="#E0FFFFFF"
+            android:layout_below="@id/tvTitle"
+            android:layout_marginTop="4dp"
+            android:text="Manage your upcoming schedules"
+            android:textColor="#BBFFD8"
             android:textSize="12sp"
             android:fontFamily="sans-serif-medium"
-            android:alpha="0.8" />
+            android:letterSpacing="0.05" />
+
     </RelativeLayout>
 
-    <!-- Content Sheet -->
+    <!-- ══════════════════════════════════════════ -->
+    <!--  MAIN SCROLLABLE CONTENT                   -->
+    <!-- ══════════════════════════════════════════ -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="-30dp"
-        android:layout_below="@id/header"
-        android:background="@drawable/bg_sheet_white"
-        android:padding="24dp">
+        android:layout_below="@id/appointmentsHeader"
+        android:layout_above="@+id/defaultBottomNavStub"
+        android:clipToPadding="false"
+        android:paddingBottom="100dp"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Upcoming Schedule"
-                android:textColor="@color/on_surface"
-                android:textSize="18sp"
-                android:fontFamily="sans-serif-black"
-                android:layout_marginBottom="16dp" />
-
-            <!-- Empty State -->
-            <RelativeLayout
-                android:id="@+id/layoutEmpty"
+            <!-- ══════════════════════════════════════════ -->
+            <!--  CALENDAR METRIC CARD                      -->
+            <!-- ══════════════════════════════════════════ -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@drawable/bg_white_3d_pill"
-                android:padding="32dp"
-                android:visibility="gone">
-                
-                <ImageView
-                    android:id="@+id/imgEmpty"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@android:drawable/ic_menu_today"
-                    app:tint="@color/on_surface_variant"
-                    android:alpha="0.3" />
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_receipt_card"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <TextView
+                <RelativeLayout
+                    android:id="@+id/calendarHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:id="@+id/tvMonthYear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="FEBRUARY 2026"
+                        android:textColor="#0B0E11"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.1" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true">
+                        <ImageView android:id="@+id/btnPrevMonth" android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_media_previous" app:tint="#6B7280" />
+                        <ImageView android:id="@+id/btnNextMonth" android:layout_width="24dp" android:layout_height="24dp" android:layout_marginStart="16dp" android:src="@android:drawable/ic_media_next" app:tint="#6B7280" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <!-- GRID -->
+                <include layout="@layout/layout_appointments_calendar_grid" />
+
+                <!-- LEGEND -->
+                <View 
+                    android:layout_width="match_parent" 
+                    android:layout_height="1dp" 
+                    android:layout_marginTop="16dp" 
+                    android:background="#EFF1F5" />
+                
+                <RelativeLayout 
+                    android:layout_width="match_parent" 
+                    android:layout_height="wrap_content" 
+                    android:layout_marginTop="12dp">
+                    
+                    <TextView 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" 
+                        android:layout_centerVertical="true"
+                        android:text="• DOTS INDICATE APPOINTMENTS" 
+                        android:textColor="#9CA3AF" 
+                        android:textSize="9sp" 
+                        android:fontFamily="sans-serif-bold" 
+                        android:letterSpacing="0.05" />
+                    
+                    <LinearLayout 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" 
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal">
+                        
+                        <View android:layout_width="6dp" android:layout_height="6dp" android:layout_gravity="center" android:background="#00F49C" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="CONFIRMED" android:textColor="#6B7280" android:textSize="9sp" android:fontFamily="sans-serif-bold" />
+                        <View android:layout_width="6dp" android:layout_height="6dp" android:layout_marginStart="12dp" android:layout_gravity="center" android:background="#FFBC00" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="PENDING" android:textColor="#6B7280" android:textSize="9sp" android:fontFamily="sans-serif-bold" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!-- ══════════════════════════════════════════ -->
+            <!--  EXPRESS BOOKING CHIPS                     -->
+            <!-- ══════════════════════════════════════════ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#00F49C" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:fontFamily="sans-serif-black" android:text="EXPRESS BOOKING SLOTS" android:textColor="#0B0E11" android:textSize="13sp" />
+            </LinearLayout>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:scrollbars="none"
+                android:clipToPadding="false"
+                android:paddingHorizontal="16dp">
+                
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/imgEmpty"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp"
-                    android:text="No upcoming appointments"
-                    android:textColor="@color/on_surface_variant"
-                    android:textSize="14sp"
-                    android:fontFamily="sans-serif-medium" />
-            </RelativeLayout>
+                    android:orientation="horizontal">
 
-            <!-- Appointments List -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvAppointments"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+                    <!-- CARD 1 -->
+                    <RelativeLayout
+                        android:id="@+id/cardExpress1"
+                        android:layout_width="120dp"
+                        android:layout_height="100dp"
+                        android:layout_marginEnd="12dp"
+                        android:background="@drawable/bg_card_verif"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:elevation="2dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 27" android:textColor="#0B0E11" android:fontFamily="sans-serif-black" android:textSize="18sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Tomorrow" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="58dp" android:gravity="center_vertical">
+                            <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#4299F0" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="09:00 AM" android:textColor="#4299F0" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+                        </LinearLayout>
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:layout_margin="12dp" android:src="@android:drawable/ic_media_play" app:tint="#4299F0" />
+                    </RelativeLayout>
 
-            <!-- New Booking Action -->
-            <RelativeLayout
-                android:id="@+id/cardNewBooking"
+                    <!-- CARD 2 -->
+                    <RelativeLayout
+                        android:id="@+id/cardExpress2"
+                        android:layout_width="120dp"
+                        android:layout_height="100dp"
+                        android:layout_marginEnd="12dp"
+                        android:background="@drawable/bg_card_pending"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:elevation="2dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 28" android:textColor="#0B0E11" android:fontFamily="sans-serif-black" android:textSize="18sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Wednesday" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="58dp" android:gravity="center_vertical">
+                            <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#FFBC00" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="10:30 AM" android:textColor="#FFBC00" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+                        </LinearLayout>
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:layout_margin="12dp" android:src="@android:drawable/ic_media_play" app:tint="#FFBC00" />
+                    </RelativeLayout>
+
+                    <!-- CARD 3 -->
+                    <RelativeLayout
+                        android:id="@+id/cardExpress3"
+                        android:layout_width="120dp"
+                        android:layout_height="100dp"
+                        android:layout_marginEnd="12dp"
+                        android:background="@drawable/bg_card_wallet"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:elevation="2dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 29" android:textColor="#0B0E11" android:fontFamily="sans-serif-black" android:textSize="18sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Thursday" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="58dp" android:gravity="center_vertical">
+                            <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#F472B6" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="02:00 PM" android:textColor="#F472B6" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+                        </LinearLayout>
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:layout_margin="12dp" android:src="@android:drawable/ic_media_play" app:tint="#F472B6" />
+                    </RelativeLayout>
+
+                    <!-- CARD 4 -->
+                    <RelativeLayout
+                        android:id="@+id/cardExpress4"
+                        android:layout_width="120dp"
+                        android:layout_height="100dp"
+                        android:background="@drawable/bg_card_revenue"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:elevation="2dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 30" android:textColor="#0B0E11" android:fontFamily="sans-serif-black" android:textSize="18sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Friday" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="58dp" android:gravity="center_vertical">
+                            <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#00F49C" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="04:15 PM" android:textColor="#00F49C" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+                        </LinearLayout>
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:layout_margin="12dp" android:src="@android:drawable/ic_media_play" app:tint="#00F49C" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- ══════════════════════════════════════════ -->
+            <!--  APPOINTMENTS LIST                         -->
+            <!-- ══════════════════════════════════════════ -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/bg_mocha_3d_pill"
-                android:padding="20dp"
-                android:stateListAnimator="@animator/press_3d">
-                
-                <LinearLayout
+                android:layout_marginHorizontal="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvSelectedDateAppointments"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-                    
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_input_add"
-                        app:tint="@color/white" />
-                        
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="Schedule a New Visit"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        android:fontFamily="sans-serif-black" />
-                </LinearLayout>
-            </RelativeLayout>
+                    android:layout_marginBottom="12dp"
+                    android:text="Appointments for Today"
+                    android:textColor="#0B0E11"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-black" />
 
-            <!-- Spacing for Bottom Nav -->
-            <View android:layout_width="match_parent" android:layout_height="100dp" />
+                <!-- EMPTY/LOADING STATES -->
+                <LinearLayout
+                    android:id="@+id/layoutLoading"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <ProgressBar android:layout_width="36dp" android:layout_height="36dp" android:indeterminateTint="#00F49C" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="Syncing appointments…" android:textColor="#6B7280" android:textSize="12sp" android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@android:drawable/ic_menu_today" app:tint="#D1D5DB" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="No appointments found" android:textColor="#6B7280" android:textSize="14sp" android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
+                <!-- THE RECYCLERVIEW -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewAppointments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false" />
+
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Reusable Bottom Nav -->
-    <include layout="@layout/layout_bottom_nav" />
-
-    <!-- Loading Overlay -->
-    <RelativeLayout
-        android:id="@+id/layoutLoading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#80FFFFFF"
-        android:visibility="gone">
-        <ProgressBar
+    <!-- FLOATING BOOK PILL -->
+    <LinearLayout
+        android:id="@+id/btnBookFloating"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="90dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/bg_pro_max_button"
+        android:backgroundTint="#FFFFFF"
+        android:elevation="6dp"
+        android:gravity="center"
+        android:paddingHorizontal="24dp">
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:indeterminateTint="@color/primary" />
-    </RelativeLayout>
+            android:fontFamily="sans-serif-black"
+            android:text="+  BOOK"
+            android:textColor="#059669"
+            android:textSize="14sp"
+            android:letterSpacing="0.2" />
+    </LinearLayout>
+
+    <!-- BOTTOM NAV -->
+    <FrameLayout 
+        android:id="@+id/defaultBottomNavStub" 
+        android:layout_width="match_parent" 
+        android:layout_height="wrap_content" 
+        android:layout_alignParentBottom="true">
+        <include layout="@layout/layout_bottom_nav" android:id="@+id/layout_bottom_nav" />
+    </FrameLayout>
 
 </RelativeLayout>

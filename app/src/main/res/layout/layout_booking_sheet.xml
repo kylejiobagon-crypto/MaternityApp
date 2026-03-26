@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_nav_dock"
+    android:backgroundTint="#F2131314"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="28dp">
+
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="32dp"
+            android:background="#33FFFFFF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:letterSpacing="0.2"
+            android:text="BOOK NEW APPOINTMENT"
+            android:textColor="@color/neo_cyan"
+            android:textSize="12sp"
+            android:layout_marginBottom="24dp"
+            android:shadowColor="@color/neo_cyan_glow"
+            android:shadowRadius="8" />
+
+        <!-- FORM SECTION -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            android:layout_marginBottom="24dp">
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_glass_card_neon"
+                android:orientation="vertical"
+                android:padding="20dp">
+                
+                <TextView 
+                    android:layout_width="wrap_content" 
+                    android:layout_height="wrap_content" 
+                    android:text="Patient Details" 
+                    android:textColor="@color/white" 
+                    android:textSize="14sp" 
+                    android:fontFamily="sans-serif-bold" 
+                    android:layout_marginBottom="12dp" />
+                
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@drawable/bg_outline_button"
+                    android:backgroundTint="#1AFFFFFF"
+                    android:paddingHorizontal="16dp"
+                    android:hint="Full Name"
+                    android:textColorHint="#4DFFFFFF"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView 
+                    android:layout_width="wrap_content" 
+                    android:layout_height="wrap_content" 
+                    android:text="Service Type" 
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/white" 
+                    android:textSize="11sp" 
+                    android:fontFamily="sans-serif-bold" 
+                    android:layout_marginBottom="12dp" />
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@drawable/bg_outline_button"
+                    android:backgroundTint="#1AFFFFFF" />
+                    
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- SUBMIT BUTTON -->
+        <FrameLayout
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="@drawable/bg_pill_gradient_cyan"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="FINALIZE BOOKING"
+                android:textColor="@color/neo_surface"
+                android:fontFamily="sans-serif-black"
+                android:textSize="14sp"
+                android:letterSpacing="0.1" />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Slot reservation fee: ₱300.00"
+            android:textColor="@color/neo_slate"
+            android:textSize="10sp"
+            android:fontFamily="sans-serif-italic" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

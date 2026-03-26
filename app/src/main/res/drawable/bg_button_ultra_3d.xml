@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Deep deep bottom shadow -->
+    <item android:top="6dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#025A8A" />
+            <corners android:radius="18dp" />
+        </shape>
+    </item>
+    <!-- Actual vibrant body gradient -->
+    <item android:bottom="6dp">
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#0284C7" android:centerColor="#059669" android:endColor="#0D9488" android:angle="135" />
+            <corners android:radius="18dp" />
+        </shape>
+    </item>
+    <!-- Top shiny glass edge / reflection -->
+    <item android:top="1dp" android:bottom="7dp" android:left="1dp" android:right="1dp">
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#66FFFFFF" android:endColor="#00FFFFFF" android:angle="270" />
+            <corners android:radius="17dp" />
+        </shape>
+    </item>
+</layer-list>

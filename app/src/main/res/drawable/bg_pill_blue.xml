@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Ultra-Wide Drop Shadow (Deep Depth) -->
+    <item android:top="10dp" android:left="10dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="50dp" />
+            <solid android:color="#1A0284C7" />
+        </shape>
+    </item>
+
+    <!-- Silk Body Base -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="50dp" />
+            <gradient
+                android:type="linear"
+                android:angle="225"
+                android:startColor="#F0F9FF"
+                android:centerColor="#E0F2FE"
+                android:endColor="#D1E9FF" />
+        </shape>
+    </item>
+
+    <!-- Frosted Texture (Subtle Noise Simulation) -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="50dp" />
+            <gradient
+                android:type="radial"
+                android:gradientRadius="180dp"
+                android:centerX="0.2"
+                android:centerY="0.2"
+                android:startColor="#26FFFFFF"
+                android:endColor="#00FFFFFF" />
+        </shape>
+    </item>
+
+    <!-- Diamond cut reflective top rim -->
+    <item android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="50dp" />
+            <stroke android:width="1dp" android:color="#99FFFFFF" />
+        </shape>
+    </item>
+
+    <!-- Soft Inner Glow -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="50dp" />
+            <stroke android:width="2dp" android:color="#0D0284C7" />
+        </shape>
+    </item>
+</layer-list>

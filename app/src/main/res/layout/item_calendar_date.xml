@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_margin="1dp">
+
+    <View
+        android:id="@+id/viewSelectedBackground"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_calendar_selected_3d"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvDateNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:fontFamily="sans-serif-black"
+        android:text="1"
+        android:textColor="@color/neo_primary"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:id="@+id/layoutDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/dotConfirmed"
+            android:layout_width="4dp"
+            android:layout_height="4dp"
+            android:background="@drawable/bg_dot_3d"
+            android:backgroundTint="@color/neo_cyan"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/dotPending"
+            android:layout_width="4dp"
+            android:layout_height="4dp"
+            android:layout_marginStart="2dp"
+            android:background="@drawable/bg_dot_3d"
+            android:backgroundTint="@color/neo_purple"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -11,31 +11,40 @@
         android:id="@+id/mainRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background">
+        android:background="@drawable/bg_premium_sky_gradient">
 
-        <!-- Pinterest Header -->
+        <!-- ══════════════════════════════════════════ -->
+        <!--  STICKY GLASSMOPRHIC HEADER                -->
+        <!-- ══════════════════════════════════════════ -->
         <RelativeLayout
             android:id="@+id/luminousHeader"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:paddingHorizontal="24dp"
-            android:layout_alignParentTop="true">
-            
-            <RelativeLayout android:layout_width="wrap_content" android:layout_height="match_parent">
-                <!-- Profile Ring -->
+            android:paddingHorizontal="20dp"
+            android:layout_alignParentTop="true"
+            android:background="#A6FFFFFF"
+            android:elevation="0dp">
+
+            <!-- Profile Block -->
+            <LinearLayout
+                android:id="@+id/headerProfileBlock"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <!-- Avatar Ring -->
+                <!-- Profile Block (Pill Style) -->
                 <RelativeLayout
                     android:id="@+id/profilePicContainer"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/bg_white_circle"
-                    android:stateListAnimator="@animator/press_3d"
-                    android:padding="4dp">
-                    
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_booking_card_3d_white"
+                    android:padding="2dp">
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:cardCornerRadius="24dp"
+                        app:cardCornerRadius="20dp"
                         app:cardElevation="0dp">
                         <ImageView
                             android:id="@+id/ivUserProfile"
@@ -46,260 +55,528 @@
                     </androidx.cardview.widget.CardView>
                 </RelativeLayout>
 
-                <!-- Texts -->
+                <!-- Greeting Texts -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/profilePicContainer"
-                    android:layout_marginStart="16dp"
-                    android:layout_centerVertical="true"
+                    android:layout_marginStart="14dp"
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Good Day,"
-                        android:textColor="@color/on_surface_variant"
-                        android:textSize="14sp"
-                        android:fontFamily="sans-serif" />
+                        android:text="Welcome back,"
+                        android:textColor="#6B7280"
+                        android:textSize="11sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:alpha="0.8" />
                     <TextView
                         android:id="@+id/tvWelcomeName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="patient"
-                        android:textColor="@color/on_surface"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
+                        android:text="Patient Name"
+                        android:textColor="#0B0E11"
+                        android:textSize="18sp"
                         android:fontFamily="sans-serif-black" />
                 </LinearLayout>
-            </RelativeLayout>
+            </LinearLayout>
 
-            <!-- Hamburger Menu Button -->
-            <ImageView
-                android:id="@+id/ivMenu"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+            <!-- Right Side: Action Icons -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:padding="10dp"
-                android:background="@drawable/bg_white_circle"
-                android:stateListAnimator="@animator/press_3d"
-                android:src="@android:drawable/ic_menu_sort_by_size"
-                app:tint="@color/on_surface" />
+                android:orientation="horizontal">
+
+                <!-- Hamburger (Floating 3D Button) -->
+                <RelativeLayout
+                    android:id="@+id/ivMenu"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@drawable/bg_booking_card_3d_white"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerInParent="true"
+                        android:src="@android:drawable/ic_menu_sort_by_size"
+                        android:alpha="0.8"
+                        app:tint="#0B0E11" />
+                </RelativeLayout>
+            </LinearLayout>
         </RelativeLayout>
 
-        <!-- Main Scroll -->
-        <ScrollView
+        <!-- ══════════════════════════════════════════ -->
+        <!--  MAIN SCROLLABLE CONTENT                   -->
+        <!-- ══════════════════════════════════════════ -->
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/luminousHeader"
             android:layout_above="@+id/bottomNavContainer"
             android:clipToPadding="false"
-            android:paddingBottom="40dp"
+            android:paddingBottom="32dp"
             android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="16dp">
+                android:orientation="vertical">
 
-                <!-- Stats Horizontal Scroll -->
+                <!-- ─────────────────────────────── -->
+                <!--  HERO SECTION                   -->
+                <!-- ─────────────────────────────── -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_booking_card_3d_selected"
+                    android:padding="24dp"
+                    android:elevation="4dp">
+
+                    <!-- Left: Status Info -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_button_white_3d"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="4dp"
+                            android:text="PERSONAL HEALTH HUB"
+                            android:textColor="#007AFF"
+                            android:textSize="9sp"
+                            android:fontFamily="sans-serif-black"
+                            android:letterSpacing="0.1" />
+
+                        <TextView
+                            android:id="@+id/tvPregnancyStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Elevate Your,"
+                            android:textColor="#FFFFFF"
+                            android:textSize="28sp"
+                            android:fontFamily="sans-serif-black"
+                            android:lineSpacingExtra="-2sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Patient Experience."
+                            android:textColor="#FFFFFF"
+                            android:textSize="28sp"
+                            android:fontFamily="sans-serif-black"
+                            android:lineSpacingExtra="-2sp" />
+                    </LinearLayout>
+
+                    <!-- Right Icon (Glass Circle) -->
+                    <RelativeLayout
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/bg_glass_circle"
+                        android:backgroundTint="#26FFFFFF">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerInParent="true"
+                            android:src="@android:drawable/ic_menu_myplaces"
+                            app:tint="#FFFFFF" />
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <!-- ─────────────────────────────── -->
+                <!--  SUMMARY STAT CARDS             -->
+                <!-- ─────────────────────────────── -->
                 <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="24dp"
-                    android:paddingBottom="16dp"
+                    android:layout_marginTop="24dp"
+                    android:paddingHorizontal="20dp"
+                    android:paddingBottom="4dp"
                     android:clipToPadding="false"
                     android:scrollbars="none">
-                    
-                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
-                        
-                        <!-- Mocha primary pill -->
-                        <RelativeLayout 
-                            android:layout_width="150dp" 
-                            android:layout_height="160dp" 
-                            android:background="@drawable/bg_mocha_3d_pill" 
-                            android:stateListAnimator="@animator/press_3d"
-                            android:padding="24dp">
-                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_today" app:tint="@color/white" />
-                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_alignParentBottom="true">
-                                <TextView android:id="@+id/tvStatValue1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="02" android:textColor="@color/white" android:textSize="38sp" android:fontFamily="sans-serif-black" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Appointments\nToday" android:textColor="#EAE1D8" android:textSize="12sp" android:layout_marginTop="4dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!-- CARD: Today (White 3D) -->
+                        <RelativeLayout
+                            android:id="@+id/statCardToday"
+                            android:layout_width="140dp"
+                            android:layout_height="130dp"
+                            android:layout_marginEnd="14dp"
+                            android:background="@drawable/bg_booking_card_3d_white"
+                            android:padding="18dp"
+                            android:elevation="2dp">
+                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_today" app:tint="#007AFF" />
+                            <TextView android:id="@+id/tvStatValue1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="0" android:textColor="#0B0E11" android:textSize="32sp" android:fontFamily="sans-serif-black" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:layout_alignParentBottom="true" android:text="Appointments Today\n(Confirmed bookings)" android:textColor="#6B7280" android:textSize="9sp" android:fontFamily="sans-serif-bold" android:lineSpacingExtra="1dp" />
+                        </RelativeLayout>
+
+                        <!-- CARD: Upcoming (White 3D) -->
+                        <RelativeLayout
+                            android:id="@+id/statCardUpcoming"
+                            android:layout_width="140dp"
+                            android:layout_height="130dp"
+                            android:layout_marginEnd="14dp"
+                            android:background="@drawable/bg_booking_card_3d_white"
+                            android:padding="18dp"
+                            android:elevation="2dp">
+                            <ImageView android:layout_width="26dp" android:layout_height="26dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#5856D6" />
+                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:orientation="vertical">
+                                <TextView android:id="@+id/tvStatValue2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="#0B0E11" android:textSize="32sp" android:fontFamily="sans-serif-black" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Upcoming Appointments\n(Scheduled visits)" android:textColor="#6B7280" android:textSize="9sp" android:fontFamily="sans-serif-bold" android:lineSpacingExtra="1dp" />
                             </LinearLayout>
                         </RelativeLayout>
 
-                        <View android:layout_width="16dp" android:layout_height="match_parent" />
-
-                        <!-- Beige secondary pill -->
-                        <RelativeLayout 
-                            android:layout_width="150dp" 
-                            android:layout_height="160dp" 
-                            android:background="@drawable/bg_white_3d_pill" 
-                            android:stateListAnimator="@animator/press_3d"
-                            android:padding="24dp">
-                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="@color/primary" />
-                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_alignParentBottom="true">
-                                <TextView android:id="@+id/tvStatValue2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="05" android:textColor="@color/on_surface" android:textSize="38sp" android:fontFamily="sans-serif-black" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Upcoming" android:textColor="@color/on_surface_variant" android:textSize="12sp" android:layout_marginTop="4dp" />
+                        <!-- CARD: Bills (White 3D) -->
+                        <RelativeLayout
+                            android:id="@+id/statCardBilling"
+                            android:layout_width="140dp"
+                            android:layout_height="130dp"
+                            android:layout_marginEnd="14dp"
+                            android:background="@drawable/bg_booking_card_3d_white"
+                            android:padding="18dp"
+                            android:elevation="2dp">
+                            <ImageView android:layout_width="26dp" android:layout_height="26dp" android:src="@android:drawable/ic_menu_save" app:tint="#FF2D55" />
+                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:orientation="vertical">
+                                <TextView android:id="@+id/tvStatValue3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="#0B0E11" android:textSize="32sp" android:fontFamily="sans-serif-black" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Pending Bills\n(Unpaid invoices)" android:textColor="#6B7280" android:textSize="9.5sp" android:fontFamily="sans-serif-bold" android:lineSpacingExtra="1dp" />
                             </LinearLayout>
                         </RelativeLayout>
 
-                        <View android:layout_width="16dp" android:layout_height="match_parent" />
-
-                        <!-- Beige secondary pill 2 -->
-                        <RelativeLayout 
-                            android:layout_width="150dp" 
-                            android:layout_height="160dp" 
-                            android:background="@drawable/bg_white_3d_pill" 
-                            android:stateListAnimator="@animator/press_3d"
-                            android:padding="24dp">
-                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_save" app:tint="@color/error" />
-                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_alignParentBottom="true">
-                                <TextView android:id="@+id/tvStatValue3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="01" android:textColor="@color/on_surface" android:textSize="38sp" android:fontFamily="sans-serif-black" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pending Bills" android:textColor="@color/on_surface_variant" android:textSize="12sp" android:layout_marginTop="4dp" />
+                        <!-- CARD: Records (3D White) -->
+                        <RelativeLayout
+                            android:id="@+id/statCardRecords"
+                            android:layout_width="140dp"
+                            android:layout_height="130dp"
+                            android:background="@drawable/bg_booking_card_3d_white"
+                            android:padding="18dp"
+                            android:elevation="2dp">
+                            <ImageView android:layout_width="26dp" android:layout_height="26dp" android:src="@android:drawable/ic_menu_myplaces" app:tint="#32D74B" />
+                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:orientation="vertical">
+                                <TextView android:id="@+id/tvStatValue4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="#0B0E11" android:textSize="32sp" android:fontFamily="sans-serif-black" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Digital Records\n(Total records)" android:textColor="#6B7280" android:textSize="9.5sp" android:fontFamily="sans-serif-bold" android:lineSpacingExtra="1dp" />
                             </LinearLayout>
+                            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/ic_media_play" app:tint="#D1D5DB" android:layout_alignParentEnd="true" android:layout_alignParentBottom="true" />
                         </RelativeLayout>
+
                     </LinearLayout>
                 </HorizontalScrollView>
 
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="24dp">
-                    
-                    <!-- Journey Section -->
-                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="32dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pregnancy Journey" android:textColor="@color/on_surface" android:textSize="20sp" android:textStyle="bold" />
-                        <TextView android:id="@+id/tvPregnancyStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="Trimester 2" android:textColor="@color/primary" android:textStyle="bold" android:textSize="14sp" />
-                    </RelativeLayout>
-                    
-                    <androidx.cardview.widget.CardView 
-                        android:layout_width="match_parent" 
-                        android:layout_height="wrap_content" 
-                        android:layout_marginTop="16dp" 
-                        app:cardBackgroundColor="@color/surface"
-                        app:cardCornerRadius="24dp"
-                        app:cardElevation="0dp">
-                        <RelativeLayout 
-                            android:layout_width="match_parent" 
-                            android:layout_height="wrap_content" 
-                            android:background="@drawable/bg_white_3d_pill"
-                            android:padding="24dp">
-                            <!-- Track -->
-                            <View android:layout_width="match_parent" android:layout_height="12dp" android:background="@drawable/timeline_progress_mocha" />
-                            <!-- Fill -->
-                            <View android:id="@+id/viewTimelineProgress" android:layout_width="160dp" android:layout_height="12dp" android:background="@drawable/bg_mocha_3d_pill" />
-                            
-                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="32dp">
-                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
-                                    <View android:layout_width="12dp" android:layout_height="12dp" android:background="@drawable/bg_mocha_circle" />
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Wk 12" android:textColor="@color/on_surface" android:textSize="12sp" android:textStyle="bold" />
-                                </LinearLayout>
-                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
-                                    <View android:layout_width="12dp" android:layout_height="12dp" android:background="@drawable/bg_mocha_circle" />
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Wk 20" android:textColor="@color/on_surface" android:textSize="12sp" android:textStyle="bold" />
-                                </LinearLayout>
-                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:alpha="0.4">
-                                    <View android:layout_width="12dp" android:layout_height="12dp" android:background="@drawable/bg_white_circle" />
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Wk 28" android:textColor="@color/on_surface_variant" android:textSize="12sp" />
-                                </LinearLayout>
-                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:alpha="0.4">
-                                    <View android:layout_width="12dp" android:layout_height="12dp" android:background="@drawable/bg_white_circle" />
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Wk 36" android:textColor="@color/on_surface_variant" android:textSize="12sp" />
-                                </LinearLayout>
-                            </LinearLayout>
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
+                <!-- ─────────────────────────────── -->
+                <!--  SECTION: QUICK ACTIONS         -->
+                <!-- ─────────────────────────────── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="28dp"
+                    android:paddingHorizontal="20dp">
 
-                    <!-- Bento Grid -->
-                    <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:columnCount="2" android:alignmentMode="alignMargins" android:columnOrderPreserved="false" android:useDefaultMargins="true">
-                        
-                        <RelativeLayout android:layout_width="0dp" android:layout_height="120dp" android:layout_columnWeight="1" android:background="@drawable/bg_white_3d_pill" android:padding="16dp" android:stateListAnimator="@animator/press_3d" android:layout_marginEnd="8dp">
-                                <ImageView android:layout_width="32dp" android:layout_height="32dp" android:padding="6dp" android:background="@drawable/bg_white_circle" android:src="@android:drawable/ic_dialog_info" app:tint="@color/primary" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_marginBottom="24dp" android:text="CURRENT STATUS" android:textColor="@color/on_surface_variant" android:textSize="10sp" android:fontFamily="sans-serif-medium" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:text="Healthy" android:textColor="@color/on_surface" android:textSize="16sp" android:textStyle="bold" />
+                    <!-- Section Title -->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/ic_menu_send" app:tint="@color/neo_cyan" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="10dp" android:text="Quick Actions" android:textColor="@color/neo_primary" android:textSize="17sp" android:fontFamily="sans-serif-black" />
+                    </LinearLayout>
+
+                    <!-- Row 1 -->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+
+                        <!-- Walk-In (3D Vibrant Blue) -->
+                        <RelativeLayout
+                            android:id="@+id/qaWalkIn"
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/bg_booking_card_3d_selected"
+                            android:padding="16dp"
+                            android:elevation="4dp">
+                            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_directions" app:tint="#FFFFFF" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:text="Walk-In\nQueue" android:textColor="#FFFFFF" android:textSize="13sp" android:fontFamily="sans-serif-black" />
                         </RelativeLayout>
 
-                        <RelativeLayout android:layout_width="0dp" android:layout_height="120dp" android:layout_columnWeight="1" android:background="@drawable/bg_white_3d_pill" android:padding="16dp" android:stateListAnimator="@animator/press_3d" android:layout_marginStart="8dp">
-                                <ImageView android:layout_width="32dp" android:layout_height="32dp" android:padding="6dp" android:background="@drawable/bg_white_circle" android:src="@android:drawable/ic_menu_recent_history" app:tint="@color/primary" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_marginBottom="24dp" android:text="DAYS TO GO" android:textColor="@color/on_surface_variant" android:textSize="10sp" android:fontFamily="sans-serif-medium" />
-                                <TextView android:id="@+id/tvBabySize" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:text="124 Days" android:textColor="@color/on_surface" android:textSize="16sp" android:textStyle="bold" />
+                        <!-- Book Appointment (3D Vibrant Purple) -->
+                        <RelativeLayout
+                            android:id="@+id/qaBookAppt"
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_3d_vibrant_purple"
+                            android:padding="16dp"
+                            android:elevation="4dp">
+                            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_today" app:tint="#FFFFFF" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:text="Schedule\nVisit" android:textColor="#FFFFFF" android:textSize="13sp" android:fontFamily="sans-serif-black" />
                         </RelativeLayout>
 
-                        <RelativeLayout android:layout_width="0dp" android:layout_height="120dp" android:layout_columnWeight="1" android:layout_marginTop="16dp" android:background="@drawable/bg_white_3d_pill" android:padding="16dp" android:stateListAnimator="@animator/press_3d" android:layout_marginEnd="8dp">
-                                <ImageView android:layout_width="32dp" android:layout_height="32dp" android:padding="6dp" android:background="@drawable/bg_white_circle" android:src="@android:drawable/ic_menu_sort_by_size" app:tint="@color/primary" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_marginBottom="24dp" android:text="MOVEMENT" android:textColor="@color/on_surface_variant" android:textSize="10sp" android:fontFamily="sans-serif-medium" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:text="Active" android:textColor="@color/on_surface" android:textSize="16sp" android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Row 2 -->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="10dp">
+
+                        <!-- View Billing (3D Vibrant Red) -->
+                        <RelativeLayout
+                            android:id="@+id/qaViewBilling"
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/bg_3d_vibrant_red"
+                            android:padding="16dp"
+                            android:elevation="4dp">
+                            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_save" app:tint="#FFFFFF" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:text="Financial\nHistory" android:textColor="#FFFFFF" android:textSize="13sp" android:fontFamily="sans-serif-black" />
                         </RelativeLayout>
 
-                        <RelativeLayout android:layout_width="0dp" android:layout_height="120dp" android:layout_columnWeight="1" android:layout_marginTop="16dp" android:background="@drawable/bg_white_3d_pill" android:padding="16dp" android:stateListAnimator="@animator/press_3d" android:layout_marginStart="8dp">
-                                <ImageView android:layout_width="32dp" android:layout_height="32dp" android:padding="6dp" android:background="@drawable/bg_white_circle" android:src="@android:drawable/ic_menu_help" app:tint="@color/primary" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_marginBottom="24dp" android:text="NEXT MILESTONE" android:textColor="@color/on_surface_variant" android:textSize="10sp" android:fontFamily="sans-serif-medium" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:text="Anomaly Scan" android:textColor="@color/on_surface" android:textSize="16sp" android:textStyle="bold" />
+                        <!-- View Records (3D Vibrant Green) -->
+                        <RelativeLayout
+                            android:id="@+id/qaViewRecords"
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_3d_vibrant_green"
+                            android:padding="16dp"
+                            android:elevation="4dp">
+                            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_myplaces" app:tint="#FFFFFF" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:text="Medical\nRecords" android:textColor="#FFFFFF" android:textSize="13sp" android:fontFamily="sans-serif-black" />
                         </RelativeLayout>
-                        
-                    </GridLayout>
 
-                    <!-- Daily Advice Layer -->
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="32dp" android:text="Daily Advice" android:textColor="@color/on_surface" android:textSize="20sp" android:textStyle="bold" />
-                    
-                    <!-- Aesthetic Card -->
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- ─────────────────────────────── -->
+                <!--  APPOINTMENT PREVIEW            -->
+                <!-- ─────────────────────────────── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="28dp"
+                    android:paddingHorizontal="20dp">
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="@color/neo_cyan" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="10dp" android:text="Upcoming Appointments" android:textColor="@color/neo_primary" android:textSize="17sp" android:fontFamily="sans-serif-black" />
+                        <TextView android:id="@+id/tvSeeAllAppts" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="See All ›" android:textColor="@color/neo_cyan" android:textSize="12sp" android:fontFamily="sans-serif-bold" android:clickable="true" android:focusable="true" />
+                    </LinearLayout>
+
+                    <!-- Appt Preview Card 1 (3D White Glass) -->
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:background="@drawable/bg_white_3d_pill"
-                        android:stateListAnimator="@animator/press_3d"
-                        android:padding="20dp">
-                        
+                        android:layout_marginBottom="14dp"
+                        android:background="@drawable/bg_booking_card_3d_white"
+                        android:padding="18dp"
+                        android:elevation="3dp">
+
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-                            <RelativeLayout android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/bg_white_circle">
-                                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:layout_centerInParent="true" android:src="@android:drawable/ic_dialog_info" app:tint="@color/primary" />
+                            <!-- Date Block (High Premium) -->
+                            <RelativeLayout android:layout_width="52dp" android:layout_height="60dp" android:background="@drawable/bg_button_white_3d">
+                                <TextView android:id="@+id/tvApptDate1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:layout_marginTop="8dp" android:text="27" android:textColor="#007AFF" android:textSize="22sp" android:fontFamily="sans-serif-black" />
+                                <TextView android:id="@+id/tvApptMonth1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:layout_alignParentBottom="true" android:layout_marginBottom="8dp" android:text="MAR" android:textColor="#6B7280" android:textSize="10sp" android:fontFamily="sans-serif-bold" />
                             </RelativeLayout>
-                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:orientation="vertical">
-                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Stay Hydrated!" android:textColor="@color/on_surface" android:textSize="16sp" android:textStyle="bold" />
-                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Increasing your water intake helps maintain amniotic fluid." android:textColor="@color/on_surface_variant" android:textSize="12sp" />
+
+                            <!-- Info -->
+                            <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:orientation="vertical">
+                                <TextView android:id="@+id/tvApptTitle1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Prenatal Check-up" android:textColor="#0B0E11" android:textSize="15sp" android:fontFamily="sans-serif-black" />
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="4dp">
+                                    <TextView android:id="@+id/tvApptTime1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="10:00 AM" android:textColor="#6B7280" android:textSize="12sp" />
+                                    <View android:layout_width="4dp" android:layout_height="4dp" android:layout_marginHorizontal="6dp" android:background="@drawable/bg_dot_3d" />
+                                    <TextView android:id="@+id/tvApptStatus1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Confirmed" android:textColor="#32D74B" android:textSize="11sp" android:fontFamily="sans-serif-black" android:alpha="0.9" />
+                                </LinearLayout>
                             </LinearLayout>
+
+                            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/ic_media_play" app:tint="#D1D5DB" />
                         </LinearLayout>
                     </RelativeLayout>
 
-                    <!-- Profile Warning -->
+                    <!-- Appt Preview Card 2 (3D White Glass) -->
                     <RelativeLayout
-                        android:id="@+id/cardProfileWarning"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:background="@drawable/bg_white_3d_pill"
-                        android:stateListAnimator="@animator/press_3d"
-                        android:padding="20dp">
-                        
+                        android:background="@drawable/bg_booking_card_3d_white"
+                        android:padding="18dp"
+                        android:elevation="3dp">
+
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-                            <!-- Mocha Circle Icon -->
-                            <RelativeLayout android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/bg_mocha_circle">
-                                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:layout_centerInParent="true" android:src="@android:drawable/ic_dialog_alert" app:tint="@color/white" />
+                            <!-- Date Block (High Premium) -->
+                            <RelativeLayout android:layout_width="52dp" android:layout_height="60dp" android:background="@drawable/bg_button_white_3d">
+                                <TextView android:id="@+id/tvApptDate2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:layout_marginTop="8dp" android:text="29" android:textColor="#FF2D55" android:textSize="22sp" android:fontFamily="sans-serif-black" />
+                                <TextView android:id="@+id/tvApptMonth2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:layout_alignParentBottom="true" android:layout_marginBottom="8dp" android:text="MAR" android:textColor="#6B7280" android:textSize="10sp" android:fontFamily="sans-serif-bold" />
                             </RelativeLayout>
-                            
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="16dp" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Complete Your Profile" android:textColor="@color/on_surface" android:textStyle="bold" android:textSize="16sp" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Help us personalize your journey" android:textColor="@color/on_surface_variant" android:textSize="12sp" />
+
+                            <!-- Info -->
+                            <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:orientation="vertical">
+                                <TextView android:id="@+id/tvApptTitle2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ultrasound Scan" android:textColor="#0B0E11" android:textSize="15sp" android:fontFamily="sans-serif-black" />
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="4dp">
+                                    <TextView android:id="@+id/tvApptTime2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="02:30 PM" android:textColor="#6B7280" android:textSize="12sp" />
+                                    <View android:layout_width="4dp" android:layout_height="4dp" android:layout_marginHorizontal="6dp" android:background="@drawable/bg_dot_3d" />
+                                    <TextView android:id="@+id/tvApptStatus2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pending" android:textColor="#FB923C" android:textSize="11sp" android:fontFamily="sans-serif-black" android:alpha="0.9" />
+                                </LinearLayout>
                             </LinearLayout>
-                            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_media_next" app:tint="@color/on_surface_variant" />
+
+                            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/ic_media_play" app:tint="#D1D5DB" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <!-- ─────────────────────────────── -->
+                <!--  PREGNANCY TRACKER              -->
+                <!-- ─────────────────────────────── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="28dp"
+                    android:paddingHorizontal="20dp">
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/ic_menu_sort_by_size" app:tint="@color/neo_cyan" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="10dp" android:text="Pregnancy Journey" android:textColor="@color/neo_primary" android:textSize="17sp" android:fontFamily="sans-serif-black" />
+                    </LinearLayout>
+
+                    <!-- Progress Track (3D White Sheet) -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_booking_card_3d_white"
+                        android:padding="20dp"
+                        android:elevation="2dp">
+                        <View android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="4dp" android:background="#F3F4F6" />
+                        <View android:id="@+id/viewTimelineProgress" android:layout_width="160dp" android:layout_height="8dp" android:layout_marginTop="4dp" android:background="@drawable/bg_booking_card_3d_selected" />
+                        
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="24dp">
+                            <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
+                                <View android:layout_width="8dp" android:layout_height="8dp" android:background="@drawable/bg_booking_card_3d_selected" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="Wk 12" android:textColor="#0B0E11" android:textSize="11sp" android:fontFamily="sans-serif-bold" />
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
+                                <View android:layout_width="8dp" android:layout_height="8dp" android:background="@drawable/bg_booking_card_3d_selected" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="Wk 20" android:textColor="#0B0E11" android:textSize="11sp" android:fontFamily="sans-serif-bold" />
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:alpha="0.4">
+                                <View android:layout_width="8dp" android:layout_height="8dp" android:background="#D1D5DB" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="Wk 28" android:textColor="#6B7280" android:textSize="11sp" />
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:alpha="0.4">
+                                <View android:layout_width="8dp" android:layout_height="8dp" android:background="#D1D5DB" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="Wk 36" android:textColor="#6B7280" android:textSize="11sp" />
+                            </LinearLayout>
                         </LinearLayout>
                     </RelativeLayout>
                 </LinearLayout>
-                
-                <!-- Bottom Spacer for Nav Dock -->
-                <View android:layout_width="match_parent" android:layout_height="100dp" />
-            </LinearLayout>
-        </ScrollView>
 
-        <!-- Premium Fixed Bottom Nav Dock -->
-        <!-- Reusable Bottom Nav -->
+                <!-- ─────────────────────────────── -->
+                <!--  RECENT ACTIVITY                -->
+                <!-- ─────────────────────────────── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="28dp"
+                    android:paddingHorizontal="20dp">
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/ic_menu_agenda" app:tint="@color/neo_cyan" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="10dp" android:text="Recent Activity" android:textColor="@color/neo_primary" android:textSize="17sp" android:fontFamily="sans-serif-black" />
+                    </LinearLayout>
+
+                    <!-- Activity Item 1 -->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="12dp" android:background="@drawable/bg_booking_card_3d_white" android:padding="16dp" android:elevation="2dp">
+                        <RelativeLayout android:layout_width="38dp" android:layout_height="38dp" android:background="@drawable/bg_button_white_3d">
+                            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:layout_centerInParent="true" android:src="@android:drawable/ic_menu_today" app:tint="#007AFF" />
+                        </RelativeLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="14dp" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Appointment Booked" android:textColor="#0B0E11" android:textSize="14sp" android:fontFamily="sans-serif-black" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Prenatal Check-up · Mar 27" android:textColor="#6B7280" android:textSize="11sp" />
+                        </LinearLayout>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2h ago" android:textColor="#9CA3AF" android:textSize="10sp" android:fontFamily="sans-serif-medium" />
+                    </LinearLayout>
+
+                    <!-- Activity Item 2 -->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="12dp" android:background="@drawable/bg_booking_card_3d_white" android:padding="16dp" android:elevation="2dp">
+                        <RelativeLayout android:layout_width="38dp" android:layout_height="38dp" android:background="@drawable/bg_button_white_3d">
+                            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:layout_centerInParent="true" android:src="@android:drawable/ic_menu_save" app:tint="#FF2D55" />
+                        </RelativeLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="14dp" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Payment Confirmed" android:textColor="#0B0E11" android:textSize="14sp" android:fontFamily="sans-serif-black" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bill #1023 · ₱450.00" android:textColor="#6B7280" android:textSize="11sp" />
+                        </LinearLayout>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1d ago" android:textColor="#9CA3AF" android:textSize="10sp" android:fontFamily="sans-serif-medium" />
+                    </LinearLayout>
+
+                    <!-- Activity Item 3 -->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:background="@drawable/bg_booking_card_3d_white" android:padding="16dp" android:elevation="2dp">
+                        <RelativeLayout android:layout_width="38dp" android:layout_height="38dp" android:background="@drawable/bg_button_white_3d">
+                            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:layout_centerInParent="true" android:src="@android:drawable/ic_menu_myplaces" app:tint="#32D74B" />
+                        </RelativeLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="14dp" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Record Updated" android:textColor="#0B0E11" android:textSize="14sp" android:fontFamily="sans-serif-black" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ultrasound Result Added" android:textColor="#6B7280" android:textSize="11sp" />
+                        </LinearLayout>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3d ago" android:textColor="#9CA3AF" android:textSize="10sp" android:fontFamily="sans-serif-medium" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- ─────────────────────────────── -->
+                <!--  COMPLETE PROFILE BANNER        -->
+                <!-- ─────────────────────────────── -->
+                <RelativeLayout
+                    android:id="@+id/cardProfileWarning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="28dp"
+                    android:background="@drawable/bg_booking_card_3d_selected"
+                    android:padding="20dp"
+                    android:elevation="4dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:visibility="gone">
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                        <RelativeLayout android:layout_width="46dp" android:layout_height="46dp" android:background="@drawable/bg_button_white_3d">
+                            <ImageView android:layout_width="20dp" android:layout_height="20dp" android:layout_centerInParent="true" android:src="@android:drawable/ic_dialog_alert" app:tint="#007AFF" />
+                        </RelativeLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Update Your Profile" android:textColor="#FFFFFF" android:textSize="16sp" android:fontFamily="sans-serif-black" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Help us personalize your care" android:textColor="#FFFFFF" android:textSize="12sp" android:alpha="0.85" />
+                        </LinearLayout>
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_media_play" app:tint="#FFFFFF" android:alpha="0.8" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <!-- Bottom Spacer -->
+                <View android:layout_width="match_parent" android:layout_height="80dp" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- FIXED BOTTOM NAV -->
         <include layout="@layout/layout_bottom_nav" />
 
         <!-- Ghost anchors kept for Java compatibility -->
         <View android:id="@+id/btnLogout" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
         <View android:id="@+id/navChat" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
-        
+
     </RelativeLayout>
 
+    <!-- Navigation Drawer -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navView"
         android:layout_width="wrap_content"

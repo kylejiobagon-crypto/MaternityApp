@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- MOCK CALENDAR GRID (NEON) -->
+    <item>
+        <shape>
+            <solid android:color="#00000000" />
+            <stroke android:width="0.5dp" android:color="#1000E5FF" />
+        </shape>
+    </item>
+    
+    <!-- GRID LINES -->
+    <item android:top="40dp"><shape><solid android:color="#08E5FF" /><size android:height="1dp" /></shape></item>
+    <item android:top="80dp"><shape><solid android:color="#08E5FF" /><size android:height="1dp" /></shape></item>
+    <item android:top="120dp"><shape><solid android:color="#08E5FF" /><size android:height="1dp" /></shape></item>
+</layer-list>

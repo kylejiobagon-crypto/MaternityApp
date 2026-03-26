@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- NEON MEDICAL CORE PALETTE (PIXEL-PERFECT TAILWIND SYNC) -->
+    <color name="neo_bg">#131314</color>
+    <color name="neo_surface">#131314</color>
+    <color name="neo_container">#201F20</color>
+    <color name="neo_container_high">#2A2A2B</color>
+    <color name="neo_container_low">#1C1B1C</color>
+    
+    <color name="neo_primary">#FFFFFF</color>
+    <color name="neo_cyan">#00FBFB</color>
+    <color name="neo_cyan_glow">#6600FBFB</color>
+    
+    <color name="neo_purple">#7701D0</color>
+    <color name="neo_purple_light">#DCB8FF</color>
+    
+    <color name="neo_green">#75FF68</color>
+    <color name="neo_green_glow">#6675FF68</color>
+    
+    <color name="neo_slate">#B9CAC9</color>
+    <color name="neo_slate_variant">#3A4A49</color>
+    <color name="neo_outline">#839493</color>
+    <color name="neo_bright">#3A393A</color>
+
+    <!-- SYSTEM ALIASES (FIXING BUILD ERRORS) -->
+    <color name="background">#131314</color>
+    <color name="on_surface">#E5E2E3</color>
+    <color name="on_surface_variant">#B9CAC9</color>
+    <color name="error">#FFB4AB</color>
+    <color name="on_error">#690005</color>
+    <color name="success">#75FF68</color>
+    <color name="on_background">#E5E2E3</color>
+    
+    <!-- LEGACY MEDICAL THEME ALIASES (FOR BACKWARD COMPATIBILITY) -->
+    <color name="medical_blue">#00FBFB</color>
+    <color name="medical_blue_dark">#003737</color>
+    <color name="medical_blue_light">#00FBFB</color>
+    <color name="medical_neutral_dark">#3A393A</color>
+    <color name="medical_neutral_light">#E5E2E3</color>
+
+    <!-- BASIC ALIASES -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="primary">#00FBFB</color>
+    <color name="teal_200">#00FBFB</color>
+    <color name="teal_700">#006A6A</color>
+</resources>

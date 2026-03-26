@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Bottom Shadow (Deep) -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#20000000" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+    <!-- Main Surface with High-End Gradient -->
+    <item android:bottom="2.5dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#FFFFFF"
+                android:centerColor="#FDFDFF"
+                android:endColor="#F5F7FA"
+                android:angle="270"
+                android:type="linear" />
+            <corners android:radius="12dp" />
+            <stroke android:width="0.8dp" android:color="#F1F3F5" />
+        </shape>
+    </item>
+    <!-- Top-Inner Reflection -->
+    <item android:bottom="4dp" android:left="1dp" android:right="1dp" android:top="0.5dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#40FFFFFF" />
+            <corners android:radius="11dp" />
+        </shape>
+    </item>
+</layer-list>

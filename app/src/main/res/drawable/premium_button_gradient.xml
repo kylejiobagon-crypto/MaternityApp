@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="18dp" />
+            <gradient
+                android:angle="90"
+                android:startColor="#4F46E5"
+                android:endColor="#7C3AED" />
+        </shape>
+    </item>
+    <item android:bottom="2dp"> <!-- Bottom shadow feel -->
+        <shape android:shape="rectangle">
+            <corners android:radius="18dp" />
+            <stroke android:width="0.5dp" android:color="#33000000" />
+        </shape>
+    </item>
+</layer-list>

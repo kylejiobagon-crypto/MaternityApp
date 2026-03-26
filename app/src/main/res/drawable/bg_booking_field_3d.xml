@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Soft background -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#F9FAFB" />
+            <corners android:radius="16dp" />
+            <stroke android:width="0.8dp" android:color="#E5E7EB" />
+        </shape>
+    </item>
+    <!-- Inner soft inset -->
+    <item android:top="2dp" android:left="2dp" android:right="2dp" android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#FFFFFF"
+                android:endColor="#F9FAFB"
+                android:angle="270" />
+            <corners android:radius="14dp" />
+        </shape>
+    </item>
+</layer-list>

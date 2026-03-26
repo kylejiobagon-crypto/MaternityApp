@@ -12,4 +12,7 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
+    <style name="RoundedProfileAvatar">
+        <item name="cornerSize">20dp</item>
+    </style>
 </resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- BASE SURFACE (MATCHES PARENT) -->
+    <item>
+        <shape>
+            <corners android:radius="16dp" />
+            <solid android:color="#FDFBF7" />
+        </shape>
+    </item>
+    
+    <!-- TOP/LEFT INSET SHADOW -->
+    <item android:bottom="4dp" android:right="2dp">
+        <shape>
+            <corners android:radius="16dp" />
+            <solid android:color="#0D000000" />
+        </shape>
+    </item>
+    
+    <!-- MAIN INSET BODY (DEEPER OFFSET) -->
+    <item android:left="2dp" android:top="2dp">
+        <shape>
+            <corners android:radius="16dp" />
+            <solid android:color="#F4F6F7" />
+            <stroke
+                android:width="1dp"
+                android:color="#1A000000" />
+        </shape>
+    </item>
+</layer-list>

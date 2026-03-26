@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Super Soft Ambient Shadow -->
+    <item android:top="8dp" android:left="8dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="44dp" />
+            <solid android:color="#0D475569" />
+        </shape>
+    </item>
+
+    <!-- Main Card Body -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="44dp" />
+            <solid android:color="#FFFFFF" />
+        </shape>
+    </item>
+
+    <!-- Glass Glow reflection (Subtle) -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="40dp" />
+            <gradient
+                android:type="radial"
+                android:gradientRadius="200dp"
+                android:centerX="0.2"
+                android:centerY="0.2"
+                android:startColor="#1A6366F1"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="44dp" />
+            <stroke android:width="0.8dp" android:color="#0D000000" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_premium_sky_gradient">
+
+    <!-- BOKEH BACKGROUND -->
+    <View android:layout_width="500dp" android:layout_height="500dp" android:layout_alignParentEnd="true" android:layout_alignParentTop="true" android:layout_marginEnd="-200dp" android:layout_marginTop="-200dp" android:background="@drawable/bg_neon_selected_date" android:alpha="0.08" android:backgroundTint="@color/neo_cyan" />
+
+    <!-- TOP APP BAR -->
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
+        android:background="#99FFFFFF"
+        android:paddingHorizontal="24dp"
+        android:elevation="0dp">
+        
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:gravity="center_vertical">
+            <RelativeLayout android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/bg_icon_booking_gradient">
+                 <ImageView android:layout_width="22dp" android:layout_height="22dp" android:layout_centerInParent="true" android:src="@android:drawable/ic_menu_add" app:tint="@color/white" />
+            </RelativeLayout>
+            
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="20dp" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="sans-serif-black" android:text="Book New Appointment" android:textColor="#0B0E11" android:textSize="19sp" android:letterSpacing="0.02" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="sans-serif-medium" android:text="JANUARY 21, 2026" android:textColor="#6B7280" android:textSize="10sp" android:letterSpacing="0.1" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btnClose"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_glass_circle"
+            android:backgroundTint="#F3F4F6"
+            android:padding="12dp"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="#6B7280" />
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar"
+        android:clipToPadding="false"
+        android:paddingBottom="120dp">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="24dp" android:clipChildren="false">
+
+            <!-- APPOINTMENT DETAILS -->
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginBottom="24dp">
+                <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/ic_dialog_info" app:tint="@color/neo_cyan" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="14dp" android:fontFamily="sans-serif-black" android:text="APPOINTMENT DETAILS" android:textColor="@color/neo_cyan" android:textSize="11sp" android:letterSpacing="0.2" />
+            </LinearLayout>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PREFERRED DATE" android:textColor="#6B7280" android:textSize="9sp" android:fontFamily="sans-serif-bold" android:letterSpacing="0.1" />
+            <RelativeLayout android:id="@+id/btnSelectDate" android:layout_width="match_parent" android:layout_height="64dp" android:background="@drawable/bg_booking_field_3d" android:paddingHorizontal="20dp" android:layout_marginTop="12dp" android:layout_marginBottom="28dp" android:clickable="true" android:focusable="true">
+                <ImageView android:id="@+id/iCal" android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_today" app:tint="#007AFF" android:layout_centerVertical="true" />
+                <TextView android:id="@+id/tvDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toEndOf="@id/iCal" android:layout_marginStart="18dp" android:layout_centerVertical="true" android:text="Select Date" android:textColor="#0B0E11" android:fontFamily="sans-serif-black" android:textSize="17sp" />
+            </RelativeLayout>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PHILHEALTH NUMBER (OPTIONAL)" android:textColor="#6B7280" android:textSize="9sp" android:fontFamily="sans-serif-bold" android:letterSpacing="0.1" />
+            <RelativeLayout android:layout_width="match_parent" android:layout_height="64dp" android:background="@drawable/bg_booking_field_3d" android:paddingHorizontal="20dp" android:layout_marginTop="12dp" android:layout_marginBottom="8dp">
+                <ImageView android:id="@+id/iPh" android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_send" app:tint="#007AFF" android:layout_centerVertical="true" />
+                <EditText android:id="@+id/etPhilhealth" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_toEndOf="@id/iPh" android:layout_marginStart="18dp" android:layout_centerVertical="true" android:hint="Enter Number" android:background="@null" android:textColor="#0B0E11" android:fontFamily="sans-serif-black" android:textSize="17sp" android:inputType="number" />
+            </RelativeLayout>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="• Enter PNIHealth for potential discount (optional)" android:textColor="#9CA3AF" android:textSize="9sp" android:alpha="0.6" android:layout_marginBottom="44dp" />
+
+            <!-- SERVICE TYPE: EXPANDED ULTRA-PREMIUM -->
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginBottom="24dp">
+                <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/ic_menu_manage" app:tint="@color/neo_cyan" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="14dp" android:fontFamily="sans-serif-black" android:text="SERVICE TYPE" android:textColor="@color/neo_cyan" android:textSize="11sp" android:letterSpacing="0.2" />
+            </LinearLayout>
+
+            <!-- Service Item Template (Stacked) -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+
+                <!-- Normal Delivery -->
+                <RelativeLayout android:id="@+id/serviceNormalDelivery" android:layout_width="match_parent" android:layout_height="96dp" android:background="@drawable/bg_booking_card_3d_selected" android:paddingHorizontal="24dp" android:layout_marginBottom="16dp" android:gravity="center_vertical" android:elevation="0dp" android:clickable="true" android:focusable="true">
+                    <RelativeLayout android:id="@+id/bChk" android:layout_width="24dp" android:layout_height="24dp" android:background="@drawable/bg_button_premium_blue" android:gravity="center">
+                        <ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@android:drawable/checkbox_on_background" app:tint="@color/white" />
+                    </RelativeLayout>
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toEndOf="@id/bChk" android:layout_marginStart="20dp" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Normal Delivery" android:textColor="#0B0E11" android:fontFamily="sans-serif-black" android:textSize="17sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="In-patient Labor &amp; Delivery package" android:textColor="#6B7280" android:textSize="11sp" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="P15,000" android:textColor="#007AFF" android:fontFamily="sans-serif-black" android:textSize="20sp" />
+                </RelativeLayout>
+
+                <!-- Prenatal Check-up -->
+                <RelativeLayout android:id="@+id/servicePrenatal" android:layout_width="match_parent" android:layout_height="80dp" android:background="@drawable/bg_booking_card_3d_white" android:paddingHorizontal="24dp" android:layout_marginBottom="12dp" android:gravity="center_vertical" android:clickable="true" android:focusable="true">
+                    <View android:id="@+id/b1" android:layout_width="22dp" android:layout_height="22dp" android:background="@drawable/bg_glass_circle" android:backgroundTint="#F3F4F6" />
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toEndOf="@id/b1" android:layout_marginStart="20dp" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Prenatal Check-up" android:textColor="#0B0E11" android:fontFamily="sans-serif-bold" android:textSize="15sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Regular maternity health progress monitoring" android:textColor="#6B7280" android:textSize="10sp" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="P500" android:textColor="#0B0E11" android:fontFamily="sans-serif-black" />
+                </RelativeLayout>
+
+                <!-- Ultrasound Scan -->
+                <RelativeLayout android:id="@+id/serviceUltrasound" android:layout_width="match_parent" android:layout_height="80dp" android:background="@drawable/bg_booking_card_3d_white" android:paddingHorizontal="24dp" android:layout_marginBottom="12dp" android:gravity="center_vertical" android:clickable="true" android:focusable="true">
+                    <View android:id="@+id/b2" android:layout_width="22dp" android:layout_height="22dp" android:background="@drawable/bg_glass_circle" android:backgroundTint="#F3F4F6" />
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toEndOf="@id/b2" android:layout_marginStart="20dp" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ultrasound Scan" android:textColor="#0B0E11" android:fontFamily="sans-serif-bold" android:textSize="15sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Detailed diagnostic imaging" android:textColor="#6B7280" android:textSize="10sp" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="P1,200" android:textColor="#0B0E11" android:fontFamily="sans-serif-black" />
+                </RelativeLayout>
+
+                <!-- Laboratory Services -->
+                <RelativeLayout android:id="@+id/serviceLab" android:layout_width="match_parent" android:layout_height="80dp" android:background="@drawable/bg_glass_card_neon" android:paddingHorizontal="24dp" android:layout_marginBottom="12dp" android:gravity="center_vertical" android:clickable="true" android:focusable="true">
+                    <View android:id="@+id/b3" android:layout_width="22dp" android:layout_height="22dp" android:background="@drawable/bg_outline_button" android:alpha="0.3" />
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toEndOf="@id/b3" android:layout_marginStart="20dp" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Laboratory Services" android:textColor="@color/neo_primary" android:fontFamily="sans-serif-bold" android:textSize="15sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Blood tests and analytics" android:textColor="@color/neo_slate" android:textSize="10sp" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="P1,500" android:textColor="@color/neo_primary" android:fontFamily="sans-serif-black" />
+                </RelativeLayout>
+
+                <!-- Vaccination -->
+                <RelativeLayout android:id="@+id/serviceVaccination" android:layout_width="match_parent" android:layout_height="80dp" android:background="@drawable/bg_glass_card_neon" android:paddingHorizontal="24dp" android:layout_marginBottom="12dp" android:gravity="center_vertical" android:clickable="true" android:focusable="true">
+                    <View android:id="@+id/b4" android:layout_width="22dp" android:layout_height="22dp" android:background="@drawable/bg_outline_button" android:alpha="0.3" />
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toEndOf="@id/b4" android:layout_marginStart="20dp" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Vaccination" android:textColor="@color/neo_primary" android:fontFamily="sans-serif-bold" android:textSize="15sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Essential immunizations" android:textColor="@color/neo_slate" android:textSize="10sp" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="P600" android:textColor="@color/neo_primary" android:fontFamily="sans-serif-black" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!-- SELECT TIME: EXPANDED 8 SLOTS -->
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginTop="32dp" android:layout_marginBottom="24dp">
+                <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="@color/neo_cyan" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="14dp" android:fontFamily="sans-serif-black" android:text="SELECT TIME SLOT" android:textColor="@color/neo_cyan" android:textSize="11sp" android:letterSpacing="0.2" />
+            </LinearLayout>
+
+            <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:alignmentMode="alignMargins" android:layout_marginHorizontal="-6dp" android:layout_marginBottom="44dp">
+                
+                <!-- 09:00 AM -->
+                <RelativeLayout android:id="@+id/slot9Am" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:layout_margin="6dp" android:background="@drawable/bg_booking_card_3d_white" android:gravity="center" android:clickable="true" android:focusable="true">
+                    <TextView android:id="@+id/tvSlot9Am" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="09:00 AM" android:textColor="#0B0E11" android:fontFamily="sans-serif-bold" android:textSize="13sp" />
+                    <TextView android:id="@+id/tvSlot9AmSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:text="Morning" android:textColor="#6B7280" android:textSize="9sp" />
+                </RelativeLayout>
+
+                <!-- 10:00 AM -->
+                <RelativeLayout android:id="@+id/slot10Am" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:layout_margin="6dp" android:background="@drawable/bg_booking_card_3d_white" android:gravity="center" android:clickable="true" android:focusable="true">
+                    <TextView android:id="@+id/tvSlot10Am" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="10:00 AM" android:textColor="#0B0E11" android:fontFamily="sans-serif-bold" android:textSize="13sp" />
+                    <TextView android:id="@+id/tvSlot10AmSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:text="Morning" android:textColor="#6B7280" android:textSize="9sp" />
+                </RelativeLayout>
+
+                <!-- 11:00 AM -->
+                <RelativeLayout android:id="@+id/slot11Am" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:layout_margin="6dp" android:background="@drawable/bg_booking_card_3d_white" android:gravity="center" android:clickable="true" android:focusable="true">
+                    <TextView android:id="@+id/tvSlot11Am" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="11:00 AM" android:textColor="#0B0E11" android:fontFamily="sans-serif-bold" android:textSize="13sp" />
+                    <TextView android:id="@+id/tvSlot11AmSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:text="Before Lunch" android:textColor="#6B7280" android:textSize="9sp" />
+                </RelativeLayout>
+
+                <!-- 12:30 PM -->
+                <RelativeLayout android:id="@+id/slot12Pm" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:layout_margin="6dp" android:background="@drawable/bg_booking_card_3d_white" android:gravity="center" android:clickable="true" android:focusable="true">
+                    <TextView android:id="@+id/tvSlot12Pm" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="12:30 PM" android:textColor="#0B0E11" android:fontFamily="sans-serif-bold" android:textSize="13sp" />
+                    <TextView android:id="@+id/tvSlot12PmSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:text="After Lunch" android:textColor="#6B7280" android:textSize="9sp" />
+                </RelativeLayout>
+
+                <!-- 01:30 PM -->
+                <RelativeLayout android:id="@+id/slot1Pm" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:layout_margin="6dp" android:background="@drawable/bg_booking_card_3d_white" android:gravity="center" android:clickable="true" android:focusable="true">
+                    <TextView android:id="@+id/tvSlot1Pm" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="01:30 PM" android:textColor="#0B0E11" android:fontFamily="sans-serif-bold" android:textSize="13sp" />
+                    <TextView android:id="@+id/tvSlot1PmSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:text="Afternoon" android:textColor="#6B7280" android:textSize="9sp" />
+                </RelativeLayout>
+
+                <!-- 02:30 PM -->
+                <RelativeLayout android:id="@+id/slot2Pm" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:layout_margin="6dp" android:background="@drawable/bg_booking_card_3d_white" android:gravity="center" android:clickable="true" android:focusable="true">
+                    <TextView android:id="@+id/tvSlot2Pm" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="02:30 PM" android:textColor="#0B0E11" android:fontFamily="sans-serif-bold" android:textSize="13sp" />
+                    <TextView android:id="@+id/tvSlot2PmSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:text="Afternoon" android:textColor="#6B7280" android:textSize="9sp" />
+                </RelativeLayout>
+
+                <!-- 03:30 PM -->
+                <RelativeLayout android:id="@+id/slot3Pm" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:layout_margin="6dp" android:background="@drawable/bg_booking_card_3d_white" android:gravity="center" android:clickable="true" android:focusable="true">
+                    <TextView android:id="@+id/tvSlot3Pm" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="03:30 PM" android:textColor="#0B0E11" android:fontFamily="sans-serif-bold" android:textSize="13sp" />
+                    <TextView android:id="@+id/tvSlot3PmSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:text="Evening Slot" android:textColor="#6B7280" android:textSize="9sp" />
+                </RelativeLayout>
+
+                <!-- 04:30 PM -->
+                <RelativeLayout android:id="@+id/slot4Pm" android:layout_width="0dp" android:layout_height="80dp" android:layout_columnWeight="1" android:layout_margin="6dp" android:background="@drawable/bg_booking_card_3d_white" android:gravity="center" android:clickable="true" android:focusable="true">
+                    <TextView android:id="@+id/tvSlot4Pm" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="04:30 PM" android:textColor="#0B0E11" android:fontFamily="sans-serif-bold" android:textSize="13sp" />
+                    <TextView android:id="@+id/tvSlot4PmSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:text="Last Slot" android:textColor="#6B7280" android:textSize="9sp" />
+                </RelativeLayout>
+            </GridLayout>
+
+            <!-- MEDICAL NOTES -->
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginBottom="24dp">
+                <ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@android:drawable/ic_menu_edit" app:tint="@color/neo_cyan" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="14dp" android:fontFamily="sans-serif-black" android:text="MEDICAL NOTES" android:textColor="@color/neo_cyan" android:textSize="11sp" android:letterSpacing="0.2" />
+            </LinearLayout>
+
+            <RelativeLayout android:layout_width="match_parent" android:layout_height="180dp" android:background="@drawable/bg_booking_field_3d" android:padding="24dp" android:layout_marginBottom="32dp">
+                <EditText android:id="@+id/etMedicalNotes" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:hint="Symptoms or medical history..." android:textColorHint="#9CA3AF" android:textColor="#0B0E11" android:textSize="13sp" android:gravity="top" />
+            </RelativeLayout>
+
+            <!-- INTEGRATED ACTION AREA (Under Medical Notes) -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingHorizontal="24dp" android:paddingTop="12dp" android:gravity="center_vertical">
+                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" android:alpha="0.1" android:background="@color/neo_primary" />
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="#CCFFFFFF" android:paddingHorizontal="12dp" android:paddingVertical="6dp" android:gravity="center" android:layout_marginHorizontal="16dp">
+                    <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_save" app:tint="@color/neo_green" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:text="PRIVATE &amp; SECURE" android:textColor="@color/neo_green" android:textSize="8sp" android:fontFamily="sans-serif-black" />
+                </LinearLayout>
+                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" android:alpha="0.1" android:background="@color/neo_primary" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingHorizontal="24dp" android:paddingTop="32dp" android:paddingBottom="24dp" android:orientation="vertical" android:clipChildren="false">
+                <TextView android:id="@+id/btnCancel" android:layout_width="match_parent" android:layout_height="64dp" android:background="@drawable/bg_glass_card_neon" android:gravity="center" android:text="CANCEL" android:textColor="@color/neo_primary" android:fontFamily="sans-serif-black" android:textSize="15sp" android:letterSpacing="0.1" android:layout_marginBottom="16dp" />
+                
+                <LinearLayout android:id="@+id/btnFinalize" android:layout_width="match_parent" android:layout_height="72dp" android:background="@drawable/bg_button_ultra_3d" android:gravity="center" android:elevation="8dp">
+                    <RelativeLayout android:layout_width="28dp" android:layout_height="28dp" android:background="@drawable/bg_glass_circle" android:backgroundTint="#4D000000">
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_centerInParent="true" android:src="@android:drawable/checkbox_on_background" app:tint="@color/white" />
+                    </RelativeLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="SCHEDULE APPOINTMENT" android:textColor="@color/white" android:fontFamily="sans-serif-black" android:textSize="17sp" android:letterSpacing="0.05" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout android:id="@+id/actionArea" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:orientation="vertical">
+        <include layout="@layout/layout_bottom_nav" />
+    </LinearLayout>
+
+</RelativeLayout>

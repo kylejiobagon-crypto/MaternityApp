@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Layer 0: Base Deep Midnight Navy -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#020617" />
+        </shape>
+    </item>
+
+    <!-- Layer 1: Atmosphere (Deep Purple Top-Left) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:centerX="0.2"
+                android:centerY="0.2"
+                android:gradientRadius="400dp"
+                android:startColor="#4D4C1D95"
+                android:endColor="#00000000"
+                android:type="radial" />
+        </shape>
+    </item>
+
+    <!-- Layer 1: Atmosphere (Neon Blue Bottom-Right) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:centerX="0.8"
+                android:centerY="0.8"
+                android:gradientRadius="500dp"
+                android:startColor="#331D4ED8"
+                android:endColor="#00000000"
+                android:type="radial" />
+        </shape>
+    </item>
+
+    <!-- Layer 2: Pattern (Translucent Grid Overlay) -->
+    <item>
+        <bitmap
+            android:src="@drawable/grid_pattern_aura"
+            android:tileMode="repeat"
+            android:alpha="0.05" />
+    </item>
+
+    <!-- Depth Gradient (Shimmer Effect Overlay) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#20FFFFFF"
+                android:centerColor="#00FFFFFF"
+                android:endColor="#00000000"
+                android:angle="135" />
+        </shape>
+    </item>
+</layer-list>

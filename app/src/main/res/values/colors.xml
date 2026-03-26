@@ -1,24 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- APPLE IPHONE 17 PRO MAX LIGHT PALETTE (PREMIUM ALICE WHITE) -->
+    <color name="neo_bg">#FBFBFD</color>
+    <color name="neo_bg_top">#FFFFFF</color>
+    <color name="neo_surface">#FFFFFF</color>
+    <color name="neo_container">#F2F2F7</color>
+    <color name="neo_container_high">#E5E5EA</color>
+    <color name="neo_container_low">#FBFBFD</color>
     
-    <!-- Pinterest Aesthetic Mocha / Latte Palette -->
-    <color name="primary">#A67C52</color>
-    <color name="primary_light">#D1B296</color>
-    <color name="primary_dark">#6B4423</color>
+    <!-- TEXT COLORS (APPLE SPEC) -->
+    <color name="neo_primary">#1D1D1F</color>
+    <color name="neo_slate">#86868B</color>
+    <color name="neo_outline">#D2D2D7</color>
+    <color name="neo_bright">#FBFBFD</color>
+
+    <!-- ACCENTS (IPHONE PRO TITAN & CYAN ICE) -->
+    <color name="neo_cyan">#0071E3</color> <!-- iOS PRO BLUE (MORE ACCESSIBLE ON WHITE) -->
+    <color name="neo_cyan_vibrant">#00FBFB</color>
+    <color name="neo_cyan_glow">#330071E3</color>
     
-    <color name="secondary">#EAE1D8</color>
-    <color name="secondary_dark">#CDBFB5</color>
+    <color name="neo_purple">#7701D0</color>
+    <color name="neo_purple_light">#EFDBFF</color>
     
-    <color name="background">#FDFBF7</color>
+    <color name="neo_green">#34C759</color> <!-- iOS SYSTEM GREEN -->
+    <color name="neo_green_glow">#3334C759</color>
+
+    <!-- SYSTEM ALIASES (FIXING BUILD ERRORS) -->
+    <color name="background">#FBFBFD</color>
     <color name="surface">#FFFFFF</color>
-    <color name="surface_container">#F5F0EA</color> 
+    <color name="on_surface">#1D1D1F</color>
+    <color name="on_surface_variant">#86868B</color>
+    <color name="surface_variant">#F2F2F7</color>
+    <color name="error">#FF3B30</color> <!-- iOS RED -->
+    <color name="on_error">#FFFFFF</color>
+    <color name="success">#34C759</color>
+    <color name="on_background">#1D1D1F</color>
+    <color name="secondary">#0071E3</color>
+    <color name="tertiary">#7701D0</color>
     
-    <color name="on_surface">#4A3B32</color>
-    <color name="on_surface_variant">#8C7A6B</color>
-    <color name="outline_variant">#EAE1D8</color> 
+    <!-- LEGACY ALIASES -->
+    <color name="medical_blue">#0071E3</color>
+    <color name="medical_blue_dark">#0040D1</color>
+    <color name="medical_blue_light">#0071E3</color>
+    <color name="medical_neutral_dark">#1D1D1F</color>
+    <color name="medical_neutral_light">#F2F2F7</color>
     
-    <color name="error">#D96C6C</color>
-    <color name="success">#85A88D</color>
+    <!-- BASIC ALIASES -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="primary">#1D1D1F</color>
+    <color name="teal_200">#0071E3</color>
+    <color name="teal_700">#0040D1</color>
 </resources>
