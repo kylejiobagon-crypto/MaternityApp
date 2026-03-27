@@ -30,6 +30,13 @@ public interface ApiService {
     );
 
     @GET("api_patients.php")
+    Call<PatientListResponse> getPatients(
+            @Query("action") String action,
+            @Query("mobile") String mobile,
+            @Query("email") String email
+    );
+
+    @GET("api_patients.php")
     Call<ResponseBody> getPatientsRaw(@Query("action") String action, @Query("mobile") String mobile);
 
     @GET("api_bookings.php")
@@ -48,7 +55,8 @@ public interface ApiService {
             @Field("booking_date") String date,
             @Field("booking_time") String time,
             @Field("service_type") String serviceType,
-            @Field("notes") String notes
+            @Field("notes") String notes,
+            @Field("philhealth_number") String philhealthNumber
     );
 
     @GET("api_bookings.php")
@@ -77,5 +85,26 @@ public interface ApiService {
             @Field("password") String password,
             @Field("tenant_id") int tenantId,
             @Field("mobile") String mobile
+    );
+
+    @POST("api_patients.php")
+    @FormUrlEncoded
+    Call<ProfileUpdateResponse> updateProfile(
+            @Query("action") String action,
+            @Query("mobile") String mobile,
+            @Field("patient_id") int patientId,
+            @Field("first_name") String firstName,
+            @Field("last_name") String lastName,
+            @Field("email") String email,
+            @Field("contact_number") String contactNumber,
+            @Field("dob") String dob,
+            @Field("address") String address,
+            @Field("philhealth_number") String philhealthNumber,
+            @Field("lmp") String lmp,
+            @Field("blood_type") String bloodType,
+            @Field("months_pregnant") Double monthsPregnant,
+            @Field("emergency_name") String emergencyName,
+            @Field("emergency_relationship") String emergencyRelationship,
+            @Field("emergency_number") String emergencyNumber
     );
 }

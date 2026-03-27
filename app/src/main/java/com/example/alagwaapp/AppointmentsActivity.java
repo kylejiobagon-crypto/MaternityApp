@@ -211,6 +211,19 @@ public class AppointmentsActivity extends AppCompatActivity {
                 
                 String token = prefs.getString("token", "");
                 if (!token.isEmpty()) builder.header("Authorization", "Bearer " + token);
+                
+                // Add critical Mobile Bypass parameters
+                okhttp3.HttpUrl newUrl = chain.request().url().newBuilder()
+                        .setQueryParameter("mobile",    "true")
+                        .setQueryParameter("tenant_id", String.valueOf(prefs.getInt("tenantId", 1)))
+                        .setQueryParameter("role",      prefs.getString("role", "patient"))
+                        .setQueryParameter("user_id",   String.valueOf(prefs.getInt("userId", 0)))
+                        .setQueryParameter("username",  prefs.getString("username", ""))
+                        .setQueryParameter("email",     prefs.getString("email", ""))
+                        .setQueryParameter("fullname",  prefs.getString("fullname", ""))
+                        .build();
+                builder.url(newUrl);
+                
                 return chain.proceed(builder.build());
             })
             .build();

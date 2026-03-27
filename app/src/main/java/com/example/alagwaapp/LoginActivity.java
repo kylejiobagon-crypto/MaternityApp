@@ -229,6 +229,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putBoolean("isLoggedIn", true);
                         editor.putInt("userId", json.optInt("user_id"));
                         editor.putInt("tenantId", json.optInt("tenant_id"));
+                        editor.putString("username", json.optString("username"));
                         editor.putString("email", json.optString("email"));
                         editor.putString("role", role);
                         editor.putString("fullname", json.optString("fullname"));
