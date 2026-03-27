@@ -1,92 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@drawable/bg_premium_sky_gradient"
+    tools:context=".RecordsActivity">
 
+    <!-- 1. FLOATING GLASS HEADER -->
     <RelativeLayout
-        android:id="@+id/header"
+        android:id="@+id/header_records"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:background="@drawable/bg_mocha_header">
+        android:layout_height="100dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_glass_card_white"
+        android:elevation="12dp"
+        android:paddingHorizontal="24dp">
         
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="32dp"
-            android:text="Medical Logs"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            android:fontFamily="sans-serif-black" />
+        <ImageView
+            android:id="@+id/btnBackRecords"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="#1E293B"
+            android:clickable="true"
+            android:focusable="true" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="64dp"
-            android:text="Your medical record history"
-            android:textColor="#E0FFFFFF"
-            android:textSize="12sp"
-            android:fontFamily="sans-serif-medium"
-            android:alpha="0.8" />
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MEDICAL JOURNEY"
+                android:textColor="#1E293B"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-black" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tracking your health progress"
+                android:textColor="#64748B"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="-30dp"
-        android:layout_below="@id/header"
-        android:background="@drawable/bg_sheet_white"
-        android:padding="24dp">
+        android:layout_below="@id/header_records"
+        android:layout_above="@+id/nav_area"
+        android:clipToPadding="false"
+        android:paddingTop="24dp"
+        android:paddingBottom="100dp"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp">
 
+            <!-- 2. LATEST VITALS HUB (HERO) -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_vitals_card_3d"
+                android:elevation="16dp"
+                android:padding="24dp">
+
+                <TextView
+                    android:id="@+id/tvVitalsLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LATEST VITALS"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-black"
+                    android:alpha="0.8"
+                    android:letterSpacing="0.1" />
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvVitalsLabel"
+                    android:layout_marginTop="20dp"
+                    android:columnCount="2"
+                    android:rowCount="2">
+
+                    <!-- WEIGHT -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="fill_horizontal"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Weight"
+                            android:textColor="#FFFFFF"
+                            android:alpha="0.7"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/tvLatestWeight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="62.5 kg"
+                            android:textColor="#FFFFFF"
+                            android:textSize="22sp"
+                            android:fontFamily="sans-serif-black" />
+                    </LinearLayout>
+
+                    <!-- BP -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="fill_horizontal"
+                        android:layout_columnWeight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Blood Pressure"
+                            android:textColor="#FFFFFF"
+                            android:alpha="0.7"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/tvLatestBP"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="115/75"
+                            android:textColor="#FFFFFF"
+                            android:textSize="22sp"
+                            android:fontFamily="sans-serif-black" />
+                    </LinearLayout>
+
+                    <!-- FHT -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="fill_horizontal"
+                        android:layout_columnWeight="1"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="FHT (Heart Tone)"
+                            android:textColor="#FFFFFF"
+                            android:alpha="0.7"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/tvLatestFHT"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="145 bpm"
+                            android:textColor="#00FBFB"
+                            android:textSize="22sp"
+                            android:fontFamily="sans-serif-black" />
+                    </LinearLayout>
+
+                    <!-- AOG -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="fill_horizontal"
+                        android:layout_columnWeight="1"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="AOG (Weeks)"
+                            android:textColor="#FFFFFF"
+                            android:alpha="0.7"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/tvLatestAOG"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="24 Weeks"
+                            android:textColor="#FFFFFF"
+                            android:textSize="22sp"
+                            android:fontFamily="sans-serif-black" />
+                    </LinearLayout>
+                </GridLayout>
+            </RelativeLayout>
+
+            <!-- 3. CHRONOLOGICAL HISTORY (MOCK DATA AURA) -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Clinical History"
-                android:textColor="@color/on_surface"
-                android:textSize="18sp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:text="CHECK-UP HISTORY"
+                android:textColor="#1E293B"
+                android:textSize="13sp"
                 android:fontFamily="sans-serif-black"
-                android:layout_marginBottom="16dp" />
+                android:letterSpacing="0.1" />
 
-            <RelativeLayout
+            <!-- Mock Item 1 -->
+            <include layout="@layout/item_record" />
+
+            <!-- Mock Item 2 -->
+            <include layout="@layout/item_record" />
+
+            <!-- Mock Item 3 -->
+            <include layout="@layout/item_record" />
+
+            <!-- Keep RV for future API binding -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewRecords"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@drawable/bg_white_3d_pill"
-                android:padding="32dp">
-                
-                <ImageView
-                    android:id="@+id/imgRecords"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@android:drawable/ic_menu_recent_history"
-                    app:tint="@color/on_surface_variant"
-                    android:alpha="0.3" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/imgRecords"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp"
-                    android:text="No records found"
-                    android:textColor="@color/on_surface_variant"
-                    android:textSize="14sp"
-                    android:fontFamily="sans-serif-medium" />
-            </RelativeLayout>
-
-            <View android:layout_width="match_parent" android:layout_height="100dp" />
+            <View android:layout_width="match_parent" android:layout_height="40dp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <include layout="@layout/layout_bottom_nav" />
+    <!-- FIXED BOTTOM NAV (STRICT PIN) -->
+    <FrameLayout
+        android:id="@+id/nav_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <include layout="@layout/layout_bottom_nav" />
+    </FrameLayout>
 
 </RelativeLayout>

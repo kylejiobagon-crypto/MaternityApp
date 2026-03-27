@@ -3,99 +3,96 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F7F8">
+    android:background="@drawable/bg_soft_gray_bg">
 
     <!-- ══════════════════════════════════════════ -->
     <!--  SECTION 1: FISCAL SESSION BANNER          -->
     <!-- ══════════════════════════════════════════ -->
-    <RelativeLayout
-        android:id="@+id/billingHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@drawable/bg_billing_premium_header"
-        android:elevation="8dp"
-        android:padding="20dp">
-
-        <!-- Floating Coin Icon -->
-        <RelativeLayout
-            android:id="@+id/iconContainer"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/bg_glass_circle"
-            android:elevation="4dp">
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_centerInParent="true"
-                android:src="@android:drawable/ic_menu_save"
-                app:tint="@color/white" />
-        </RelativeLayout>
-
-        <!-- Live Badge -->
-        <LinearLayout
-            android:id="@+id/liveBadge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_glass_pill"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="4dp">
-            <View
-                android:layout_width="6dp"
-                android:layout_height="6dp"
-                android:background="@drawable/bg_circle_red"
-                android:layout_marginEnd="6dp" />
-            <TextView
-                android:id="@+id/tvSessionDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fiscal Session: Live"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                android:fontFamily="sans-serif-medium" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/liveBadge"
-            android:layout_marginTop="16dp"
-            android:text="Billing Overview"
-            android:textColor="@color/white"
-            android:textSize="28sp"
-            android:fontFamily="sans-serif-black" />
-
-        <TextView
-            android:id="@+id/tvBillingUserName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvTitle"
-            android:layout_marginTop="4dp"
-            android:text="Patient Account"
-            android:textColor="#BBFFD8"
-            android:textSize="12sp"
-            android:fontFamily="sans-serif-medium"
-            android:letterSpacing="0.05" />
-
-    </RelativeLayout>
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/billingHeader"
-        android:layout_above="@+id/defaultBottomNavStub"
+        android:layout_above="@+id/nav_area"
         android:clipToPadding="false"
-        android:paddingBottom="80dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="20dp"
         android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <!-- ══════════════════════════════════════════ -->
+            <!--  SECTION 1: BILLING HERO BANNER            -->
+            <!-- ══════════════════════════════════════════ -->
+            <RelativeLayout
+                android:id="@+id/billingHero"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_billing_header_green_premium"
+                android:elevation="14dp"
+                android:clipToOutline="true"
+                android:padding="24dp">
+
+                <!-- Moving Smoke Effect Layer -->
+                <View
+                    android:id="@+id/smokeEffectSurface"
+                    android:layout_width="600dp"
+                    android:layout_height="600dp"
+                    android:layout_centerInParent="true"
+                    android:alpha="0.3"
+                    android:background="@drawable/bg_smoke_gradient_layer" />
+
+                <!-- Floating Coin Icon -->
+                <RelativeLayout
+                    android:id="@+id/iconContainer"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/bg_white_glass_circle"
+                    android:elevation="6dp">
+                    <ImageView android:layout_width="26dp" android:layout_height="26dp" android:layout_centerInParent="true" android:src="@android:drawable/ic_menu_save" app:tint="#059669" />
+                </RelativeLayout>
+
+                <!-- Live Badge -->
+                <LinearLayout
+                    android:id="@+id/liveBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_glass_pill"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp">
+                    <View android:layout_width="6dp" android:layout_height="6dp" android:background="@drawable/bg_circle_red" android:layout_marginEnd="6dp" />
+                    <TextView android:id="@+id/tvSessionDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fiscal Session: Live" android:textColor="#0E7490" android:textSize="10sp" android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/liveBadge"
+                    android:layout_marginTop="16dp"
+                    android:text="Billing Overview"
+                    android:textColor="#0E7490"
+                    android:textSize="28sp"
+                    android:fontFamily="sans-serif-black" />
+
+                <TextView
+                    android:id="@+id/tvBillingUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvTitle"
+                    android:layout_marginTop="4dp"
+                    android:text="Patient Account: dustin pogi"
+                    android:textColor="#059669"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-bold"
+                    android:alpha="0.8" />
+            </RelativeLayout>
 
             <!-- ══════════════════════════════════════════ -->
             <!--  SECTION 2: 2x2 METRICS GRID               -->
@@ -114,12 +111,12 @@
                     android:layout_columnWeight="1"
                     android:layout_marginEnd="6dp"
                     android:layout_marginBottom="12dp"
-                    android:background="@drawable/bg_card_revenue"
-                    android:elevation="3dp"
-                    android:padding="16dp">
-                    <ImageView android:id="@+id/ic1" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_save" app:tint="#00F49C" />
-                    <TextView android:id="@+id/tvTotalRevenue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic1" android:layout_marginTop="12dp" android:text="₱0.00" android:textColor="#0B0E11" android:textSize="20sp" android:fontFamily="sans-serif-black" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvTotalRevenue" android:text="Total Settlements" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
+                    android:background="@drawable/bg_premium_card_emerald"
+                    android:elevation="10dp"
+                    android:padding="20dp">
+                    <ImageView android:id="@+id/ic1" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_save" app:tint="#FFFFFF" />
+                    <TextView android:id="@+id/tvTotalRevenue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic1" android:layout_marginTop="16dp" android:text="₱0.00" android:textColor="#FFFFFF" android:textSize="22sp" android:fontFamily="sans-serif-black" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvTotalRevenue" android:text="Total Settlements" android:textColor="#E0F2FE" android:textSize="11sp" android:fontFamily="sans-serif-bold" android:alpha="0.9" />
                 </RelativeLayout>
 
                 <!-- Card 2: Pending -->
@@ -129,12 +126,12 @@
                     android:layout_columnWeight="1"
                     android:layout_marginStart="6dp"
                     android:layout_marginBottom="12dp"
-                    android:background="@drawable/bg_card_pending"
-                    android:elevation="3dp"
-                    android:padding="16dp">
-                    <ImageView android:id="@+id/ic2" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#FFBC00" />
-                    <TextView android:id="@+id/tvPendingAmount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic2" android:layout_marginTop="12dp" android:text="₱0.00" android:textColor="#0B0E11" android:textSize="20sp" android:fontFamily="sans-serif-black" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvPendingAmount" android:text="Awaiting Payment" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
+                    android:background="@drawable/bg_premium_card_amber"
+                    android:elevation="10dp"
+                    android:padding="20dp">
+                    <ImageView android:id="@+id/ic2" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#FFFFFF" />
+                    <TextView android:id="@+id/tvPendingAmount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic2" android:layout_marginTop="16dp" android:text="₱0.00" android:textColor="#FFFFFF" android:textSize="22sp" android:fontFamily="sans-serif-black" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvPendingAmount" android:text="Awaiting Payment" android:textColor="#FEF3C7" android:textSize="11sp" android:fontFamily="sans-serif-bold" android:alpha="0.9" />
                 </RelativeLayout>
 
                 <!-- Card 3: Verification -->
@@ -143,12 +140,12 @@
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_marginEnd="6dp"
-                    android:background="@drawable/bg_card_verif"
-                    android:elevation="3dp"
-                    android:padding="16dp">
-                    <ImageView android:id="@+id/ic3" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_search" app:tint="#4299F0" />
-                    <TextView android:id="@+id/tvVerificationAmount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic3" android:layout_marginTop="12dp" android:text="₱0.00" android:textColor="#0B0E11" android:textSize="20sp" android:fontFamily="sans-serif-black" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvVerificationAmount" android:text="Under Review" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
+                    android:background="@drawable/bg_premium_card_cyan"
+                    android:elevation="10dp"
+                    android:padding="20dp">
+                    <ImageView android:id="@+id/ic3" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_search" app:tint="#FFFFFF" />
+                    <TextView android:id="@+id/tvVerificationAmount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic3" android:layout_marginTop="16dp" android:text="₱0.00" android:textColor="#FFFFFF" android:textSize="22sp" android:fontFamily="sans-serif-black" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvVerificationAmount" android:text="Under Review" android:textColor="#CFFAFE" android:textSize="11sp" android:fontFamily="sans-serif-bold" android:alpha="0.9" />
                 </RelativeLayout>
 
                 <!-- Card 4: Downpayments -->
@@ -157,12 +154,12 @@
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_marginStart="6dp"
-                    android:background="@drawable/bg_card_wallet"
-                    android:elevation="3dp"
-                    android:padding="16dp">
-                    <ImageView android:id="@+id/ic4" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_agenda" app:tint="#F472B6" />
-                    <TextView android:id="@+id/tvDownpaymentTotal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic4" android:layout_marginTop="12dp" android:text="₱0.00" android:textColor="#0B0E11" android:textSize="20sp" android:fontFamily="sans-serif-black" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvDownpaymentTotal" android:text="Downpayments Wallet" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
+                    android:background="@drawable/bg_premium_card_violet"
+                    android:elevation="10dp"
+                    android:padding="20dp">
+                    <ImageView android:id="@+id/ic4" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_agenda" app:tint="#FFFFFF" />
+                    <TextView android:id="@+id/tvDownpaymentTotal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic4" android:layout_marginTop="16dp" android:text="₱0.00" android:textColor="#FFFFFF" android:textSize="22sp" android:fontFamily="sans-serif-black" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvDownpaymentTotal" android:text="Downpayments Wallet" android:textColor="#F3E8FF" android:textSize="11sp" android:fontFamily="sans-serif-bold" android:alpha="0.9" />
                 </RelativeLayout>
 
             </GridLayout>
@@ -175,13 +172,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/bg_search_glass"
+                android:background="@drawable/bg_3d_real_glass"
                 android:elevation="2dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="12dp">
-                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_search" app:tint="#A0AAB5" />
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_search" app:tint="#94A3B8" />
                 <EditText
                     android:id="@+id/etBillingSearch"
                     android:layout_width="match_parent"
@@ -189,8 +186,8 @@
                     android:layout_marginStart="12dp"
                     android:background="@null"
                     android:hint="Search invoices or services…"
-                    android:textColorHint="#A0AAB5"
-                    android:textColor="#0B0E11"
+                    android:textColorHint="#94A3B8"
+                    android:textColor="#0F172A"
                     android:textSize="14sp"
                     android:fontFamily="sans-serif-medium"
                     android:singleLine="true" />
@@ -219,16 +216,31 @@
             <!-- ══════════════════════════════════════════ -->
             <!--  SECTION 4: INVOICE CARD-LIST              -->
             <!-- ══════════════════════════════════════════ -->
+            <!-- ══════════════════════════════════════════ -->
+            <!--  SECTION 4: TRANSACTION TABLE              -->
+            <!-- ══════════════════════════════════════════ -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="28dp"
                 android:layout_marginHorizontal="16dp"
-                android:orientation="vertical">
+                android:background="@drawable/bg_billing_table_container"
+                android:elevation="6dp"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginBottom="12dp">
-                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Recent Transactions" android:textColor="#0B0E11" android:textSize="18sp" android:fontFamily="sans-serif-black" />
-                    <TextView android:id="@+id/tvInvoiceCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 records" android:textColor="#6B7280" android:textSize="12sp" android:fontFamily="sans-serif-medium" />
+                <!-- Table Header Column Titles -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_table_header_pill"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp">
+                    <TextView android:layout_width="0dp" android:layout_weight="1.8" android:layout_height="wrap_content" android:text="Date" android:textColor="#0E7490" android:textSize="12sp" android:fontFamily="sans-serif-bold" />
+                    <TextView android:layout_width="0dp" android:layout_weight="4" android:layout_height="wrap_content" android:text="Service" android:textColor="#0E7490" android:textSize="12sp" android:fontFamily="sans-serif-bold" />
+                    <TextView android:layout_width="0dp" android:layout_weight="2.5" android:layout_height="wrap_content" android:text="Amount" android:textColor="#0E7490" android:textSize="12sp" android:fontFamily="sans-serif-bold" />
+                    <TextView android:layout_width="0dp" android:layout_weight="1.7" android:layout_height="wrap_content" android:text="Status" android:textColor="#0E7490" android:textSize="12sp" android:fontFamily="sans-serif-bold" android:gravity="end" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -237,8 +249,8 @@
                     android:layout_height="120dp"
                     android:gravity="center"
                     android:orientation="vertical">
-                    <ProgressBar android:layout_width="36dp" android:layout_height="36dp" android:indeterminateTint="#00F49C" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="Syncing financial data…" android:textColor="#6B7280" android:textSize="12sp" android:fontFamily="sans-serif-medium" />
+                    <ProgressBar android:layout_width="32dp" android:layout_height="32dp" android:indeterminateTint="#059669" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="Updating list..." android:textColor="#94A3B8" android:textSize="11sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -248,23 +260,42 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:visibility="gone">
-                    <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@android:drawable/ic_menu_save" app:tint="#D1D5DB" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="No transactions found" android:textColor="#6B7280" android:textSize="14sp" android:fontFamily="sans-serif-medium" />
+                    <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@android:drawable/ic_menu_save" app:tint="#E2E8F0" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="No history found" android:textColor="#94A3B8" android:textSize="13sp" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvInvoices"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    android:visibility="gone" />
+                    android:nestedScrollingEnabled="false" />
+
+                <!-- Hidden for compatibility -->
+                <TextView android:id="@+id/tvInvoiceCount" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+
+                <!-- See all link -->
+                <TextView
+                    android:id="@+id/tvSeeAllTransactions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center"
+                    android:text="Load More Activity"
+                    android:textColor="#0E7490"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-bold" />
 
             </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <FrameLayout android:id="@+id/defaultBottomNavStub" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true">
+    <!-- FIXED BOTTOM NAV (ROBUST PIN) -->
+    <FrameLayout
+        android:id="@+id/nav_area"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true">
         <include layout="@layout/layout_bottom_nav" />
     </FrameLayout>
 

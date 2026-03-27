@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 1. BASE CLEAN WHITE -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF" />
+        </shape>
+    </item>
+
+    <!-- 2. VIBRANT CYAN SPLASH (Liquid Mesh) -->
+    <item android:top="-250dp" android:left="-250dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="700dp"
+                android:centerX="0.2"
+                android:centerY="0.2"
+                android:startColor="#66CCF1FF"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- 3. SOFT LAVENDER SPHERE (Center Right) -->
+    <item android:right="-300dp" android:top="100dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="800dp"
+                android:centerX="0.9"
+                android:centerY="0.4"
+                android:startColor="#4DE0C3FC"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- 4. POWDER PINK GLOW (Bottom Left) -->
+    <item android:bottom="-200dp" android:left="-100dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="600dp"
+                android:centerX="0.1"
+                android:centerY="0.9"
+                android:startColor="#4DFED9EE"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- 5. CRYSTAL BLUE OVERLAY -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="315"
+                android:startColor="#0DFFFFFF"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 1. SOFT SHADOW -->
+    <item android:top="2dp" android:left="1dp" android:right="1dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#4D000000" />
+            <corners android:radius="14dp" />
+        </shape>
+    </item>
+
+    <!-- 2. ORANGE/YELLOW CORE (#FBC02D) -->
+    <item android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="90"
+                android:startColor="#FBC02D"
+                android:endColor="#FFEB3B" />
+            <corners android:radius="14dp" />
+            <stroke android:width="0.5dp" android:color="#4DFFFFFF" />
+        </shape>
+    </item>
+</layer-list>

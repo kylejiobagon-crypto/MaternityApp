@@ -1,102 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@drawable/bg_chat_aura_mesh">
 
+    <!-- ✅ 1. ZERO-GRAVITY FLOATING HEADER -->
     <RelativeLayout
-        android:id="@+id/header"
+        android:id="@+id/chat_header"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:background="@drawable/bg_mocha_header">
-        
+        android:layout_height="80dp"
+        android:paddingHorizontal="20dp"
+        android:layout_marginTop="16dp">
+
         <ImageView
             android:id="@+id/btnBack"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_glass_card_premium_light"
+            android:elevation="6dp"
             android:padding="12dp"
             android:src="@android:drawable/ic_menu_revert"
-            app:tint="@color/white"
-            android:background="@drawable/bg_white_circle"
-            android:backgroundTint="#20FFFFFF" />
+            app:tint="#1E293B" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="24dp"
-            android:text="Chat with Us"
-            android:textColor="@color/white"
-            android:textSize="22sp"
+            android:layout_centerInParent="true"
+            android:text="Communication Hub"
+            android:textColor="#1E293B"
+            android:textSize="20sp"
             android:fontFamily="sans-serif-black" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="56dp"
-            android:text="Support and consultations"
-            android:textColor="#E0FFFFFF"
-            android:textSize="12sp"
-            android:fontFamily="sans-serif-medium"
-            android:alpha="0.8" />
+        <RelativeLayout
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_glass_card_premium_light"
+            android:elevation="6dp">
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_centerInParent="true"
+                android:src="@android:drawable/ic_popup_sync"
+                app:tint="#6366F1" />
+        </RelativeLayout>
     </RelativeLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <!-- ✅ 2. FLOATING GLASS SEARCH HUB -->
+    <RelativeLayout
+        android:id="@+id/search_hub"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_below="@id/chat_header"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_glass_search_bar"
+        android:elevation="12dp"
+        android:paddingHorizontal="20dp">
+        
+        <ImageView
+            android:id="@+id/ic_search"
+            android:layout_width="22sp"
+            android:layout_height="22sp"
+            android:layout_centerVertical="true"
+            android:src="@android:drawable/ic_menu_search"
+            app:tint="#64748B" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="14dp"
+            android:layout_toEndOf="@id/ic_search"
+            android:background="@android:color/transparent"
+            android:hint="Search professional..."
+            android:textColor="#1E293B"
+            android:textColorHint="#94A3B8"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif-medium" />
+    </RelativeLayout>
+
+    <!-- ✅ 3. ACTIVE CONTACTS LIST WITH REFRESH -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="-30dp"
-        android:layout_below="@id/header"
-        android:background="@drawable/bg_sheet_white"
-        android:padding="24dp">
+        android:layout_below="@id/search_hub"
+        android:layout_marginTop="12dp">
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvChatContacts"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="100dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_chat_contact" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Your Conversations"
-                android:textColor="@color/on_surface"
-                android:textSize="18sp"
-                android:fontFamily="sans-serif-black"
-                android:layout_marginBottom="16dp" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@drawable/bg_white_3d_pill"
-                android:padding="32dp">
-                
-                <ImageView
-                    android:id="@+id/imgChat"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@android:drawable/stat_notify_chat"
-                    app:tint="@color/on_surface_variant"
-                    android:alpha="0.3" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/imgChat"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp"
-                    android:text="No messages yet"
-                    android:textColor="@color/on_surface_variant"
-                    android:textSize="14sp"
-                    android:fontFamily="sans-serif-medium" />
-            </RelativeLayout>
-
-            <View android:layout_width="match_parent" android:layout_height="100dp" />
-
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    <!-- NAVIGATION ANCHOR -->
+    <FrameLayout
+        android:id="@+id/nav_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <include layout="@layout/layout_bottom_nav" />
+    </FrameLayout>
 
 </RelativeLayout>

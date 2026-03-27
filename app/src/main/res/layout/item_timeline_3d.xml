@@ -85,29 +85,28 @@
                 <TextView android:id="@+id/tvPatientName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="14dp" android:fontFamily="sans-serif-black" android:text="Maria Santos" android:textColor="@color/neo_primary" android:textSize="16sp" />
             </LinearLayout>
 
-            <!-- DETAILS -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center_vertical">
+            <!-- DETAILS (Vertical Overhaul) -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="vertical">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginBottom="6dp">
                     <ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@android:drawable/ic_menu_send" app:tint="@color/neo_slate" />
                     <TextView android:id="@+id/tvServiceType" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:fontFamily="sans-serif" android:text="Prenatal Check-up" android:textColor="@color/neo_slate" android:textSize="11sp" />
                 </LinearLayout>
-                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
                     <ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@android:drawable/ic_menu_help" app:tint="@color/neo_slate" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:fontFamily="sans-serif" android:text="Dr. Cruz" android:textColor="@color/neo_slate" android:textSize="11sp" />
+                    <TextView android:id="@+id/tvDoctorName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:fontFamily="sans-serif" android:text="Assigned: Dr. Cruz" android:textColor="@color/neo_slate" android:textSize="11sp" />
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- ACTIONS FOR CONFIRMED (DEFAULT) -->
+            <!-- UPDATED ACTIONS: CANCEL & RESCHEDULE -->
             <LinearLayout android:id="@+id/layoutActionsConfirmed" android:layout_width="match_parent" android:layout_height="36dp" android:layout_marginTop="20dp" android:orientation="horizontal">
-                <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="6dp" android:background="@drawable/bg_outline_button" android:gravity="center" android:text="VIEW" android:textColor="@color/neo_primary" android:textSize="9sp" android:fontFamily="sans-serif-black" />
-                <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="6dp" android:background="@drawable/bg_outline_button" android:gravity="center" android:text="EDIT" android:textColor="@color/neo_primary" android:textSize="9sp" android:fontFamily="sans-serif-black" />
-                <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/bg_pill_gradient_cyan" android:backgroundTint="#0DFBFB" android:gravity="center" android:text="CANCEL" android:textColor="@color/neo_cyan" android:textSize="9sp" android:fontFamily="sans-serif-black" />
+                <TextView android:id="@+id/btnCancel" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="8dp" android:background="@drawable/bg_pill_gradient_cyan" android:backgroundTint="#0DFBFB" android:gravity="center" android:text="CANCEL" android:textColor="@color/neo_cyan" android:textSize="9sp" android:fontFamily="sans-serif-black" />
+                <TextView android:id="@+id/btnReschedule" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1.2" android:background="@drawable/bg_outline_button" android:gravity="center" android:text="RESCHEDULE" android:textColor="@color/neo_primary" android:textSize="9sp" android:fontFamily="sans-serif-black" />
             </LinearLayout>
 
             <!-- ACTIONS FOR PENDING -->
             <LinearLayout android:id="@+id/layoutActionsPending" android:layout_width="match_parent" android:layout_height="36dp" android:layout_marginTop="20dp" android:orientation="horizontal" android:visibility="gone">
                 <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1.2" android:layout_marginEnd="8dp" android:background="@drawable/bg_button_schedule_neon" android:gravity="center" android:text="CONFIRM" android:textColor="@color/white" android:textSize="9sp" android:fontFamily="sans-serif-black" />
-                <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/bg_outline_button" android:backgroundTint="#1A9333FF" android:gravity="center" android:text="RESCHEDULE" android:textColor="#9333FF" android:textSize="9sp" android:fontFamily="sans-serif-black" />
+                <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/bg_outline_button" android:backgroundTint="#1A9333FF" android:gravity="center" android:text="CLOSE" android:textColor="#9333FF" android:textSize="9sp" android:fontFamily="sans-serif-black" />
             </LinearLayout>
 
         </LinearLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 1. SOFT TEAL GLOW -->
+    <item android:top="2dp" android:left="1dp" android:right="1dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#2640E0D0" /> <!-- 15% Teal Glow -->
+            <corners android:radius="14dp" />
+        </shape>
+    </item>
+
+    <!-- 2. TEAL CORE (#40E0D0) -->
+    <item android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="315"
+                android:startColor="#40E0D0"
+                android:endColor="#1D5D8A" />
+            <corners android:radius="14dp" />
+            <stroke android:width="0.8dp" android:color="#4DFFFFFF" />
+        </shape>
+    </item>
+</layer-list>

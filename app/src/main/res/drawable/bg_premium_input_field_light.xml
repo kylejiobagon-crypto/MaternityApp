@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Outer Rim (Sharp Shadow) -->
+    <item>
+        <shape>
+            <corners android:radius="16dp" />
+            <solid android:color="#00000000" />
+            <stroke android:width="1dp" android:color="#E1E4E8" />
+        </shape>
+    </item>
+    
+    <!-- Main Body Background (Soft Inset) -->
+    <item android:top="1dp" android:left="1dp" android:bottom="1dp" android:right="1dp">
+        <shape>
+            <solid android:color="#F5F7FA" />
+            <corners android:radius="16dp" />
+            <padding android:left="16dp" android:right="16dp" />
+        </shape>
+    </item>
+    
+    <!-- Inner Shadow Simulation (At the top) -->
+    <item android:bottom="48dp" android:left="4dp" android:right="4dp">
+        <shape>
+            <corners android:radius="16dp" />
+            <solid android:color="#0D000000" />
+        </shape>
+    </item>
+</layer-list>

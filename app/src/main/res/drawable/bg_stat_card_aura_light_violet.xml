@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Main Gradient Body: Soft Premium Violet -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#8E2DE2"
+                android:centerColor="#7019C1"
+                android:endColor="#4A148C"
+                android:angle="0" />
+            <corners android:radius="24dp" />
+        </shape>
+    </item>
+
+    <!-- Glossy Top-Highlight Shadow-Effect -->
+    <item android:bottom="60dp" android:right="30dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:centerX="0.0"
+                android:centerY="0.0"
+                android:gradientRadius="120dp"
+                android:startColor="#4DFFFFFF" 
+                android:endColor="#00FFFFFF" 
+                android:type="radial" />
+            <corners android:radius="24dp" />
+        </shape>
+    </item>
+
+    <!-- 3D Glass Rim Shine -->
+    <item android:bottom="2dp" android:right="2dp" android:top="2dp" android:left="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="24dp" />
+            <stroke android:width="1.2dp" android:color="#40FFFFFF" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <padding android:bottom="6dp" android:left="4dp" android:right="4dp" android:top="2dp" />
+            <solid android:color="#2000FF87" /> <!-- Green shadow glow -->
+            <corners android:radius="26dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#5919233C" /> 
+            <corners android:radius="24dp" />
+            <stroke android:width="1dp" android:color="#00FF87" /> 
+        </shape>
+    </item>
+    <!-- INTERNAL GRADIENT HIGHLIGHT (Luminous Green to Deep Emerald) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="225"
+                android:startColor="#2600FF87"
+                android:endColor="#00004D2E" />
+            <corners android:radius="24dp" />
+        </shape>
+    </item>
+</layer-list>

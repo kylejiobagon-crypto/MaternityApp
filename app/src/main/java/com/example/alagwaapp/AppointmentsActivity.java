@@ -52,6 +52,8 @@ public class AppointmentsActivity extends AppCompatActivity {
     private ImageView btnPrevMonth, btnNextMonth;
     private View layoutEmpty, layoutLoading;
     private View btnBookFloating, btnClose;
+    private View cardQueueStatus, statusPulseLive;
+    private TextView tvQueueNumber, tvEstimatedWait;
     private AppointmentAdapter adapter;
     private ApiService apiService;
     private SharedPreferences prefs;
@@ -73,6 +75,8 @@ public class AppointmentsActivity extends AppCompatActivity {
         layoutLoading = findViewById(R.id.layoutLoading);
         btnBookFloating = findViewById(R.id.btnBookFloating);
         btnClose = findViewById(R.id.btnClose);
+        
+        // Queue Status has been moved to Dashboard
 
         currentDisplayDate = Calendar.getInstance();
         selectedDate = Calendar.getInstance();
@@ -304,6 +308,7 @@ public class AppointmentsActivity extends AppCompatActivity {
         fullList.add(m2);
     }
 
+
     private void showBookAppointmentSheet() {
         BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.TransparentDialog);
         View sheet = getLayoutInflater().inflate(R.layout.layout_booking_sheet, null);
@@ -408,6 +413,7 @@ public class AppointmentsActivity extends AppCompatActivity {
             if ("Confirmed".equalsIgnoreCase(appointment.status) || position == 0) {
                 holder.tvPatient.setText(appointment.patientName);
                 holder.tvService.setText(appointment.serviceType);
+                holder.tvDoctor.setText("Assigned: Dr. Cruz");
                 holder.tvStatus.setText("CONFIRMED");
                 holder.tvStatus.setTextColor(0xFF75FF68);
                 holder.containerStatus.setBackgroundResource(R.drawable.bg_status_confirmed);
@@ -420,6 +426,7 @@ public class AppointmentsActivity extends AppCompatActivity {
             } else {
                 holder.tvPatient.setText(appointment.patientName);
                 holder.tvService.setText(appointment.serviceType);
+                holder.tvDoctor.setText("Assigned: Dr. Reyes");
                 holder.tvStatus.setText("PENDING");
                 holder.tvStatus.setTextColor(0xFF7701D0);
                 holder.containerStatus.setBackgroundResource(R.drawable.bg_status_pending);
@@ -430,15 +437,20 @@ public class AppointmentsActivity extends AppCompatActivity {
                 holder.tvDateTime.setTextColor(0x66FFFFFF);
                 holder.nodeIcon.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0x33B9CAC9));
             }
+            
+            holder.btnCancel.setOnClickListener(v -> Toast.makeText(v.getContext(), "Cancel requested", Toast.LENGTH_SHORT).show());
+            holder.btnReschedule.setOnClickListener(v -> Toast.makeText(v.getContext(), "Reschedule requested", Toast.LENGTH_SHORT).show());
         }
 
         @Override public int getItemCount() { return list.size(); }
         static class ViewHolder extends RecyclerView.ViewHolder {
-            TextView tvService, tvDateTime, tvStatus, tvPatient;
+            TextView tvService, tvDoctor, tvDateTime, tvStatus, tvPatient;
             View nodeIcon, containerStatus, statusPulse, layoutActionsConfirmed, layoutActionsPending;
+            View btnCancel, btnReschedule;
             ImageView ivTimeIcon;
             ViewHolder(View v) { super(v); 
                 tvService = v.findViewById(R.id.tvServiceType);
+                tvDoctor  = v.findViewById(R.id.tvDoctorName);
                 tvPatient = v.findViewById(R.id.tvPatientName);
                 tvDateTime = v.findViewById(R.id.tvDateTime);
                 tvStatus = v.findViewById(R.id.tvStatus);
@@ -448,6 +460,8 @@ public class AppointmentsActivity extends AppCompatActivity {
                 layoutActionsConfirmed = v.findViewById(R.id.layoutActionsConfirmed);
                 layoutActionsPending = v.findViewById(R.id.layoutActionsPending);
                 ivTimeIcon = v.findViewById(R.id.ivTimeIcon);
+                btnCancel = v.findViewById(R.id.btnCancel);
+                btnReschedule = v.findViewById(R.id.btnReschedule);
             }
         }
     }

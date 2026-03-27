@@ -37,7 +37,8 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText etFirstName, etLastName, etEmail, etPhone, etDob, etAge, etPhilHealth, etAddress;
     private EditText etLmp, etBlood, etMonths, etEmergencyName, etEmergencyRel, etEmergencyPhone;
     private TextView btnEdit, btnReset, tvProfileNameHero;
-    private View btnSave, avatarContainer, syncDot, loadingOverlay;
+    private View btnSave, syncDot, loadingOverlay;
+    private RelativeLayout avatarContainer;
     private TextView tvDueDate, tvWeeks, tvTrimester;
     private boolean isEditMode = false;
     
@@ -157,7 +158,8 @@ public class ProfileActivity extends AppCompatActivity {
         btnReset = findViewById(R.id.btnReset);
         btnSave = findViewById(R.id.btnSave);
         avatarContainer = findViewById(R.id.avatarContainer);
-        syncDot = findViewById(R.id.syncDot);
+        // syncDot is the Camera Overlay (index 1) in the new XML
+        syncDot = avatarContainer != null ? avatarContainer.getChildAt(1) : null; 
         tvProfileNameHero = findViewById(R.id.tvProfileNameHero);
         
         tvDueDate = findViewById(R.id.tvDueDate);
@@ -170,6 +172,13 @@ public class ProfileActivity extends AppCompatActivity {
         btnEdit.setOnClickListener(v -> toggleEditMode());
         btnSave.setOnClickListener(v -> saveChanges());
         btnReset.setOnClickListener(v -> showResetBottomSheet());
+
+        if (avatarContainer != null) {
+            avatarContainer.setOnClickListener(v -> {
+                Toast.makeText(this, "Opening Secure Gallery Hub... 📸", Toast.LENGTH_SHORT).show();
+                // Simulation of gallery selection
+            });
+        }
 
         etDob.setOnClickListener(v -> {
             if (isEditMode) showDatePicker();

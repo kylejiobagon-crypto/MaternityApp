@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 1. DEEP COSMIC BASE (Deep Blue) -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#0B0E21" />
+        </shape>
+    </item>
+
+    <!-- 2. TEAL MESH (Top Right) -->
+    <item android:top="-150dp" android:right="-200dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="800dp"
+                android:centerX="1.0"
+                android:centerY="0.2"
+                android:startColor="#4D122557"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- 3. MAGENTA MESH (Bottom Left) -->
+    <item android:bottom="-200dp" android:left="-150dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="700dp"
+                android:centerX="0.0"
+                android:centerY="1.0"
+                android:startColor="#4D2C003E"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- 4. SUBTLE CENTER GLOW (Light Teal) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="600dp"
+                android:centerX="0.5"
+                android:centerY="0.6"
+                android:startColor="#1A122557"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+</layer-list>

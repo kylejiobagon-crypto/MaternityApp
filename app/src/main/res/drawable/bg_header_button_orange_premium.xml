@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Bottom Drop Shadow for 3D depth -->
+    <item android:top="2dp" android:left="2dp" android:right="2dp" android:bottom="0dp">
+         <shape android:shape="oval">
+             <solid android:color="#26000000" />
+         </shape>
+    </item>
+
+    <!-- Main Orange Gradient Body -->
+    <item android:bottom="2dp" android:right="1dp" android:left="1dp">
+        <shape android:shape="oval">
+            <gradient
+                android:startColor="#FFBF00"
+                android:endColor="#FF7D00"
+                android:angle="135" />
+        </shape>
+    </item>
+
+    <!-- 3D Bevel Rim Highlight -->
+    <item android:bottom="2dp" android:right="1dp" android:left="1dp">
+        <shape android:shape="oval">
+            <stroke android:width="1.2dp" android:color="#66FFFFFF" />
+        </shape>
+    </item>
+
+    <!-- Top Glossy Reflection -->
+    <item android:bottom="30dp" android:left="8dp" android:right="8dp" android:top="4dp">
+         <shape android:shape="oval">
+             <gradient
+                 android:startColor="#80FFFFFF"
+                 android:endColor="#00FFFFFF"
+                 android:angle="270" />
+         </shape>
+    </item>
+</layer-list>

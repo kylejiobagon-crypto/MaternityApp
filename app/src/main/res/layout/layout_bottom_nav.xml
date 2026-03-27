@@ -1,185 +1,223 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bottomNavContainer"
     android:layout_width="match_parent"
-    android:layout_height="78dp"
+    android:layout_height="80dp"
     android:layout_alignParentBottom="true"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginBottom="16dp"
-    android:background="@drawable/bg_bottom_nav_aura"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingTop="2dp"
-    android:paddingBottom="4dp"
-    android:elevation="15dp">
+    android:background="@drawable/bg_bottom_nav_dark_premium"
+    android:elevation="30dp">
 
-    <!-- HOME -->
     <LinearLayout
-        android:id="@+id/navHome"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:focusable="true">
-        <ImageView
-            android:id="@+id/ivNavHome"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@android:drawable/ic_menu_today"
-            android:alpha="0.8"
-            app:tint="@color/neo_slate" />
-        <TextView
-            android:id="@+id/tvNavHome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:fontFamily="sans-serif-bold"
-            android:text="HOME"
-            android:textColor="@color/neo_slate"
-            android:textSize="8sp" />
-    </LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:baselineAligned="false">
 
-    <!-- BOOKING -->
-    <LinearLayout
-        android:id="@+id/navAppointments"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:focusable="true">
-        <ImageView
-            android:id="@+id/ivNavAppointments"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@android:drawable/ic_menu_agenda"
-            android:alpha="0.8"
-            app:tint="@color/neo_slate" />
-        <TextView
-            android:id="@+id/tvNavAppointments"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:fontFamily="sans-serif-bold"
-            android:text="BOOKING"
-            android:textColor="@color/neo_slate"
-            android:textSize="8sp" />
-    </LinearLayout>
+        <!-- HOME -->
+        <LinearLayout
+            android:id="@+id/navHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <FrameLayout
+                android:id="@+id/navHomeCircle"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/ivNavHome"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/ic_menu_today"
+                    app:tint="#94A3B8" />
+            </FrameLayout>
+            <TextView
+                android:id="@+id/tvNavHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Home"
+                android:textColor="#94A3B8"
+                android:textSize="10sp" />
+        </LinearLayout>
 
-    <!-- RECORDS -->
-    <LinearLayout
-        android:id="@+id/navRecords"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:focusable="true">
-        <ImageView
-            android:id="@+id/ivNavRecords"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@android:drawable/ic_menu_myplaces"
-            android:alpha="0.8"
-            app:tint="@color/neo_slate" />
-        <TextView
-            android:id="@+id/tvNavRecords"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:fontFamily="sans-serif-bold"
-            android:text="RECORDS"
-            android:textColor="@color/neo_slate"
-            android:textSize="8sp" />
-    </LinearLayout>
+        <!-- BOOKING / Statistic equivalent -->
+        <LinearLayout
+            android:id="@+id/navAppointments"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <FrameLayout
+                android:id="@+id/navAppointmentsCircle"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/ivNavAppointments"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/ic_menu_agenda"
+                    app:tint="#94A3B8" />
+            </FrameLayout>
+            <TextView
+                android:id="@+id/tvNavAppointments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Booking"
+                android:textColor="#94A3B8"
+                android:textSize="10sp" />
+        </LinearLayout>
 
-    <!-- BILLING -->
-    <LinearLayout
-        android:id="@+id/navBilling"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:focusable="true">
-        <ImageView
-            android:id="@+id/ivNavBilling"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@android:drawable/ic_menu_manage"
-            android:alpha="0.8"
-            app:tint="@color/neo_slate" />
-        <TextView
-            android:id="@+id/tvNavBilling"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:fontFamily="sans-serif-bold"
-            android:text="BILLING"
-            android:textColor="@color/neo_slate"
-            android:textSize="8sp" />
-    </LinearLayout>
+        <!-- RECORDS / Data equivalent -->
+        <LinearLayout
+            android:id="@+id/navRecords"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <FrameLayout
+                android:id="@+id/navRecordsCircle"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/ivNavRecords"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/ic_menu_myplaces"
+                    app:tint="#94A3B8" />
+            </FrameLayout>
+            <TextView
+                android:id="@+id/tvNavRecords"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Records"
+                android:textColor="#94A3B8"
+                android:textSize="10sp" />
+        </LinearLayout>
 
-    <!-- PROFILE -->
-    <LinearLayout
-        android:id="@+id/navProfile"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:focusable="true">
-        <ImageView
-            android:id="@+id/ivNavProfile"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@android:drawable/ic_menu_directions"
-            android:alpha="0.8"
-            app:tint="@color/neo_slate" />
-        <TextView
-            android:id="@+id/tvNavProfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:fontFamily="sans-serif-bold"
-            android:text="PROFILE"
-            android:textColor="@color/neo_slate"
-            android:textSize="8sp" />
-    </LinearLayout>
+        <!-- BILLING -->
+        <LinearLayout
+            android:id="@+id/navBilling"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <FrameLayout
+                android:id="@+id/navBillingCircle"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/ivNavBilling"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/ic_menu_manage"
+                    app:tint="#94A3B8" />
+            </FrameLayout>
+            <TextView
+                android:id="@+id/tvNavBilling"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Billing"
+                android:textColor="#94A3B8"
+                android:textSize="10sp" />
+        </LinearLayout>
 
-    <!-- RATINGS -->
-    <LinearLayout
-        android:id="@+id/navRatings"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:focusable="true">
-        <ImageView
-            android:id="@+id/ivNavRatings"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@android:drawable/btn_star"
-            android:alpha="0.8"
-            app:tint="@color/neo_slate" />
-        <TextView
-            android:id="@+id/tvNavRatings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:fontFamily="sans-serif-bold"
-            android:text="RATINGS"
-            android:textColor="@color/neo_slate"
-            android:textSize="8sp" />
-    </LinearLayout>
+        <!-- RATINGS -->
+        <LinearLayout
+            android:id="@+id/navRatings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <FrameLayout
+                android:id="@+id/navRatingsCircle"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/ivNavRatings"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/btn_star"
+                    app:tint="#94A3B8" />
+            </FrameLayout>
+            <TextView
+                android:id="@+id/tvNavRatings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Ratings"
+                android:textColor="#94A3B8"
+                android:textSize="10sp" />
+        </LinearLayout>
 
-</LinearLayout>
+        <!-- PROFILE / More equivalent -->
+        <LinearLayout
+            android:id="@+id/navProfile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <FrameLayout
+                android:id="@+id/navProfileCircle"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/ivNavProfile"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/ic_menu_directions"
+                    app:tint="#94A3B8" />
+            </FrameLayout>
+            <TextView
+                android:id="@+id/tvNavProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Profile"
+                android:textColor="#94A3B8"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

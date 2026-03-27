@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Bottom Drop Shadow Simulation -->
+    <item android:top="2dp" android:left="2dp" android:right="2dp" android:bottom="0dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="30dp" />
+            <solid android:color="#26000000" />
+        </shape>
+    </item>
+
+    <!-- Main Frosted Body (White with more noticeable Orange tint) -->
+    <item android:bottom="4dp" android:right="2dp" android:left="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#F2FFFFFF"
+                android:endColor="#F2FFE5D0"
+                android:angle="135" />
+            <corners android:radius="30dp" />
+        </shape>
+    </item>
+
+    <!-- 3D Bevel / Rim Light Highlight -->
+    <item android:bottom="4dp" android:right="2dp" android:left="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="30dp" />
+            <stroke android:width="1.5dp" android:color="#FFFFFFFF" />
+            <solid android:color="#00000000" />
+        </shape>
+    </item>
+
+    <!-- Top Glossy Shine -->
+    <item android:bottom="100dp" android:right="12dp" android:left="12dp" android:top="8dp">
+         <shape android:shape="rectangle">
+             <gradient
+                 android:startColor="#80FFFFFF"
+                 android:endColor="#00FFFFFF"
+                 android:angle="270" />
+             <corners android:topLeftRadius="20dp" android:topRightRadius="20dp" />
+         </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 1. DEEP OUTER SHADOW (Neumorphic Elevation) -->
+    <item android:top="6dp" android:left="4dp" android:right="4dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#4D000000" />
+            <corners android:radius="28dp" />
+        </shape>
+    </item>
+
+    <!-- 2. TEAL NAVY CORE (Strict specification: #153A61) -->
+    <item android:bottom="6dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#153A61" />
+            <corners android:radius="28dp" />
+            <!-- Translucent Cyan Glow Border (#40E0D0 at 30% alpha) -->
+            <stroke android:width="1.2dp" android:color="#4D40E0D0" />
+        </shape>
+    </item>
+
+    <!-- 3. TOP LIGHT GLOW (Glassmorphism highlight) -->
+    <item android:bottom="6dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="90"
+                android:startColor="#00FFFFFF"
+                android:endColor="#0DFFFFFF" />
+            <corners android:radius="28dp" />
+        </shape>
+    </item>
+</layer-list>

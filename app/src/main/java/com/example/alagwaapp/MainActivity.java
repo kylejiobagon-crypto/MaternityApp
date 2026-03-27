@@ -1,5 +1,6 @@
 package com.example.alagwaapp;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,22 +48,21 @@ public class MainActivity extends AppCompatActivity {
 
     // ─── HEADER ──────────────────────────────────
     private TextView tvWelcomeName;
-
-    // ─── HERO BANNER ─────────────────────────────
-    private TextView tvPregnancyStatus;   // repurposed: shows hero sub-label
-    private TextView tvHeroDate;           // live date (optional, set by tag)
-
+    
     // ─── STAT CARDS ──────────────────────────────
     private TextView tvStatValue1;   // Today's appointments
     private TextView tvStatValue2;   // Upcoming appointments
     private TextView tvStatValue3;   // Pending bills
     private TextView tvStatValue4;   // Total records
 
-    // ─── PREGNANCY TRACKER ───────────────────────
+    // ─── PREGNANCY TRACKER (WAVE - OPTION 2) ─────
+    private MaternityWaveView maternityWaveView;
+    private TextView tvOrbitValue, tvOrbitSubValue, tvDetailDueDate, tvDetailWeeks;
     private View viewTimelineProgress;
+    private View statusPulseLive;
+    private TextView tvQueueNumber, tvEstimatedWait;
 
-    // ─── PROFILE WARNING ─────────────────────────
-    private View cardProfileWarning;
+    // All dashboard clean-up.
 
     // ─── APPOINTMENT PREVIEW ──────────────────────
     private TextView tvApptDate1, tvApptMonth1, tvApptTitle1, tvApptTime1, tvApptStatus1;
@@ -108,6 +109,40 @@ public class MainActivity extends AppCompatActivity {
         fetchClinicBranding();
         fetchDashboardSummary();   // hits API → fills stat cards + name
         fetchUpcomingAppointments(); // hits API → fills appointment preview
+        setupHeroAnimations();     // moving smoke effect
+    }
+
+    private void setupHeroAnimations() {
+        View smokeLayer = findViewById(R.id.smokeEffectSurface);
+        if (smokeLayer == null) return;
+
+        // Infinite Translation (Horizontal movement)
+        ObjectAnimator transX = ObjectAnimator.ofFloat(smokeLayer, "translationX", -150f, 150f);
+        transX.setDuration(8000);
+        transX.setRepeatCount(ObjectAnimator.INFINITE);
+        transX.setRepeatMode(ObjectAnimator.REVERSE);
+        transX.setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator());
+        transX.start();
+
+        // Infinite Translation (Vertical movement)
+        ObjectAnimator transY = ObjectAnimator.ofFloat(smokeLayer, "translationY", -100f, 100f);
+        transY.setDuration(12000);
+        transY.setRepeatCount(ObjectAnimator.INFINITE);
+        transY.setRepeatMode(ObjectAnimator.REVERSE);
+        transY.setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator());
+        transY.start();
+
+        // Infinite Scale (Breathing effect)
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(smokeLayer, "scaleX", 1f, 1.4f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(smokeLayer, "scaleY", 1f, 1.4f);
+        scaleX.setDuration(10000);
+        scaleY.setDuration(10000);
+        scaleX.setRepeatCount(ObjectAnimator.INFINITE);
+        scaleY.setRepeatCount(ObjectAnimator.INFINITE);
+        scaleX.setRepeatMode(ObjectAnimator.REVERSE);
+        scaleY.setRepeatMode(ObjectAnimator.REVERSE);
+        scaleX.start();
+        scaleY.start();
     }
 
     // ─────────────────────────────────────────────
@@ -123,8 +158,12 @@ public class MainActivity extends AppCompatActivity {
         // Header
         tvWelcomeName     = findViewById(R.id.tvWelcomeName);
 
-        // Hero
-        tvPregnancyStatus = findViewById(R.id.tvPregnancyStatus);
+        // Hero Wave
+        maternityWaveView = findViewById(R.id.maternityWaveView);
+        tvOrbitValue        = findViewById(R.id.tvOrbitValue);
+        tvOrbitSubValue     = findViewById(R.id.tvOrbitSubValue);
+        tvDetailDueDate     = findViewById(R.id.tvDetailDueDate);
+        tvDetailWeeks       = findViewById(R.id.tvDetailWeeks);
 
         // Stats
         tvStatValue1      = findViewById(R.id.tvStatValue1);
@@ -132,11 +171,19 @@ public class MainActivity extends AppCompatActivity {
         tvStatValue3      = findViewById(R.id.tvStatValue3);
         tvStatValue4      = findViewById(R.id.tvStatValue4);
 
-        // Pregnancy tracker
+        // Queue Status (Inside Drawer Header)
+        if (navigationView != null && navigationView.getHeaderCount() > 0) {
+            View header = navigationView.getHeaderView(0);
+            statusPulseLive = header.findViewById(R.id.statusPulseLive);
+            tvQueueNumber   = header.findViewById(R.id.tvQueueNumber);
+            tvEstimatedWait = header.findViewById(R.id.tvEstimatedWait);
+            setupLivePulse();
+        }
+
+        // Pregnancy tracker (Compatibility)
         viewTimelineProgress = findViewById(R.id.viewTimelineProgress);
 
         // Profile warning
-        cardProfileWarning = findViewById(R.id.cardProfileWarning);
 
         // Ghost stubs
         navChat   = findViewById(R.id.navChat);
@@ -152,13 +199,9 @@ public class MainActivity extends AppCompatActivity {
             tvWelcomeName.setText(cachedName.toLowerCase());
         }
 
-        // Live date — show in hero subtitle (tvPregnancyStatus reused as hero subtitle)  
+        // Live date — the API summary will set the specific pregnancy data later
         String today = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
                 .format(new Date()).toUpperCase();
-        if (tvPregnancyStatus != null && (tvPregnancyStatus.getText().toString().equals("Your Health,")
-                || tvPregnancyStatus.getText().toString().isEmpty())) {
-            // only override if not yet set by API
-        }
 
         // Determine smart time-of-day greeting prefix
         int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
@@ -246,12 +289,6 @@ public class MainActivity extends AppCompatActivity {
             overridePendingTransition(0, 0);
         });
 
-        // Profile warning banner → ProfileActivity
-        if (cardProfileWarning != null) cardProfileWarning.setOnClickListener(v -> {
-            startActivity(new Intent(this, ProfileActivity.class)
-                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-            overridePendingTransition(0, 0);
-        });
 
         // Top avatar → ProfileActivity
         View profileAvatar = findViewById(R.id.profilePicContainer);
@@ -266,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
     //  DRAWER SETUP
     // ─────────────────────────────────────────────
     private void setupDrawer() {
-        if (ivMenu != null)    ivMenu.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.END));
+        if (ivMenu != null) ivMenu.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.END));
         if (btnLogout != null) btnLogout.setOnClickListener(v -> handleLogout());
 
         navigationView.setNavigationItemSelectedListener(item -> {
@@ -402,18 +439,36 @@ public class MainActivity extends AppCompatActivity {
                         if (tvStatValue3 != null) tvStatValue3.setText(fmt(data.getPendingBills()));
                         if (tvStatValue4 != null) tvStatValue4.setText(fmt(data.records_count));
 
-                        // ── Pregnancy Tracker ─────────────────
+                        // ── Pregnancy Tracker (ORBIT) ─────────
                         SummaryResponse.PregnancyStats ps = data.pregnancy_stats;
-                        if (ps != null && tvPregnancyStatus != null) {
-                            tvPregnancyStatus.setText("Week " + ps.weeks_pregnant);
+                        if (ps != null) {
+                            if (tvOrbitValue != null) tvOrbitValue.setText(String.valueOf(ps.weeks_pregnant));
+                            
+                            // Map Trimester
+                            int trimester = 1;
+                            if (ps.weeks_pregnant > 27) trimester = 3;
+                            else if (ps.weeks_pregnant > 13) trimester = 2;
+                            
+                            if (tvOrbitSubValue != null) {
+                                String triSuffix = trimester == 1 ? "st" : (trimester == 2 ? "nd" : "rd");
+                                tvOrbitSubValue.setText(trimester + triSuffix + " Trimester");
+                            }
+
+                            // Update Wave Progress
+                            if (maternityWaveView != null) {
+                                float waveProgress = Math.min(ps.weeks_pregnant / 40f, 1.0f);
+                                maternityWaveView.setProgress(waveProgress);
+                            }
+                            
+                            if (tvDetailWeeks != null) {
+                                int weeksToGo = Math.max(0, 40 - ps.weeks_pregnant);
+                                tvDetailWeeks.setText(weeksToGo + " milestone weeks to go");
+                            }
+                            
+                            // Compatibility
                             updateTimelineProgress(Math.min(ps.weeks_pregnant / 40f, 1f));
                         }
 
-                        // ── Profile warning ───────────────────
-                        if (cardProfileWarning != null) {
-                            boolean incomplete = data.fullname == null || data.fullname.trim().isEmpty();
-                            cardProfileWarning.setVisibility(incomplete ? View.VISIBLE : View.GONE);
-                        }
                     }
 
                     @Override public void onFailure(Call<SummaryResponse> call, Throwable t) {
@@ -558,5 +613,14 @@ public class MainActivity extends AppCompatActivity {
     private void setTv(String idName, String text) {
         TextView tv = getTextById(idName);
         if (tv != null) tv.setText(text);
+    }
+
+    private void setupLivePulse() {
+        if (statusPulseLive == null) return;
+        android.view.animation.AlphaAnimation pulse = new android.view.animation.AlphaAnimation(1.0f, 0.4f);
+        pulse.setDuration(1200);
+        pulse.setRepeatCount(android.view.animation.Animation.INFINITE);
+        pulse.setRepeatMode(android.view.animation.Animation.REVERSE);
+        statusPulseLive.startAnimation(pulse);
     }
 }

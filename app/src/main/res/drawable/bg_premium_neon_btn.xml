@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Bottom Shadow / Highlight -->
+    <item>
+        <shape>
+            <corners android:radius="24dp" />
+            <gradient
+                android:startColor="#CCFF0092"
+                android:endColor="#CC6C00FF"
+                android:angle="0" />
+            <stroke android:width="2dp" android:color="#33FFFFFF" />
+        </shape>
+    </item>
+    
+    <!-- Inner Aura (Top/Left) -->
+    <item android:bottom="4dp" android:right="2dp">
+        <shape>
+            <corners android:radius="24dp" />
+            <gradient
+                android:startColor="#FFFF4BB4"
+                android:endColor="#FF9D52FF"
+                android:angle="45" />
+            <padding android:left="30dp" android:right="30dp" />
+        </shape>
+    </item>
+    
+    <!-- Top Edge Highlight to simulate light reflection -->
+    <item android:bottom="48dp" android:left="8dp" android:right="8dp" android:top="2dp">
+         <shape>
+             <corners android:radius="12dp" />
+             <solid android:color="#4DFFFFFF" />
+         </shape>
+    </item>
+</layer-list>

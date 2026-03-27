@@ -90,15 +90,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/appointmentsHeader"
-        android:layout_above="@+id/defaultBottomNavStub"
+        android:layout_above="@+id/nav_area"
         android:clipToPadding="false"
-        android:paddingBottom="100dp"
+        android:paddingBottom="20dp"
         android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <!-- Spacer -->
+            <View 
+                android:layout_width="match_parent" 
+                android:layout_height="12dp" />
 
             <!-- ══════════════════════════════════════════ -->
             <!--  CALENDAR METRIC CARD                      -->
@@ -328,6 +333,54 @@
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="No appointments found" android:textColor="#6B7280" android:textSize="14sp" android:fontFamily="sans-serif-medium" />
                 </LinearLayout>
 
+                <!-- MOMMY'S REMINDER (NEW) -->
+                <RelativeLayout
+                    android:id="@+id/layoutReminders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:background="@drawable/bg_reminder_mommy_aura"
+                    android:padding="20dp"
+                    android:elevation="6dp">
+                    
+                    <ImageView
+                        android:id="@+id/ivAuraIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_white_glass_circle"
+                        android:padding="10dp"
+                        android:src="@android:drawable/ic_menu_help"
+                        app:tint="#FF3C8E" />
+                        
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/ivAuraIcon"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:id="@+id/tvReminderDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Recommended Next: April 12"
+                            android:textColor="#FF3C8E"
+                            android:textSize="13sp"
+                            android:fontFamily="sans-serif-black" />
+                            
+                        <TextView
+                            android:id="@+id/tvReminderAdvice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Your doctor suggests a follow-up ultrasound for your 24th week check-up."
+                            android:textColor="#64748B"
+                            android:textSize="11sp"
+                            android:fontFamily="sans-serif-medium"
+                            android:alpha="0.8" />
+                    </LinearLayout>
+                </RelativeLayout>
+
                 <!-- THE RECYCLERVIEW -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewAppointments"
@@ -364,13 +417,13 @@
             android:letterSpacing="0.2" />
     </LinearLayout>
 
-    <!-- BOTTOM NAV -->
-    <FrameLayout 
-        android:id="@+id/defaultBottomNavStub" 
-        android:layout_width="match_parent" 
-        android:layout_height="wrap_content" 
+    <!-- FIXED BOTTOM NAV (ROBUST PIN) -->
+    <FrameLayout
+        android:id="@+id/nav_area"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true">
-        <include layout="@layout/layout_bottom_nav" android:id="@+id/layout_bottom_nav" />
+        <include layout="@layout/layout_bottom_nav" />
     </FrameLayout>
 
 </RelativeLayout>

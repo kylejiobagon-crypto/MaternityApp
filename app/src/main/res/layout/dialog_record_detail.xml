@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_glass_card_white"
+    android:orientation="vertical"
+    android:padding="24dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <!-- Handle -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="24dp"
+        android:background="#CBD5E1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ULTRASOUND METRICS"
+        android:textColor="#1E293B"
+        android:textSize="12sp"
+        android:fontFamily="sans-serif-black"
+        android:letterSpacing="0.1"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Metrics Grid -->
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:rowCount="1"
+        android:layout_marginBottom="24dp">
+
+        <!-- BPD -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BPD (Head)"
+                android:textColor="#64748B"
+                android:textSize="10sp" />
+            <TextView
+                android:id="@+id/tvDetailBPD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="62 mm"
+                android:textColor="#2563EB"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-black" />
+        </LinearLayout>
+
+        <!-- AC -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AC (Abdomen)"
+                android:textColor="#64748B"
+                android:textSize="10sp" />
+            <TextView
+                android:id="@+id/tvDetailAC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="190 mm"
+                android:textColor="#2563EB"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-black" />
+        </LinearLayout>
+
+        <!-- FL -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FL (Femur)"
+                android:textColor="#64748B"
+                android:textSize="10sp" />
+            <TextView
+                android:id="@+id/tvDetailFL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="45 mm"
+                android:textColor="#2563EB"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-black" />
+        </LinearLayout>
+    </GridLayout>
+
+    <!-- Findings Section -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DOCTOR'S FINDINGS"
+        android:textColor="#1E293B"
+        android:textSize="12sp"
+        android:fontFamily="sans-serif-black"
+        android:letterSpacing="0.1"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/tvDetailFindings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Normal fetal growth and heartbeat detected. Placenta positions are healthy."
+        android:textColor="#475569"
+        android:textSize="14sp"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DIAGNOSIS &amp; NOTES"
+        android:textColor="#1E293B"
+        android:textSize="12sp"
+        android:fontFamily="sans-serif-black"
+        android:letterSpacing="0.1"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/tvDetailNotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Recommended: Increased calcium intake and light exercise. Next check-up in 4 weeks."
+        android:textColor="#475569"
+        android:textSize="14sp"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/btnCloseDetail"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:backgroundTint="#1E293B"
+        android:text="Close Details"
+        android:textColor="#FFFFFF"
+        android:fontFamily="sans-serif-bold"
+        app:cornerRadius="16dp" />
+
+</LinearLayout>

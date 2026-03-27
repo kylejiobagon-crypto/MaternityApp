@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Base Layer: Soft White -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#F8FAFC"/>
+        </shape>
+    </item>
+    <!-- Layer 2: Soft Pink Glow (Top Left) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:centerX="10%"
+                android:centerY="10%"
+                android:gradientRadius="300dp"
+                android:startColor="#15FBCFE8"
+                android:endColor="#00000000"
+                android:type="radial"/>
+        </shape>
+    </item>
+    <!-- Layer 3: Soft Blue Glow (Bottom Right) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:centerX="90%"
+                android:centerY="90%"
+                android:gradientRadius="400dp"
+                android:startColor="#15E0F2FE"
+                android:endColor="#00000000"
+                android:type="radial"/>
+        </shape>
+    </item>
+</layer-list>

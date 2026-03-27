@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 1. DEEP COSMIC BASE -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="270"
+                android:startColor="#03091B"
+                android:endColor="#122557" />
+        </shape>
+    </item>
+
+    <!-- 2. SWIRLING NEBULA: COSMIC BLUE/TEAL BLOSSOM (Top Right) -->
+    <item android:top="-100dp" android:right="-200dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="800dp"
+                android:centerX="1.0"
+                android:centerY="0.2"
+                android:startColor="#1A183E73"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- 3. NEBULA DUST: PINK CLOUDS (Bottom Left) -->
+    <item android:bottom="-200dp" android:left="-150dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="700dp"
+                android:centerX="0.0"
+                android:centerY="1.0"
+                android:startColor="#16FF99CC"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- 4. NEBULA DUST: PURPLE SWIRLS (Center Left) -->
+    <item android:top="200dp" android:left="-200dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="600dp"
+                android:centerX="0.0"
+                android:centerY="0.4"
+                android:startColor="#16B049FF"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- 5. FLOATING PARTICLES (Simulated with tiny radial gradients across the screen) -->
+    <!-- Cyan Particles -->
+    <item android:top="150dp" android:left="80dp" android:width="4dp" android:height="4dp">
+        <shape android:shape="oval"><solid android:color="#8000F2FF" /></shape>
+    </item>
+    <item android:top="400dp" android:right="120dp" android:width="3dp" android:height="3dp">
+        <shape android:shape="oval"><solid android:color="#9900F2FF" /></shape>
+    </item>
+    <item android:bottom="300dp" android:left="50dp" android:width="2dp" android:height="2dp">
+        <shape android:shape="oval"><solid android:color="#4D00F2FF" /></shape>
+    </item>
+    <!-- Pink Particles -->
+    <item android:bottom="200dp" android:right="70dp" android:width="4dp" android:height="4dp">
+        <shape android:shape="oval"><solid android:color="#80FF99CC" /></shape>
+    </item>
+    <item android:top="100dp" android:right="200dp" android:width="2dp" android:height="2dp">
+        <shape android:shape="oval"><solid android:color="#99FF99CC" /></shape>
+    </item>
+    <item android:top="600dp" android:left="140dp" android:width="3dp" android:height="3dp">
+        <shape android:shape="oval"><solid android:color="#66FF99CC" /></shape>
+    </item>
+</layer-list>

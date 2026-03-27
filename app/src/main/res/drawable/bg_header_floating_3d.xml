@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Deep Drop Shadow for floating effect -->
+    <item android:top="4dp" android:left="4dp" android:right="0dp" android:bottom="0dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="24dp" />
+            <solid android:color="#20000000" />
+        </shape>
+    </item>
+
+    <!-- Main White-to-Orange Gradient Body -->
+    <item android:bottom="4dp" android:right="2dp" android:left="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#FFFFFF"
+                android:endColor="#F2FFF5E6"
+                android:angle="270" />
+            <corners android:radius="24dp" />
+        </shape>
+    </item>
+
+    <!-- 3D Bevel / Rim Light Highlight -->
+    <item android:bottom="4dp" android:right="2dp" android:left="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="24dp" />
+            <stroke android:width="1.5dp" android:color="#FFFFFFFF" />
+            <solid android:color="#00000000" />
+        </shape>
+    </item>
+
+    <!-- Top Glossy Shine -->
+    <item android:bottom="60dp" android:right="12dp" android:left="12dp" android:top="6dp">
+         <shape android:shape="rectangle">
+             <gradient
+                 android:startColor="#60FFFFFF"
+                 android:endColor="#00FFFFFF"
+                 android:angle="270" />
+             <corners android:topLeftRadius="16dp" android:topRightRadius="16dp" />
+         </shape>
+    </item>
+</layer-list>

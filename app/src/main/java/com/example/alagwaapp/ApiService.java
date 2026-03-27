@@ -39,6 +39,13 @@ public interface ApiService {
     @GET("api_patients.php")
     Call<ResponseBody> getPatientsRaw(@Query("action") String action, @Query("mobile") String mobile);
 
+    @GET("api_chats.php")
+    Call<ChatResponse> fetchChats(
+            @Query("action") String action,
+            @Query("tenant_id") int tenantId,
+            @Query("user_id") int userId
+    );
+
     @GET("api_bookings.php")
     Call<AppointmentResponse> getAppointments(
             @Query("action") String action,

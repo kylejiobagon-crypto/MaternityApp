@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Outer Inset Shadow (Bottom/Right highlight) -->
+    <item>
+        <shape>
+            <corners android:radius="14dp" />
+            <solid android:color="#00000000" />
+            <stroke android:width="1.5dp" android:color="#26FFFFFF" />
+        </shape>
+    </item>
+    
+    <!-- Main Body Background -->
+    <item android:top="1dp" android:left="1dp" android:bottom="2dp" android:right="2dp">
+        <shape>
+            <solid android:color="#1A000000" /> <!-- Dark Inset (10% black) -->
+            <corners android:radius="14dp" />
+            <padding android:left="12dp" android:right="12dp" />
+        </shape>
+    </item>
+    
+    <!-- Top-Left Inner Glow/Shadow Highlight to simulate depth -->
+    <item android:bottom="2dp" android:right="2dp">
+        <shape>
+            <corners android:radius="14dp" />
+            <stroke android:width="1dp" android:color="#0DFFFFFF" />
+        </shape>
+    </item>
+</layer-list>

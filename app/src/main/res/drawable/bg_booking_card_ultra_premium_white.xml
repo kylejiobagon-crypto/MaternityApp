@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Bottom Drop Shadow -->
+    <item android:top="6dp" android:left="3dp" android:right="3dp" android:bottom="-4dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#0F000000" />
+            <corners android:radius="26dp" />
+        </shape>
+    </item>
+
+    <!-- Main Card Background (Glossy/Matte Blend) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#FFFFFF"
+                android:endColor="#F8FAFC"
+                android:angle="270" />
+            <corners android:radius="26dp" />
+            <stroke android:width="1.2dp" android:color="#F1F5F9" />
+        </shape>
+    </item>
+
+    <!-- Light Rim (Top Glow) -->
+    <item android:top="1dp" android:bottom="4dp" android:left="1dp" android:right="1dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#66FFFFFF"
+                android:endColor="#00FFFFFF"
+                android:angle="270" />
+            <corners android:radius="25dp" />
+        </shape>
+    </item>
+
+    <!-- Glass Micro-Surface (Very subtle depth) -->
+    <item android:top="10dp" android:left="10dp" android:right="10dp" android:bottom="8dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#05F8FAFF"
+                android:endColor="#08007AFF"
+                android:angle="45" />
+            <corners android:radius="20dp" />
+        </shape>
+    </item>
+</layer-list>

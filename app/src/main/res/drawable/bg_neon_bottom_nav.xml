@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- AMBIENT SHADOW -->
+    <item>
+        <shape android:shape="rectangle">
+            <padding android:bottom="8dp" android:left="8dp" android:right="8dp" android:top="8dp" />
+            <solid android:color="#40000000" />
+            <corners android:radius="45dp" />
+        </shape>
+    </item>
+
+    <!-- FROSTED SURFACE -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#33FFFFFF" /> 
+            <corners android:radius="40dp" />
+            <stroke android:width="1.2dp" android:color="#4DFFFFFF" />
+        </shape>
+    </item>
+
+    <!-- INNER TINT -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#1AFFFFFF"
+                android:endColor="#0A000000"
+                android:angle="270" />
+            <corners android:radius="40dp" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- AMBIENT SHADOW (DEEP NAVY) -->
+    <item>
+        <shape android:shape="rectangle">
+            <padding android:bottom="8dp" android:left="4dp" android:right="4dp" android:top="4dp" />
+            <solid android:color="#33000000" />
+            <corners android:radius="28dp" />
+        </shape>
+    </item>
+
+    <!-- FROSTED SURFACE (ULTRA LOW ALPHA WHITE) -->
+    <item android:bottom="4dp" android:right="2dp" android:top="2dp" android:left="2dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#1AFFFFFF" /> 
+            <corners android:radius="26dp" />
+            <stroke android:width="1.2dp" android:color="#8000FBFB" /> <!-- NEON CYAN RIM -->
+        </shape>
+    </item>
+
+    <!-- INNER GLOSS (LINEAR) -->
+    <item android:bottom="4dp" android:right="2dp" android:top="2dp" android:left="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#1AFFFFFF"
+                android:endColor="#00FFFFFF"
+                android:angle="135" />
+            <corners android:radius="26dp" />
+        </shape>
+    </item>
+</layer-list>

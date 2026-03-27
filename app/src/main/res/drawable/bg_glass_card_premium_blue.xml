@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 1. HIGH TRANSLUCENCY FILL (50% White Frosted) -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#80FFFFFF" />
+            <corners android:radius="32dp" />
+        </shape>
+    </item>
+
+    <!-- 2. PREMIUM SILVER TO COBALT GRADIENT STROKE (Reflection Edge) -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="32dp" />
+            <stroke android:width="1.2dp">
+                <gradient
+                    android:type="linear"
+                    android:angle="315"
+                    android:startColor="#C0C0C0"
+                    android:endColor="#003366" />
+            </stroke>
+        </shape>
+    </item>
+
+    <!-- 3. TOP-LEFT LIGHT REFLECTION (Glossy sheen) -->
+    <item android:top="0.5dp" android:left="0.5dp" android:right="20dp" android:bottom="40dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="315"
+                android:startColor="#B3FFFFFF"
+                android:endColor="#00000000" />
+            <corners android:topLeftRadius="31dp" />
+        </shape>
+    </item>
+
+    <!-- 4. SUBTLE INNER GLOW -->
+    <item android:top="2dp" android:left="2dp" android:right="2dp" android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="30dp" />
+            <stroke android:width="0.5dp" android:color="#0D000000" />
+        </shape>
+    </item>
+</layer-list>

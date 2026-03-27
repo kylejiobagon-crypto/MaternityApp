@@ -3,6 +3,7 @@ package com.example.alagwaapp;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.webkit.CookieManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -88,6 +90,7 @@ public class BillingActivity extends AppCompatActivity {
         initClient();
         fetchBillingSummary();
         fetchInvoices();
+        setupHeroAnimations();
     }
 
     private void bindViews() {
@@ -167,6 +170,39 @@ public class BillingActivity extends AppCompatActivity {
             }
             @Override public void afterTextChanged(Editable s) {}
         });
+    }
+
+    private void setupHeroAnimations() {
+        View smokeLayer = findViewById(R.id.smokeEffectSurface);
+        if (smokeLayer == null) return;
+
+        // Infinite Translation (Horizontal movement)
+        ObjectAnimator transX = ObjectAnimator.ofFloat(smokeLayer, "translationX", -150f, 150f);
+        transX.setDuration(8000);
+        transX.setRepeatCount(ObjectAnimator.INFINITE);
+        transX.setRepeatMode(ObjectAnimator.REVERSE);
+        transX.setInterpolator(new AccelerateDecelerateInterpolator());
+        transX.start();
+
+        // Infinite Translation (Vertical movement)
+        ObjectAnimator transY = ObjectAnimator.ofFloat(smokeLayer, "translationY", -100f, 100f);
+        transY.setDuration(12000);
+        transY.setRepeatCount(ObjectAnimator.INFINITE);
+        transY.setRepeatMode(ObjectAnimator.REVERSE);
+        transY.setInterpolator(new AccelerateDecelerateInterpolator());
+        transY.start();
+
+        // Infinite Scale (Breathing effect)
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(smokeLayer, "scaleX", 1f, 1.4f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(smokeLayer, "scaleY", 1f, 1.4f);
+        scaleX.setDuration(10000);
+        scaleY.setDuration(10000);
+        scaleX.setRepeatCount(ObjectAnimator.INFINITE);
+        scaleY.setRepeatCount(ObjectAnimator.INFINITE);
+        scaleX.setRepeatMode(ObjectAnimator.REVERSE);
+        scaleY.setRepeatMode(ObjectAnimator.REVERSE);
+        scaleX.start();
+        scaleY.start();
     }
 
     private void setupNavigation() {

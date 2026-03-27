@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Bottom Shadow Simulation -->
+    <item android:top="2dp" android:left="2dp" android:right="2dp" android:bottom="0dp">
+         <shape android:shape="rectangle">
+             <corners android:radius="28dp" />
+             <solid android:color="#40000000" />
+         </shape>
+    </item>
+
+    <!-- Main Orange Gradient Base -->
+    <item android:bottom="3dp" android:right="1dp" android:left="1dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#FF9F1C"
+                android:endColor="#FF7D00"
+                android:angle="135" />
+            <corners android:radius="28dp" />
+        </shape>
+    </item>
+
+    <!-- 3D Bevel Highlight (Rim Light) -->
+    <item android:bottom="3dp" android:right="1dp" android:left="1dp">
+        <shape android:shape="rectangle">
+            <stroke android:width="1.5dp" android:color="#4DFFFFFF" />
+            <corners android:radius="28dp" />
+        </shape>
+    </item>
+
+    <!-- Glossy Top Shine Overlay -->
+    <item android:bottom="80dp" android:right="8dp" android:left="8dp" android:top="4dp">
+         <shape android:shape="rectangle">
+             <gradient
+                 android:startColor="#66FFFFFF"
+                 android:endColor="#00FFFFFF"
+                 android:angle="270" />
+             <corners android:topLeftRadius="18dp" android:topRightRadius="18dp" />
+         </shape>
+    </item>
+</layer-list>

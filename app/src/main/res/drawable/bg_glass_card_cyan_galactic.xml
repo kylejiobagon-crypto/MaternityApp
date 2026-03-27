@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- REUSING GALAXY CARD BASE BUT WITH CYAN THEME HIGHLIGHT -->
+    <item>
+        <shape android:shape="rectangle">
+            <padding android:bottom="6dp" android:left="4dp" android:right="4dp" android:top="2dp" />
+            <solid android:color="#2600F2FF" /> <!-- rgba(0, 242, 255, 0.15) Ambient highlight -->
+            <corners android:radius="26dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#5919233C" /> <!-- Deep Frost -->
+            <corners android:radius="24dp" />
+            <stroke android:width="1dp" android:color="#00F2FF" /> 
+        </shape>
+    </item>
+    <!-- INTERNAL GRADIENT HIGHLIGHT (Deep Space Cyan to Navy) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="225"
+                android:startColor="#2000F2FF"
+                android:endColor="#000A1136" />
+            <corners android:radius="24dp" />
+        </shape>
+    </item>
+</layer-list>

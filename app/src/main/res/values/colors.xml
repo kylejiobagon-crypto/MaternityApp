@@ -1,54 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- APPLE IPHONE 17 PRO MAX LIGHT PALETTE (PREMIUM ALICE WHITE) -->
-    <color name="neo_bg">#FBFBFD</color>
-    <color name="neo_bg_top">#FFFFFF</color>
-    <color name="neo_surface">#FFFFFF</color>
-    <color name="neo_container">#F2F2F7</color>
-    <color name="neo_container_high">#E5E5EA</color>
-    <color name="neo_container_low">#FBFBFD</color>
+    <!-- GALACTIC STITCH COSMIC PALETTE -->
+    <color name="cosmic_navy_deep">#03091B</color>
+    <color name="cosmic_navy_mid">#122557</color>
+    <color name="cosmic_navy_light">#183E73</color>
+    <color name="cosmic_dust_pink">#16FF99CC</color>
+    <color name="cosmic_dust_purple">#16B049FF</color>
     
-    <!-- TEXT COLORS (APPLE SPEC) -->
-    <color name="neo_primary">#1D1D1F</color>
-    <color name="neo_slate">#86868B</color>
-    <color name="neo_outline">#D2D2D7</color>
+    <color name="neon_galactic_cyan">#00F2FF</color>
+    <color name="neon_galactic_cyan_glow">#4D00FFFF</color>
+    <color name="neon_galactic_teal">#26D0CE</color>
+    <color name="neon_galactic_purple">#B049FF</color>
+    <color name="neon_galactic_lavender">#9D5CFF</color>
+    <color name="neon_galactic_pink">#FF99CC</color>
+    <color name="neon_galactic_orange">#FFA756</color>
+    <color name="neon_galactic_emerald">#004D2E</color>
+    <color name="neon_galactic_green_vibrant">#00FF87</color>
+    
+    <color name="glass_galactic_surface">#5919233C</color>
+    <color name="glass_nav_dark">#99020617</color>
+    <color name="nav_inactive_teal">#4A6572</color>
+
+    <!-- LEGACY & SYSTEM ALIASES (CRITICAL FOR PROJECT-WIDE STABILITY) -->
+    <color name="neo_primary">#03091B</color>
+    <color name="neo_bg">#03091B</color>
+    <color name="neo_slate">#4A6572</color>
+    <color name="neo_cyan">#00F2FF</color>
+    <color name="neo_cyan_glow">#4D00FFFF</color>
+    <color name="neo_purple">#9D5CFF</color>
+    <color name="neo_green">#00FF87</color>
+    <color name="neo_surface">#122557</color>
     <color name="neo_bright">#FBFBFD</color>
-
-    <!-- ACCENTS (IPHONE PRO TITAN & CYAN ICE) -->
-    <color name="neo_cyan">#0071E3</color> <!-- iOS PRO BLUE (MORE ACCESSIBLE ON WHITE) -->
-    <color name="neo_cyan_vibrant">#00FBFB</color>
-    <color name="neo_cyan_glow">#330071E3</color>
     
-    <color name="neo_purple">#7701D0</color>
-    <color name="neo_purple_light">#EFDBFF</color>
-    
-    <color name="neo_green">#34C759</color> <!-- iOS SYSTEM GREEN -->
-    <color name="neo_green_glow">#3334C759</color>
-
-    <!-- SYSTEM ALIASES (FIXING BUILD ERRORS) -->
-    <color name="background">#FBFBFD</color>
-    <color name="surface">#FFFFFF</color>
-    <color name="on_surface">#1D1D1F</color>
-    <color name="on_surface_variant">#86868B</color>
-    <color name="surface_variant">#F2F2F7</color>
-    <color name="error">#FF3B30</color> <!-- iOS RED -->
-    <color name="on_error">#FFFFFF</color>
-    <color name="success">#34C759</color>
-    <color name="on_background">#1D1D1F</color>
-    <color name="secondary">#0071E3</color>
-    <color name="tertiary">#7701D0</color>
-    
-    <!-- LEGACY ALIASES -->
     <color name="medical_blue">#0071E3</color>
     <color name="medical_blue_dark">#0040D1</color>
     <color name="medical_blue_light">#0071E3</color>
     <color name="medical_neutral_dark">#1D1D1F</color>
     <color name="medical_neutral_light">#F2F2F7</color>
-    
-    <!-- BASIC ALIASES -->
+
+    <color name="on_surface">#FFFFFF</color>
+    <color name="on_surface_variant">#B3FFFFFF</color>
+    <color name="surface">#122557</color>
+    <color name="surface_variant">#183E73</color>
+    <color name="background">#03091B</color>
+    <color name="on_background">#FFFFFF</color>
+    <color name="error">#FF3B30</color>
+    <color name="on_error">#FFFFFF</color>
+
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
-    <color name="primary">#1D1D1F</color>
-    <color name="teal_200">#0071E3</color>
+    <color name="primary">#00F2FF</color>
+    <color name="secondary">#26D0CE</color>
+    <color name="tertiary">#B049FF</color>
+    
+    <color name="teal_200">#00F2FF</color>
     <color name="teal_700">#0040D1</color>
+    
+    <!-- NEUMORPHIC ORANGE THEME -->
+    <color name="orange_primary">#FF7D00</color>
+    <color name="orange_vibrant">#FF9F1C</color>
+    <color name="orange_soft">#FFB86C</color>
+    <color name="charcoal_bg">#111827</color>
+    <color name="charcoal_surface">#1F2937</color>
+    <color name="soft_gray_bg">#F3F4F6</color>
+    <color name="primary_hub">#4338CA</color> 
+    <color name="accent_neon">#00F2FF</color>
 </resources>

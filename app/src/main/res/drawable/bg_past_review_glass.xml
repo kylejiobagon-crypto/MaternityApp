@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Outer Glow -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="32dp"/>
+            <solid android:color="#00000000"/>
+            <stroke android:width="2dp" android:color="#DBEAFE"/> <!-- Sky blue border -->
+        </shape>
+    </item>
+    <!-- Main Vibrant Gradient Glass Body -->
+    <item android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="32dp"/>
+            <gradient
+                android:startColor="#F5F3FF" 
+                android:endColor="#DBEAFE"
+                android:angle="135"/>
+        </shape>
+    </item>
+</layer-list>

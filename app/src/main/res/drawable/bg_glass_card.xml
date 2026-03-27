@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Ambient Base (Semi-transparent black) -->
+    <!-- 1. GLASS FILL (10% White) -->
     <item>
         <shape android:shape="rectangle">
-            <corners android:radius="16dp" />
-            <solid android:color="#991a1919" />
+            <solid android:color="#1AFFFFFF" />
+            <corners android:radius="32dp" />
         </shape>
     </item>
 
-    <!-- Glass Gradient (135deg Dark Grey) -->
+    <!-- 2. NEON STROKE (50% Neon Cyan) -->
     <item>
         <shape android:shape="rectangle">
-            <corners android:radius="16dp" />
+            <corners android:radius="32dp" />
+            <stroke android:width="1dp" android:color="#8000FFFF" />
+        </shape>
+    </item>
+
+    <!-- 3. TOP GLOSS SHEEN -->
+    <item android:top="1dp" android:left="1dp" android:right="1dp" android:bottom="20dp">
+        <shape android:shape="rectangle">
             <gradient
                 android:type="linear"
-                android:angle="225"
-                android:startColor="#B3262626"
-                android:endColor="#661a1919" />
-        </shape>
-    </item>
-
-    <!-- Super Fine Pixel Rim (Outline-Variant) -->
-    <item>
-        <shape android:shape="rectangle">
-            <corners android:radius="16dp" />
-            <stroke android:width="1dp" android:color="#1A494847" />
+                android:angle="270"
+                android:startColor="#1AFFFFFF"
+                android:endColor="#00000000" />
+            <corners android:radius="31dp" />
         </shape>
     </item>
 </layer-list>
+

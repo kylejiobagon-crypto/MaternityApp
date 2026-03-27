@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/bg_glass_card_premium_light"
+    android:elevation="6dp"
+    android:padding="16dp">
+
+    <!-- AVATAR HUB WITH PULSE -->
+    <RelativeLayout
+        android:id="@+id/avatar_hub"
+        android:layout_width="56dp"
+        android:layout_height="56dp">
+        
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivContactAvatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@android:drawable/ic_menu_gallery"
+            app:shapeAppearanceOverlay="@style/RoundedProfileAvatar" />
+
+        <!-- LIVE STATUS PULSE -->
+        <View
+            android:id="@+id/statusPulse"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/bg_dot_emerald_glow"
+            android:elevation="4dp" />
+    </RelativeLayout>
+
+    <!-- INFO HUB -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@id/avatar_hub"
+        android:layout_toStartOf="@id/unread_hub"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvContactName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dr. Reyes, OB"
+            android:textColor="#1A1A2E"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-black" />
+
+        <TextView
+            android:id="@+id/tvLastMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your next checkup is on Monday..."
+            android:textColor="#64748B"
+            android:textSize="13sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginTop="2dp" />
+    </LinearLayout>
+
+    <!-- UNREAD & TIME HUB -->
+    <LinearLayout
+        android:id="@+id/unread_hub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:gravity="end"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvMsgTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10:42 AM"
+            android:textColor="#94A3B8"
+            android:textSize="10sp"
+            android:fontFamily="sans-serif-bold" />
+
+        <TextView
+            android:id="@+id/tvUnreadCount"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_unread_badge_neon"
+            android:gravity="center"
+            android:text="2"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            android:fontFamily="sans-serif-bold" />
+    </LinearLayout>
+
+</RelativeLayout>

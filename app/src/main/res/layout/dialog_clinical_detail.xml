@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_glass_card_white"
+    android:padding="24dp"
+    android:clipToPadding="false"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- 1. PREMIUM HEADER SECTION -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp">
+            
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CLINICAL ASSESSMENT"
+                    android:textColor="#1E293B"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-black"
+                    android:letterSpacing="0.05" />
+                <TextView
+                    android:id="@+id/tvAttendingDr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Attending: Dr. Maria Clara, OB-GYN"
+                    android:textColor="#64748B"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium" />
+            </LinearLayout>
+
+            <!-- Verified Badge -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_alert_success_glass"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="6dp"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@android:drawable/checkbox_on_background"
+                    app:tint="#10B981"
+                    android:layout_marginEnd="4dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VERIFIED"
+                    android:textColor="#10B981"
+                    android:textSize="10sp"
+                    android:fontFamily="sans-serif-black" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!-- 2. ESSENTIAL VITALS GRID (2x2) -->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="2"
+            android:layout_marginBottom="24dp">
+
+            <!-- Weight -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_columnWeight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="#F1F5F9"
+                android:padding="12dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Current Weight"
+                    android:textColor="#64748B"
+                    android:textSize="10sp" />
+                <TextView
+                    android:id="@+id/tvDetailWeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="62.5 kg"
+                    android:textColor="#1E293B"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-black" />
+            </LinearLayout>
+
+            <!-- BP -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_columnWeight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="#F1F5F9"
+                android:padding="12dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Blood Pressure"
+                    android:textColor="#64748B"
+                    android:textSize="10sp" />
+                <TextView
+                    android:id="@+id/tvDetailBP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="115 / 75"
+                    android:textColor="#EF4444"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-black" />
+            </LinearLayout>
+
+            <!-- FHT -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_columnWeight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="#F1F5F9"
+                android:padding="12dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fetal Heart Tone"
+                    android:textColor="#64748B"
+                    android:textSize="10sp" />
+                <TextView
+                    android:id="@+id/tvDetailFHT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="148 bpm"
+                    android:textColor="#EC4899"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-black" />
+            </LinearLayout>
+
+            <!-- AOG -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_columnWeight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="#F1F5F9"
+                android:padding="12dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gestational Age"
+                    android:textColor="#64748B"
+                    android:textSize="10sp" />
+                <TextView
+                    android:id="@+id/tvDetailAOG"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="24w 4d"
+                    android:textColor="#1E293B"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-black" />
+            </LinearLayout>
+        </GridLayout>
+
+        <!-- 3. FETAL GROWTH ANALYTICS (SCIENTIFIC METRICS) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_ultrasound_glow"
+            android:padding="20dp"
+            android:orientation="vertical"
+            android:layout_marginBottom="24dp">
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SCIENTIFIC METRICS (Ultrasound)"
+                android:textColor="#E879F9"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-black"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="BPD (Head)" android:textColor="#64748B" android:textSize="10sp" />
+                    <TextView android:id="@+id/tvBPD" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="62.4 mm" android:textColor="#1E293B" android:textSize="15sp" android:fontFamily="sans-serif-bold" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="AC (Torso)" android:textColor="#64748B" android:textSize="10sp" />
+                    <TextView android:id="@+id/tvAC" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="185.0 mm" android:textColor="#1E293B" android:textSize="15sp" android:fontFamily="sans-serif-bold" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="FL (Femur)" android:textColor="#64748B" android:textSize="10sp" />
+                    <TextView android:id="@+id/tvFL" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="44.2 mm" android:textColor="#1E293B" android:textSize="15sp" android:fontFamily="sans-serif-bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 4. PROFESSIONAL CONCLUSION -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DIAGNOSIS &amp; ASSESSMENT"
+            android:textColor="#1E293B"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif-black"
+            android:layout_marginBottom="8dp" />
+        
+        <TextView
+            android:id="@+id/tvDiagnosis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Single live intrauterine pregnancy in cephalic presentation. Adequate amniotic fluid and clear fetal cardiac motion observed. Both mother and fetus are in normal condition."
+            android:textColor="#475569"
+            android:textSize="14sp"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Medical Advice Note -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_advice_note_yellow"
+            android:padding="16dp"
+            android:orientation="vertical"
+            android:layout_marginBottom="24dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MEDICAL ADVICE"
+                android:textColor="#854D0E"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-black"
+                android:layout_marginBottom="4dp" />
+            <TextView
+                android:id="@+id/tvAdvice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ensure to maintain iron-rich diet. Continue rest and avoid lifting heavy loads until next visit."
+                android:textColor="#854D0E"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- Prescription Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MEDICATION PRESCRIBED"
+            android:textColor="#1E293B"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif-black"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvPrescriptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="• Ferrous Sulfate (Iron) - 1x Daily\n• Vitamin B-12 Complex - 1x Daily\n• Folic Acid (500mg) - Once Daily"
+            android:textColor="#475569"
+            android:textSize="13sp"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="32dp" />
+
+        <Button
+            android:id="@+id/btnCloseDetail"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:backgroundTint="#1E293B"
+            android:text="Dismiss Analysis"
+            android:textColor="#FFFFFF"
+            android:fontFamily="sans-serif-black"
+            app:cornerRadius="16dp" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

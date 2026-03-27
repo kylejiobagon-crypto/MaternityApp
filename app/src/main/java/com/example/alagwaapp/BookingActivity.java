@@ -157,18 +157,19 @@ public class BookingActivity extends AppCompatActivity {
             View btnIndicator = view.findViewById(i == 0 ? R.id.bChk : getResources().getIdentifier("b" + i, "id", getPackageName()));
 
             if (i == index) {
-                view.setBackgroundResource(R.drawable.bg_booking_card_3d_selected);
-                view.setElevation(8f);
+                view.setBackgroundResource(R.drawable.bg_booking_card_ultra_premium_selected);
+                view.setElevation(12f);
                 if (btnIndicator != null) {
-                    btnIndicator.setBackgroundResource(R.drawable.bg_button_premium_blue);
+                    btnIndicator.setBackgroundResource(R.drawable.bg_glass_circle);
+                    btnIndicator.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0x4DFFFFFF));
                     btnIndicator.setAlpha(1.0f);
                 }
             } else {
-                view.setBackgroundResource(R.drawable.bg_booking_card_3d_white);
-                view.setElevation(2f);
+                view.setBackgroundResource(R.drawable.bg_booking_card_ultra_premium_white);
+                view.setElevation(4f);
                 if (btnIndicator != null) {
                     btnIndicator.setBackgroundResource(R.drawable.bg_glass_circle);
-                    btnIndicator.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFF3F4F6));
+                    btnIndicator.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFF1F5F9));
                     btnIndicator.setAlpha(1.0f);
                 }
             }
@@ -187,16 +188,16 @@ public class BookingActivity extends AppCompatActivity {
             if (tvMain == null || tvSub == null) continue;
 
             if (i == index) {
-                view.setBackgroundResource(R.drawable.bg_booking_card_3d_selected);
-                view.setElevation(10f);
-                tvMain.setTextColor(0xFF007AFF);
-                tvSub.setTextColor(0xFF007AFF);
-                tvSub.setAlpha(0.6f);
+                view.setBackgroundResource(R.drawable.bg_booking_card_ultra_premium_selected);
+                view.setElevation(12f);
+                tvMain.setTextColor(0xFFFFFFFF);
+                tvSub.setTextColor(0xCCFFFFFF);
+                tvSub.setAlpha(1.0f);
             } else {
-                view.setBackgroundResource(R.drawable.bg_booking_card_3d_white);
+                view.setBackgroundResource(R.drawable.bg_booking_field_ultra_premium);
                 view.setElevation(2f);
-                tvMain.setTextColor(0xFF0B0E11);
-                tvSub.setTextColor(0xFF6B7280);
+                tvMain.setTextColor(0xFF0F172A);
+                tvSub.setTextColor(0xFF94A3B8);
                 tvSub.setAlpha(1.0f);
             }
         }

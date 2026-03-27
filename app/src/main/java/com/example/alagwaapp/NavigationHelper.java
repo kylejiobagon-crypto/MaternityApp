@@ -72,27 +72,34 @@ public class NavigationHelper {
         });
 
         // Use colors from our theme palette
-        int activeColor = activity.getResources().getColor(R.color.neo_cyan);
-        int inactiveColor = activity.getResources().getColor(R.color.neo_slate);
+        int activeColor = Color.parseColor("#0F172A"); // Dark color for icon on yellow bg
+        int inactiveColor = Color.parseColor("#94A3B8"); // Cool gray
 
-        if (activity instanceof MainActivity) setActive(activity, R.id.ivNavHome, R.id.tvNavHome, activeColor);
-        else if (activity instanceof AppointmentsActivity) setActive(activity, R.id.ivNavAppointments, R.id.tvNavAppointments, activeColor);
-        else if (activity instanceof RecordsActivity) setActive(activity, R.id.ivNavRecords, R.id.tvNavRecords, activeColor);
-        else if (activity instanceof BillingActivity) setActive(activity, R.id.ivNavBilling, R.id.tvNavBilling, activeColor);
-        else if (activity instanceof ProfileActivity) setActive(activity, R.id.ivNavProfile, R.id.tvNavProfile, activeColor);
-        else if (activity instanceof RatingsActivity) setActive(activity, R.id.ivNavRatings, R.id.tvNavRatings, activeColor);
+        if (activity instanceof MainActivity) setActive(activity, R.id.ivNavHome, R.id.tvNavHome, R.id.navHomeCircle, activeColor);
+        else if (activity instanceof AppointmentsActivity) setActive(activity, R.id.ivNavAppointments, R.id.tvNavAppointments, R.id.navAppointmentsCircle, activeColor);
+        else if (activity instanceof RecordsActivity) setActive(activity, R.id.ivNavRecords, R.id.tvNavRecords, R.id.navRecordsCircle, activeColor);
+        else if (activity instanceof BillingActivity) setActive(activity, R.id.ivNavBilling, R.id.tvNavBilling, R.id.navBillingCircle, activeColor);
+        else if (activity instanceof ProfileActivity) setActive(activity, R.id.ivNavProfile, R.id.tvNavProfile, R.id.navProfileCircle, activeColor);
+        else if (activity instanceof RatingsActivity) setActive(activity, R.id.ivNavRatings, R.id.tvNavRatings, R.id.navRatingsCircle, activeColor);
     }
 
-    private static void setActive(Activity activity, int imgId, int txtId, int color) {
+    private static void setActive(Activity activity, int imgId, int txtId, int containerId, int activeIconColor) {
         ImageView iv = activity.findViewById(imgId);
         TextView tv = activity.findViewById(txtId);
+        View container = activity.findViewById(containerId);
+
+        if (container != null) {
+            container.setBackgroundResource(R.drawable.bg_nav_active_squircle);
+        }
+
         if (iv != null) {
-            iv.setColorFilter(color);
+            iv.setColorFilter(activeIconColor);
             iv.setScaleX(1.1f);
             iv.setScaleY(1.1f);
+            iv.setAlpha(1.0f);
         }
         if (tv != null) {
-            tv.setTextColor(color);
+            tv.setTextColor(Color.WHITE);
             tv.setAlpha(1.0f);
             tv.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
         }

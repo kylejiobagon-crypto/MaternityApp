@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Deep Outer Shadow -->
+    <item android:bottom="4dp" android:right="4dp">
+        <shape>
+            <corners android:radius="32dp" />
+            <solid android:color="#15000000" />
+        </shape>
+    </item>
+
+    <!-- Main Green/White Gradient Core -->
+    <item android:bottom="6dp" android:right="6dp">
+        <shape>
+            <gradient
+                android:startColor="#F0FDF4"
+                android:centerColor="#DCFCE7"
+                android:endColor="#BBF7D0"
+                android:angle="135" />
+            <corners android:radius="32dp" />
+            <stroke android:width="2dp" android:color="#FFFFFF" />
+        </shape>
+    </item>
+
+    <!-- Inner Glossy Bottom Rim -->
+    <item android:bottom="6dp" android:left="20dp" android:right="20dp" android:top="1480dp">
+        <shape>
+            <solid android:color="#80FFFFFF" />
+            <corners android:radius="20dp" />
+        </shape>
+    </item>
+</layer-list>

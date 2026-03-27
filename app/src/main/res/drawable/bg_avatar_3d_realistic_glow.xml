@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Outer Glow Layer -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#00000000"/>
+            <stroke android:width="4dp" android:color="#3300F49C"/> <!-- Soft Emerald Glow -->
+        </shape>
+    </item>
+    <!-- Inner Metallic Ring -->
+    <item android:left="3dp" android:top="3dp" android:right="3dp" android:bottom="3dp">
+        <shape android:shape="oval">
+            <solid android:color="#F8FAFC"/>
+            <stroke android:width="2dp" android:color="#00F49C"/> <!-- Neon Emerald Border -->
+        </shape>
+    </item>
+</layer-list>
