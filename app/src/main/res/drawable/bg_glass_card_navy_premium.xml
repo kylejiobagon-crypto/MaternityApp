@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Deep Navy Layer for that Wow base -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#1A233E"
+                android:endColor="#0A0F1F"
+                android:angle="135" />
+            <corners android:radius="24dp" />
+            <stroke
+                android:width="1dp"
+                android:color="@color/billing_glass_stroke" />
+        </shape>
+    </item>
+    
+    <!-- Glass Reflections for Premium look -->
+    <item android:top="1dp" android:left="1dp" android:right="1dp" android:bottom="40dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#26FFFFFF"
+                android:endColor="#00FFFFFF"
+                android:angle="135" />
+            <corners android:radius="24dp" />
+        </shape>
+    </item>
+</layer-list>
