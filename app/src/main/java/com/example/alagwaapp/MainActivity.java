@@ -334,43 +334,7 @@ public class MainActivity extends AppCompatActivity {
     //  NETWORKING
     // ─────────────────────────────────────────────
     private void initNetworking() {
-        if (sharedClient == null) {
-            sharedClient = new OkHttpClient.Builder()
-                .addInterceptor(chain -> {
-                    String cookies = CookieManager.getInstance().getCookie("http://alagawa.ct.ws/");
-                    Request.Builder builder = chain.request().newBuilder()
-                            .header("User-Agent", userAgent)
-                            .header("Accept", "application/json");
-                    if (cookies != null) builder.header("Cookie", cookies);
-
-                    String token = prefs.getString("token", "");
-                    if (!token.isEmpty()) builder.header("Authorization", "Bearer " + token);
-
-                    okhttp3.HttpUrl newUrl = chain.request().url().newBuilder()
-                            .setQueryParameter("mobile",    "true")
-                            .setQueryParameter("tenant_id", String.valueOf(prefs.getInt("tenantId", 1)))
-                            .setQueryParameter("role",      prefs.getString("role", "patient"))
-                            .setQueryParameter("user_id",   String.valueOf(prefs.getInt("userId", 0)))
-                            .setQueryParameter("username",  prefs.getString("username", ""))
-                            .setQueryParameter("email",     prefs.getString("email", ""))
-                            .setQueryParameter("fullname",  prefs.getString("fullname", ""))
-                            .build();
-                    builder.url(newUrl);
-                    return chain.proceed(builder.build());
-                })
-                .build();
-        }
-
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-                .baseUrl("http://alagawa.ct.ws/")
-                .client(sharedClient)
-                .addConverterFactory(GsonConverterFactory.create(
-                        new GsonBuilder().setLenient().create()))
-                .build();
-        }
-
-        apiService = retrofit.create(ApiService.class);
+        apiService = InfinityFreeClient.buildRetrofit(prefs).create(ApiService.class);
     }
 
     // ─────────────────────────────────────────────
@@ -406,7 +370,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        apiService.getSummary("summary", "true", email)
+        apiService.getSummary("stats", "true", email)
                 .enqueue(new Callback<SummaryResponse>() {
                     @Override
                     public void onResponse(Call<SummaryResponse> call, Response<SummaryResponse> response) {
@@ -440,31 +404,29 @@ public class MainActivity extends AppCompatActivity {
                         // ── Pregnancy Tracker (ORBIT) ─────────
                         SummaryResponse.PregnancyStats ps = data.pregnancy_stats;
                         if (ps != null) {
-                            if (tvOrbitValue != null) tvOrbitValue.setText(String.valueOf(ps.weeks_pregnant));
-                            
-                            // Map Trimester
-                            int trimester = 1;
-                            if (ps.weeks_pregnant > 27) trimester = 3;
-                            else if (ps.weeks_pregnant > 13) trimester = 2;
+                            if (tvOrbitValue != null) tvOrbitValue.setText(String.valueOf(ps.weeks));
                             
                             if (tvOrbitSubValue != null) {
-                                String triSuffix = trimester == 1 ? "st" : (trimester == 2 ? "nd" : "rd");
-                                tvOrbitSubValue.setText(trimester + triSuffix + " Trimester");
+                                tvOrbitSubValue.setText(ps.trimester);
+                            }
+
+                            if (tvDetailDueDate != null && ps.edd != null) {
+                                tvDetailDueDate.setText("Due on " + ps.edd);
                             }
 
                             // Update Wave Progress
                             if (maternityWaveView != null) {
-                                float waveProgress = Math.min(ps.weeks_pregnant / 40f, 1.0f);
+                                float waveProgress = (float) ps.progress_percent / 100f;
                                 maternityWaveView.setProgress(waveProgress);
                             }
                             
                             if (tvDetailWeeks != null) {
-                                int weeksToGo = Math.max(0, 40 - ps.weeks_pregnant);
+                                int weeksToGo = Math.max(0, 40 - ps.weeks);
                                 tvDetailWeeks.setText(weeksToGo + " milestone weeks to go");
                             }
                             
                             // Compatibility
-                            updateTimelineProgress(Math.min(ps.weeks_pregnant / 40f, 1f));
+                            updateTimelineProgress((float) ps.progress_percent / 100f);
                         }
 
                     }

@@ -9,7 +9,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 
 public interface ApiService {
-    @GET("api_billing.php")
+    @GET("api_dashboard.php")
     Call<SummaryResponse> getSummary(
             @Query("action") String action,
             @Query("mobile") String mobile,
@@ -23,7 +23,7 @@ public interface ApiService {
             @Query("mobile") String mobile
     );
 
-    @GET("api_billing.php")
+    @GET("api_dashboard.php")
     Call<ResponseBody> getSummaryRaw(
             @Query("action") String action,
             @Query("mobile") String mobile
@@ -79,6 +79,12 @@ public interface ApiService {
     @GET("api_dashboard.php")
     Call<ResponseBody> getDashboardRaw(@Query("action") String action, @Query("mobile") String mobile);
 
+    @GET("api_dashboard.php")
+    Call<CheckupHistoryResponse> getCheckupHistory(
+            @Query("action") String action,
+            @Query("mobile") String mobile
+    );
+
     @GET("api_checkups.php")
     Call<ResponseBody> getCheckupsRaw(@Query("action") String action, @Query("mobile") String mobile);
 
@@ -122,5 +128,21 @@ public interface ApiService {
             @Query("mobile") String mobile,
             @Field("payment_id") int paymentId,
             @Field("reference_number") String referenceNumber
+    );
+
+    @POST("api_billing.php")
+    @FormUrlEncoded
+    Call<ResponseBody> submitPayment(
+            @Field("action") String action,
+            @Field("payment_id") int paymentId,
+            @Field("payment_method") String method,
+            @Field("reference_number") String ref,
+            @Field("mobile") String mobile
+    );
+
+    @GET("api_billing.php")
+    Call<ResponseBody> getBillingRaw(
+            @Query("action") String action,
+            @Query("mobile") String mobile
     );
 }

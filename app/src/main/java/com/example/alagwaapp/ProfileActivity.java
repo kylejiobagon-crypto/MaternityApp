@@ -98,42 +98,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
     
     private void initNetwork() {
-        OkHttpClient okClient = new OkHttpClient.Builder()
-                .addInterceptor(chain -> {
-                    String cookies = android.webkit.CookieManager.getInstance().getCookie(BASE_URL);
-                    okhttp3.Request.Builder builder = chain.request().newBuilder()
-                            .header("User-Agent", CUSTOM_UA)
-                            .header("Accept", "application/json");
-                    if (cookies != null && !cookies.isEmpty()) {
-                        builder.header("Cookie", cookies);
-                        Log.d("AlagwaApp", "Injecting Cookies: " + cookies);
-                    }
-
-                    String token = prefs.getString("token", "");
-                    if (!token.isEmpty()) builder.header("Authorization", "Bearer " + token);
-
-                    okhttp3.HttpUrl newUrl = chain.request().url().newBuilder()
-                            .setQueryParameter("mobile",    "true")
-                            .setQueryParameter("tenant_id", String.valueOf(prefs.getInt("tenantId", 1)))
-                            .setQueryParameter("role",      prefs.getString("role", "patient"))
-                            .setQueryParameter("user_id",   String.valueOf(prefs.getInt("userId", 0)))
-                            .setQueryParameter("username",  prefs.getString("username", ""))
-                            .setQueryParameter("email",     prefs.getString("email", ""))
-                            .setQueryParameter("fullname",  prefs.getString("fullname", ""))
-                            .build();
-                    builder.url(newUrl);
-                    return chain.proceed(builder.build());
-                })
-                .build();
-
-        retrofit2.Retrofit retrofit = new retrofit2.Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(okClient)
-                .addConverterFactory(retrofit2.converter.gson.GsonConverterFactory.create(
-                        new GsonBuilder().setLenient().create()))
-                .build();
-
-        apiService = retrofit.create(ApiService.class);
+        apiService = InfinityFreeClient.buildRetrofit(prefs).create(ApiService.class);
     }
 
     private void initializeViews() {
@@ -289,9 +254,9 @@ public class ProfileActivity extends AppCompatActivity {
                             patient.bloodType = p.optString("blood_type", "");
                             patient.lmp = p.optString("lmp", "");
                             patient.monthsPregnant = p.optDouble("months_pregnant", 0.0);
-                            patient.emergencyName = p.optString("emergency_contact_name", ""); // Corrected field name
-                            patient.emergencyRelationship = p.optString("emergency_contact_relationship", ""); // Corrected field name
-                            patient.emergencyNumber = p.optString("emergency_contact_number", ""); // Corrected field name
+                            patient.emergencyName = p.optString("emergency_name", ""); 
+                            patient.emergencyRelationship = p.optString("emergency_relationship", ""); 
+                            patient.emergencyNumber = p.optString("emergency_number", ""); 
                             
                             // Metrics
                             patient.daysPregnant = p.optInt("days_pregnant", 0);
@@ -408,9 +373,9 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void showDatePicker() {
-        Calendar cal = Calendar.getInstance();
-        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-            String date = (month + 1) + "/" + dayOfMonth + "/" + year;
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        new android.app.DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+            String date = String.format(java.util.Locale.US, "%04d-%02d-%02d", year, month + 1, dayOfMonth);
             etDob.setText(date);
             calculateAge(year, month, dayOfMonth);
         }, 1995, 0, 1).show();

@@ -115,36 +115,8 @@ public class BookingActivity extends AppCompatActivity {
     }
 
     private void initNetworking() {
-        OkHttpClient client = new OkHttpClient.Builder()
-            .addInterceptor(chain -> {
-                String cookies = CookieManager.getInstance().getCookie("http://alagawa.ct.ws/");
-                Request.Builder builder = chain.request().newBuilder()
-                        .header("User-Agent", "Mozilla/5.0")
-                        .header("Accept", "application/json");
-                if (cookies != null) builder.header("Cookie", cookies);
-                
-                // Add critical Mobile Bypass parameters
-                okhttp3.HttpUrl newUrl = chain.request().url().newBuilder()
-                        .setQueryParameter("mobile",    "true")
-                        .setQueryParameter("tenant_id", String.valueOf(prefs.getInt("tenantId", 1)))
-                        .setQueryParameter("role",      prefs.getString("role", "patient"))
-                        .setQueryParameter("user_id",   String.valueOf(prefs.getInt("userId", 0)))
-                        .setQueryParameter("username",  prefs.getString("username", ""))
-                        .setQueryParameter("email",     prefs.getString("email", ""))
-                        .setQueryParameter("fullname",  prefs.getString("fullname", ""))
-                        .build();
-                builder.url(newUrl);
-                
-                return chain.proceed(builder.build());
-            })
-            .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://alagawa.ct.ws/")
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setLenient().create()))
-                .build();
-        apiService = retrofit.create(ApiService.class);
+        // InfinityFreeClient auto-solves the AES anti-bot challenge from InfinityFree hosting
+        apiService = InfinityFreeClient.buildRetrofit(prefs).create(ApiService.class);
     }
 
     private void showDatePicker() {
@@ -318,63 +290,113 @@ public class BookingActivity extends AppCompatActivity {
 
     private void submitAppointment() {
         String notes = etMedicalNotes.getText().toString().trim();
-        
-        // Use 0 as default if we don't have it; backend will resolve by email in session (interceptor)
-        int patientId = prefs.getInt("userId", 0);
-        String mobile = "true"; // mobile param is passed via query string now
-        
+
+        // Send patient_id = 0: backend will auto-resolve the patient from session email (set by interceptor).
+        // This avoids sending the user_id (which is NOT the patient_id in the DB).
+        int patientId = 0;
+
         // PhilHealth is now passed as a dedicated field
         String phNumber = etPhilhealth.getText().toString().trim();
 
-        // Convert common "09:00 AM" to HH:mm (24h) for backend regex: /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/
+        // Convert "09:00 AM" to HH:mm (24h) for backend regex
         String formattedTime = selectedTimeSlot;
         try {
             SimpleDateFormat inFmt = new SimpleDateFormat("hh:mm a", Locale.getDefault());
             SimpleDateFormat outFmt = new SimpleDateFormat("HH:mm", Locale.getDefault());
             formattedTime = outFmt.format(inFmt.parse(selectedTimeSlot));
         } catch (Exception e) {
-            // fallback if it was already formatted or something failed
             if (selectedTimeSlot.contains(" AM")) formattedTime = selectedTimeSlot.replace(" AM", "");
             if (selectedTimeSlot.contains(" PM")) {
-                 int hr = Integer.parseInt(selectedTimeSlot.split(":")[0]);
-                 if (hr < 12) hr += 12;
-                 formattedTime = hr + ":" + selectedTimeSlot.split(":")[1].replace(" PM", "");
+                int hr = Integer.parseInt(selectedTimeSlot.split(":")[0]);
+                if (hr < 12) hr += 12;
+                formattedTime = hr + ":" + selectedTimeSlot.split(":")[1].replace(" PM", "");
             }
         }
 
-        apiService.createAppointment("create", "true", patientId, selectedDate, formattedTime, selectedService, notes, phNumber)
+        // Disable button to prevent double-submit
+        View btnFinalize = findViewById(R.id.btnFinalize);
+        if (btnFinalize != null) {
+            btnFinalize.setEnabled(false);
+            btnFinalize.setAlpha(0.5f);
+        }
+
+        final String finalFormattedTime = formattedTime;
+        apiService.createAppointment("create", "true", patientId, selectedDate, finalFormattedTime, selectedService, notes, phNumber)
             .enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (btnFinalize != null) {
+                        btnFinalize.setEnabled(true);
+                        btnFinalize.setAlpha(1.0f);
+                    }
+                    String rawBody = "(empty)";
                     try {
-                        String body = response.body() != null ? response.body().string() : "";
-                        int paymentId = 0;
-                        try {
-                            org.json.JSONObject obj = new org.json.JSONObject(body);
-                            paymentId = obj.optInt("payment_id", 0);
-                        } catch (Exception e) {}
+                        rawBody = response.body() != null ? response.body().string() : "";
+                        android.util.Log.d("BOOKING_DEBUG", "HTTP Status: " + response.code());
+                        android.util.Log.d("BOOKING_DEBUG", "Raw Response: " + rawBody);
 
-                        // PROCEED TO CHECKOUT PREVIEW (Using ₱300 downpayment as per clinical policy)
+                        // Strip any PHP warnings/notices before the JSON
+                        int jsonStart = rawBody.indexOf('{');
+                        if (jsonStart > 0) rawBody = rawBody.substring(jsonStart);
+
+                        org.json.JSONObject obj = new org.json.JSONObject(rawBody);
+                        boolean success = obj.optBoolean("success", false);
+
+                        if (!success) {
+                            String msg = obj.optString("message", "Booking failed. Please try again.");
+                            boolean profileIncomplete = obj.optBoolean("profile_incomplete", false);
+                            if (profileIncomplete) {
+                                new android.app.AlertDialog.Builder(BookingActivity.this)
+                                    .setTitle("Complete Your Profile First")
+                                    .setMessage(msg + "\n\nPlease update your profile before booking.")
+                                    .setPositiveButton("Go to Profile", (d, w) -> {
+                                        Intent intent = new Intent(BookingActivity.this, ProfileActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    })
+                                    .setNegativeButton("Cancel", null)
+                                    .show();
+                            } else {
+                                Toast.makeText(BookingActivity.this, msg, Toast.LENGTH_LONG).show();
+                            }
+                            return;
+                        }
+
+                        // SUCCESS — get payment_id returned by backend
+                        int paymentId = obj.optInt("payment_id", 0);
+                        int bookingId = obj.optInt("booking_id", 0);
+
                         Intent intent = new Intent(BookingActivity.this, PaymentCheckoutActivity.class);
                         intent.putExtra("service_name", selectedService != null ? selectedService : "General Check-up");
                         intent.putExtra("amount", "₱300.00");
                         intent.putExtra("payment_id", paymentId);
+                        intent.putExtra("booking_id", bookingId);
+                        intent.putExtra("booking_date", selectedDate);
+                        intent.putExtra("booking_time", finalFormattedTime);
                         startActivity(intent);
                         finish();
+
                     } catch (Exception e) {
-                        Intent intent = new Intent(BookingActivity.this, PaymentCheckoutActivity.class);
-                        intent.putExtra("service_name", selectedService != null ? selectedService : "General Check-up");
-                        intent.putExtra("amount", "₱300.00");
-                        intent.putExtra("payment_id", 0);
-                        startActivity(intent);
-                        finish();
+                        android.util.Log.e("BOOKING_DEBUG", "Parse error: " + e.getMessage() + " | Raw: " + rawBody);
+                        // Show a truncated version of raw response so we can debug
+                        String preview = rawBody.length() > 200 ? rawBody.substring(0, 200) : rawBody;
+                        new android.app.AlertDialog.Builder(BookingActivity.this)
+                            .setTitle("Server Response (Debug)")
+                            .setMessage(preview)
+                            .setPositiveButton("OK", null)
+                            .show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Toast.makeText(BookingActivity.this, "Network error. Please try again.", Toast.LENGTH_SHORT).show();
+                    if (btnFinalize != null) {
+                        btnFinalize.setEnabled(true);
+                        btnFinalize.setAlpha(1.0f);
+                    }
+                    Toast.makeText(BookingActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
     }
 }
+

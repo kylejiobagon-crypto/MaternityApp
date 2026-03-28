@@ -82,36 +82,7 @@ public class PaymentCheckoutActivity extends AppCompatActivity {
     }
 
     private void initNetworking() {
-        OkHttpClient client = new OkHttpClient.Builder()
-            .addInterceptor(chain -> {
-                String cookies = CookieManager.getInstance().getCookie("http://alagawa.ct.ws/");
-                Request.Builder builder = chain.request().newBuilder()
-                        .header("User-Agent", "Mozilla/5.0")
-                        .header("Accept", "application/json");
-                if (cookies != null) builder.header("Cookie", cookies);
-                
-                // Add critical Mobile Bypass parameters
-                okhttp3.HttpUrl newUrl = chain.request().url().newBuilder()
-                        .setQueryParameter("mobile",    "true")
-                        .setQueryParameter("tenant_id", String.valueOf(prefs.getInt("tenantId", 1)))
-                        .setQueryParameter("role",      prefs.getString("role", "patient"))
-                        .setQueryParameter("user_id",   String.valueOf(prefs.getInt("userId", 0)))
-                        .setQueryParameter("username",  prefs.getString("username", ""))
-                        .setQueryParameter("email",     prefs.getString("email", ""))
-                        .setQueryParameter("fullname",  prefs.getString("fullname", ""))
-                        .build();
-                builder.url(newUrl);
-                
-                return chain.proceed(builder.build());
-            })
-            .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://alagawa.ct.ws/") 
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setLenient().create()))
-                .build();
-        apiService = retrofit.create(ApiService.class);
+        apiService = InfinityFreeClient.buildRetrofit(prefs).create(ApiService.class);
     }
 
     private void processPayment() {

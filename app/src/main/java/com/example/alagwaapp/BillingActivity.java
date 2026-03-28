@@ -55,11 +55,11 @@ public class BillingActivity extends AppCompatActivity {
     private EditText etBillingSearch;
     private TextView chipAll, chipPaid, chipPending, chipVerif, chipDownpayment;
     
-    // ─── Invoice List ─────────────────────────────
     private RecyclerView rvInvoices;
     private LinearLayout billingLoadingLayout, billingEmptyLayout;
     private TextView tvInvoiceCount;
 
+    private ApiService apiService;
     private InvoiceAdapter invoiceAdapter;
     private List<JsonObject> allInvoices = new ArrayList<>();
     private List<JsonObject> filteredInvoices = new ArrayList<>();
@@ -151,7 +151,7 @@ public class BillingActivity extends AppCompatActivity {
             else if (v.getId() == R.id.chipVerif) activeStatus = "for_verification";
             else if (v.getId() == R.id.chipDownpayment) activeStatus = "downpayment";
 
-            applyLocalFilters();
+            filterAndRefresh();
         };
 
         chipAll.setOnClickListener(listener);
@@ -166,7 +166,7 @@ public class BillingActivity extends AppCompatActivity {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
             @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
                 activeSearch = s.toString().toLowerCase().trim();
-                applyLocalFilters();
+                filterAndRefresh();
             }
             @Override public void afterTextChanged(Editable s) {}
         });
@@ -210,61 +210,87 @@ public class BillingActivity extends AppCompatActivity {
     }
 
     private void initClient() {
-        okClient = new OkHttpClient.Builder()
-            .addInterceptor(chain -> {
-                String cookies = CookieManager.getInstance().getCookie(BASE_URL);
-                Request.Builder builder = chain.request().newBuilder()
-                        .header("User-Agent", userAgent)
-                        .header("Accept", "application/json");
-                if (cookies != null) builder.header("Cookie", cookies);
-
-                String token = prefs.getString("token", "");
-                if (!token.isEmpty()) builder.header("Authorization", "Bearer " + token);
-
-                okhttp3.HttpUrl newUrl = chain.request().url().newBuilder()
-                        .addQueryParameter("mobile",    "true")
-                        .addQueryParameter("tenant_id", String.valueOf(prefs.getInt("tenantId", 1)))
-                        .addQueryParameter("role",      prefs.getString("role", "patient"))
-                        .addQueryParameter("user_id",   String.valueOf(prefs.getInt("userId", 0)))
-                        .addQueryParameter("email",     prefs.getString("email", ""))
-                        .build();
-                builder.url(newUrl);
-                return chain.proceed(builder.build());
-            })
-            .build();
+        // Use the centralized InfinityFree client that auto-solves AES challenges
+        apiService = InfinityFreeClient.buildRetrofit(prefs).create(ApiService.class);
     }
 
     private void fetchBillingSummary() {
-        String email = prefs.getString("email", "");
-        String url = BASE_URL + "api_billing.php?action=summary&mobile=true&role=patient&email=" + email;
+        apiService.getBillingRaw("summary", "true").enqueue(new retrofit2.Callback<okhttp3.ResponseBody>() {
+            @Override
+            public void onResponse(retrofit2.Call<okhttp3.ResponseBody> call, retrofit2.Response<okhttp3.ResponseBody> resp) {
+                try {
+                    if (!resp.isSuccessful() || resp.body() == null) {
+                        runOnUiThread(() -> loadFallbackSummary());
+                        return;
+                    }
+                    String body = resp.body().string();
+                    android.util.Log.d("AlagwaBillingRaw", "Summary Body: " + body);
 
-        new Thread(() -> {
-            try {
-                Request req = new Request.Builder().url(url).build();
-                okhttp3.Response resp = okClient.newCall(req).execute();
-                String body = resp.body() != null ? resp.body().string() : "";
+                    JsonObject json = new JsonParser().parse(body).getAsJsonObject();
+                    if (json.has("success") && json.get("success").getAsBoolean()) {
+                        JsonObject data = json.getAsJsonObject("data");
 
-                JsonObject json = new JsonParser().parse(body).getAsJsonObject();
-                if (json.get("success") != null && json.get("success").getAsBoolean()) {
-                    JsonObject data = json.getAsJsonObject("data");
+                        double revenue = safeDouble(data, "total_revenue");
+                        double pending = safeDouble(data, "pending_amount");
+                        double verif   = safeDouble(data, "verification_amount");
+                        double downpay = safeDouble(data, "downpayment_total");
 
-                    double revenue    = safeDouble(data, "total_revenue");
-                    double pending    = safeDouble(data, "pending_amount");
-                    double verif      = safeDouble(data, "verification_amount");
-                    double downpay    = safeDouble(data, "downpayment_total");
-
-                    runOnUiThread(() -> {
-                        tvTotalRevenue.setText(formatPeso(revenue));
-                        tvPendingAmount.setText(formatPeso(pending));
-                        tvVerificationAmount.setText(formatPeso(verif));
-                        tvDownpaymentTotal.setText(formatPeso(downpay));
-                    });
+                        runOnUiThread(() -> {
+                            tvTotalRevenue.setText(formatPeso(revenue));
+                            tvPendingAmount.setText(formatPeso(pending));
+                            tvVerificationAmount.setText(formatPeso(verif));
+                            tvDownpaymentTotal.setText(formatPeso(downpay));
+                        });
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Summary parse error: " + e.getMessage());
+                    runOnUiThread(() -> loadFallbackSummary());
                 }
-            } catch (Exception e) {
-                Log.w(TAG, "Summary fetch failed: " + e.getMessage());
-                runOnUiThread(this::loadFallbackSummary);
             }
-        }).start();
+            @Override public void onFailure(retrofit2.Call<okhttp3.ResponseBody> call, Throwable t) {
+                Log.w(TAG, "Summary network error: " + t.getMessage());
+                runOnUiThread(() -> loadFallbackSummary());
+            }
+        });
+    }
+
+    private void fetchInvoices() {
+        showLoading(true);
+        apiService.getBillingRaw("list", "true").enqueue(new retrofit2.Callback<okhttp3.ResponseBody>() {
+            @Override
+            public void onResponse(retrofit2.Call<okhttp3.ResponseBody> call, retrofit2.Response<okhttp3.ResponseBody> resp) {
+                try {
+                    showLoading(false);
+                    if (!resp.isSuccessful() || resp.body() == null) {
+                        showEmpty(true);
+                        return;
+                    }
+                    String body = resp.body().string();
+                    android.util.Log.d("AlagwaBillingRaw", "List Body: " + body);
+
+                    JsonObject json = new JsonParser().parse(body).getAsJsonObject();
+                    if (json.has("success") && json.get("success").getAsBoolean()) {
+                        JsonArray data = json.getAsJsonArray("data");
+                        allInvoices.clear();
+                        for (int i = 0; i < data.size(); i++) {
+                            allInvoices.add(data.get(i).getAsJsonObject());
+                        }
+                        filterAndRefresh();
+                    } else {
+                        showEmpty(true);
+                    }
+                } catch (Exception e) {
+                    showLoading(false);
+                    showEmpty(true);
+                    Log.e(TAG, "Invoices parse error: " + e.getMessage());
+                }
+            }
+            @Override public void onFailure(retrofit2.Call<okhttp3.ResponseBody> call, Throwable t) {
+                showLoading(false);
+                showEmpty(true);
+                Log.w(TAG, "Invoices network error: " + t.getMessage());
+            }
+        });
     }
 
     private void loadFallbackSummary() {
@@ -274,125 +300,128 @@ public class BillingActivity extends AppCompatActivity {
         tvDownpaymentTotal.setText("₱0.00");
     }
 
-    private void fetchInvoices() {
-        showLoading(true);
-        String email = prefs.getString("email", "");
-        String url = BASE_URL + "api_billing.php?action=list&mobile=true&role=patient&email=" + email;
+    private void filterAndRefresh() {
+        filteredInvoices.clear();
+        for (JsonObject inv : allInvoices) {
+            String status  = safeStr(inv, "status").toLowerCase();
+            String payType = safeStr(inv, "payment_type").toLowerCase();
+            String service = (safeStr(inv, "service_type") + " " + safeStr(inv, "description")).toLowerCase();
 
-        new Thread(() -> {
-            try {
-                Request req = new Request.Builder().url(url).build();
-                okhttp3.Response resp = okClient.newCall(req).execute();
-                String body = resp.body() != null ? resp.body().string() : "";
+            // Filter logic
+            boolean matchesStatus = "all".equals(activeStatus)
+                    || ("pending".equals(activeStatus) && ("pending".equals(status) || "unpaid".equals(status)))
+                    || (activeStatus.equals("downpayment") && "downpayment".equals(payType))
+                    || (activeStatus.equals(status));
 
-                if (body.trim().startsWith("{")) {
-                    JsonObject json = new JsonParser().parse(body).getAsJsonObject();
-                    if (json.has("success") && json.get("success").getAsBoolean() && json.has("data")) {
-                        JsonArray arr = json.getAsJsonArray("data");
-                        loadInvoices(arr);
-                        return;
-                    }
-                }
-                if (body.trim().startsWith("[")) {
-                    JsonArray arr = new JsonParser().parse(body).getAsJsonArray();
-                    loadInvoices(arr);
-                    return;
-                }
-                runOnUiThread(() -> showLoading(false));
+            boolean matchesSearch = activeSearch.isEmpty() || service.contains(activeSearch.toLowerCase());
 
-            } catch (Exception e) {
-                Log.w(TAG, "Invoice fetch failed: " + e.getMessage());
-                runOnUiThread(() -> {
-                    showLoading(false);
-                    showEmpty(true);
-                });
+            if (matchesStatus && matchesSearch) {
+                filteredInvoices.add(inv);
             }
-        }).start();
-    }
-
-    private void loadInvoices(JsonArray arr) {
-        allInvoices.clear();
-        for (JsonElement el : arr) {
-            if (el.isJsonObject()) allInvoices.add(el.getAsJsonObject());
         }
+
         runOnUiThread(() -> {
-            showLoading(false);
-            applyLocalFilters();
+            invoiceAdapter.notifyDataSetChanged();
+            showEmpty(filteredInvoices.isEmpty());
+            tvInvoiceCount.setText(filteredInvoices.size() + " records found");
+            if (!filteredInvoices.isEmpty()) rvInvoices.setVisibility(View.VISIBLE);
         });
     }
 
-    private void applyLocalFilters() {
-        filteredInvoices.clear();
-        for (JsonObject inv : allInvoices) {
-            String status      = safeStr(inv, "status").toLowerCase();
-            String payType     = safeStr(inv, "payment_type").toLowerCase();
-            String service     = safeStr(inv, "service_type").toLowerCase();
-            String patientName = safeStr(inv, "patient_name").toLowerCase();
-            String invId       = safeStr(inv, "payment_id");
-
-            // Filter by "downpayment" which mixes type and status
-            if (activeStatus.equals("downpayment")) {
-                if (!payType.equals("downpayment")) continue;
-            } else if (!activeStatus.equals("all")) {
-                if (!status.equals(activeStatus)) continue;
-                if (payType.equals("downpayment")) continue; // hide DPs from normal views
-            }
-            
-            // Search filter
-            if (!activeSearch.isEmpty() && !patientName.contains(activeSearch) && !invId.contains(activeSearch) && !service.contains(activeSearch)) continue;
-
-            filteredInvoices.add(inv);
-        }
-
-        tvInvoiceCount.setText(filteredInvoices.size() + " records");
-        showEmpty(filteredInvoices.isEmpty());
-        if (!filteredInvoices.isEmpty()) rvInvoices.setVisibility(View.VISIBLE);
-        invoiceAdapter.notifyDataSetChanged();
-    }
+    private String selectedMethod = "gcash";
 
     private void onPayNow(int paymentId, double amount, String type) {
-        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-        dlg.setTitle(type.equals("downpayment") ? "Submit Deposit" : "Submit Payment");
-        dlg.setMessage("Confirm payment of " + formatPeso(amount) + "?\n\nMethod: Cash / On-Site");
-        dlg.setPositiveButton("Confirm", (dialog, which) -> submitPaymentToApi(paymentId, "cash", ""));
-        dlg.setNegativeButton("Cancel", null);
-        dlg.show();
+        BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
+        View view = getLayoutInflater().inflate(R.layout.layout_bottom_sheet_payment, null);
+        dialog.setContentView(view);
+
+        // Ensure background is transparent
+        View parent = (View) view.getParent();
+        if (parent != null) parent.setBackgroundColor(Color.TRANSPARENT);
+
+        TextView bsPayAmount = view.findViewById(R.id.bsPayAmount);
+        TextView bsPayService = view.findViewById(R.id.bsPayService);
+        EditText etRefNo = view.findViewById(R.id.etRefNo);
+        View btnSubmit = view.findViewById(R.id.btnSubmitPayment);
+        View methodGcash = view.findViewById(R.id.methodGcash);
+        View methodMaya = view.findViewById(R.id.methodMaya);
+        View methodCash = view.findViewById(R.id.methodCash);
+        View refContainer = view.findViewById(R.id.refContainer);
+
+        bsPayAmount.setText(formatPeso(amount));
+        bsPayService.setText(type.equals("downpayment") ? "Downpayment / Deposit" : "Service Payment");
+
+        selectedMethod = "gcash"; // default
+
+        View.OnClickListener methodListener = v -> {
+            methodGcash.setBackgroundResource(R.drawable.bg_glass_card_dark_realapp);
+            methodMaya.setBackgroundResource(R.drawable.bg_glass_card_dark_realapp);
+            methodCash.setBackgroundResource(R.drawable.bg_glass_card_dark_realapp);
+            ((TextView)((ViewGroup)methodGcash).getChildAt(0)).setTextColor(Color.parseColor("#6B7280"));
+            ((TextView)((ViewGroup)methodMaya).getChildAt(0)).setTextColor(Color.parseColor("#6B7280"));
+            ((TextView)((ViewGroup)methodCash).getChildAt(0)).setTextColor(Color.parseColor("#6B7280"));
+
+            if (v.getId() == R.id.methodGcash) {
+                selectedMethod = "gcash";
+                v.setBackgroundResource(R.drawable.bg_glass_card_flagship);
+                ((TextView)((ViewGroup)v).getChildAt(0)).setTextColor(Color.parseColor("#0B0E11"));
+                refContainer.setVisibility(View.VISIBLE);
+            } else if (v.getId() == R.id.methodMaya) {
+                selectedMethod = "maya";
+                v.setBackgroundResource(R.drawable.bg_glass_card_flagship);
+                ((TextView)((ViewGroup)v).getChildAt(0)).setTextColor(Color.parseColor("#0B0E11"));
+                refContainer.setVisibility(View.VISIBLE);
+            } else {
+                selectedMethod = "cash";
+                v.setBackgroundResource(R.drawable.bg_glass_card_flagship);
+                ((TextView)((ViewGroup)v).getChildAt(0)).setTextColor(Color.parseColor("#0B0E11"));
+                refContainer.setVisibility(View.GONE);
+            }
+        };
+
+        methodGcash.setOnClickListener(methodListener);
+        methodMaya.setOnClickListener(methodListener);
+        methodCash.setOnClickListener(methodListener);
+
+        btnSubmit.setOnClickListener(v -> {
+            String ref = etRefNo.getText().toString().trim();
+            if (!selectedMethod.equals("cash") && ref.isEmpty()) {
+                Toast.makeText(this, "Please enter Reference Number", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            submitPaymentToApi(paymentId, selectedMethod, ref);
+            dialog.dismiss();
+        });
+
+        dialog.show();
     }
 
     private void submitPaymentToApi(int paymentId, String method, String ref) {
-        new Thread(() -> {
-            try {
-                RequestBody form = new FormBody.Builder()
-                        .add("action", "submit_payment")
-                        .add("payment_id", String.valueOf(paymentId))
-                        .add("payment_method", method)
-                        .add("reference_number", ref)
-                        .add("mobile", "true")
-                        .build();
-
-                Request req = new Request.Builder()
-                        .url(BASE_URL + "api_billing.php")
-                        .post(form)
-                        .build();
-                okhttp3.Response resp = okClient.newCall(req).execute();
-                String body = resp.body() != null ? resp.body().string() : "";
-                JsonObject json = new JsonParser().parse(body).getAsJsonObject();
-                boolean ok = json.has("success") && json.get("success").getAsBoolean();
-
-                runOnUiThread(() -> {
-                    if (ok) {
-                        Toast.makeText(this, "✅ Submitted for review!", Toast.LENGTH_LONG).show();
-                        fetchBillingSummary();
-                        fetchInvoices();
-                    } else {
-                        String msg = json.has("message") ? json.get("message").getAsString() : "Unknown error";
-                        Toast.makeText(this, "❌ " + msg, Toast.LENGTH_LONG).show();
+        apiService.submitPayment("submit_payment", paymentId, method, ref, "true").enqueue(new retrofit2.Callback<okhttp3.ResponseBody>() {
+            @Override
+            public void onResponse(retrofit2.Call<okhttp3.ResponseBody> call, retrofit2.Response<okhttp3.ResponseBody> resp) {
+                try {
+                    if (resp.isSuccessful() && resp.body() != null) {
+                        String body = resp.body().string();
+                        JsonObject json = new JsonParser().parse(body).getAsJsonObject();
+                        if (json.has("success") && json.get("success").getAsBoolean()) {
+                            runOnUiThread(() -> {
+                                Toast.makeText(BillingActivity.this, "✅ Payment Submitted!", Toast.LENGTH_SHORT).show();
+                                fetchBillingSummary();
+                                fetchInvoices();
+                            });
+                            return;
+                        }
                     }
-                });
-            } catch (Exception e) {
-                runOnUiThread(() -> Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> Toast.makeText(BillingActivity.this, "❌ Submission Failed", Toast.LENGTH_SHORT).show());
+                } catch (Exception e) {
+                    Log.e(TAG, "Payment submit error: " + e.getMessage());
+                }
             }
-        }).start();
+            @Override public void onFailure(retrofit2.Call<okhttp3.ResponseBody> call, Throwable t) {
+                runOnUiThread(() -> Toast.makeText(BillingActivity.this, "Network Error", Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 
     // ─────────────────────────────────────────────
@@ -408,10 +437,12 @@ public class BillingActivity extends AppCompatActivity {
         if (parent != null) parent.setBackgroundColor(Color.TRANSPARENT);
 
         String id       = safeStr(inv, "payment_id");
-        double amount   = safeDouble(inv, "amount");
+        double subtotal = safeDouble(inv, "subtotal");
+        if (subtotal <= 0) subtotal = safeDouble(inv, "amount"); // Fallback
+
         double discount = safeDouble(inv, "discount_amount");
         double downpay  = safeDouble(inv, "downpayment_applied");
-        double total    = Math.max(0, amount - discount - downpay);
+        double finalTotal = Math.max(0, subtotal - discount - downpay);
         String status   = safeStr(inv, "status");
 
         TextView bsInvoiceId = view.findViewById(R.id.bsInvoiceId);
@@ -426,8 +457,8 @@ public class BillingActivity extends AppCompatActivity {
         LinearLayout bsDownpaymentRow = view.findViewById(R.id.bsDownpaymentRow);
 
         bsInvoiceId.setText("#PAY-" + String.format("%04d", safeInt(inv, "payment_id")));
-        bsTotalAmount.setText(formatPeso(total));
-        bsSubtotal.setText(formatPeso(amount));
+        bsTotalAmount.setText(formatPeso(finalTotal));
+        bsSubtotal.setText(formatPeso(subtotal));
         bsStatus.setText(friendlyStatus(status));
         bsStatus.setTextColor(statusColors(status)[0]);
         
@@ -440,7 +471,7 @@ public class BillingActivity extends AppCompatActivity {
             bsDownpaymentApplied.setText("- " + formatPeso(downpay));
         }
         
-        bsFinalTotal.setText(formatPeso(total));
+        bsFinalTotal.setText(formatPeso(finalTotal));
 
         view.findViewById(R.id.btnDownloadPdf).setOnClickListener(v -> {
             Toast.makeText(this, "Downloading PDF Receipt...", Toast.LENGTH_SHORT).show();
@@ -540,6 +571,15 @@ public class BillingActivity extends AppCompatActivity {
             h.btnPayNow.setOnClickListener(v -> onPayNow(payId, amount, "checkup"));
             h.btnPayDownpayment.setOnClickListener(v -> onPayNow(payId, amount, "downpayment"));
             h.btnViewReceipt.setOnClickListener(v -> showBottomSheetReceipt(inv));
+
+            // Make the status pill clickable as well for better UX
+            h.tvInvoiceStatus.setOnClickListener(v -> {
+                if (canPay) {
+                    onPayNow(payId, amount, isDownpay ? "downpayment" : "checkup");
+                } else if (hasPaid) {
+                    showBottomSheetReceipt(inv);
+                }
+            });
         }
 
         @Override public int getItemCount() { return items.size(); }
@@ -547,8 +587,7 @@ public class BillingActivity extends AppCompatActivity {
         class VH extends RecyclerView.ViewHolder {
             View statusStrip;
             TextView tvInvoiceId, tvInvoiceStatus, tvInvoiceService, tvInvoiceDate, tvInvoiceAmount, tvInitials;
-            TextView btnPayNow, btnPayDownpayment;
-            LinearLayout btnViewReceipt;
+            TextView btnPayNow, btnPayDownpayment, btnViewReceipt;
 
             VH(View v) {
                 super(v);
@@ -571,8 +610,8 @@ public class BillingActivity extends AppCompatActivity {
         switch (raw.toLowerCase()) {
             case "paid":             return "Payment Complete";
             case "for_verification": return "Under Review";
-            case "pending":          return "Awaiting Payment";
-            case "unpaid":           return "Unpaid";
+            case "pending":          return "Pay Now";
+            case "unpaid":           return "Pay Now";
             case "applied":          return "Applied to Bill";
             default:                 return raw;
         }
