@@ -51,13 +51,14 @@ public class AppointmentsActivity extends AppCompatActivity {
     private TextView tvMonthYear, tvSelectedDateAppointments;
     private ImageView btnPrevMonth, btnNextMonth;
     private View layoutEmpty, layoutLoading;
-    private View btnBookFloating, btnClose;
+    private View btnBookFloating;
     private View cardQueueStatus, statusPulseLive;
     private TextView tvQueueNumber, tvEstimatedWait;
     private AppointmentAdapter adapter;
     private ApiService apiService;
     private SharedPreferences prefs;
     private List<AppointmentResponse.Appointment> fullList = new ArrayList<>();
+    private TextView tvReminderDate, tvReminderAdvice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,9 @@ public class AppointmentsActivity extends AppCompatActivity {
         layoutEmpty = findViewById(R.id.layoutEmpty);
         layoutLoading = findViewById(R.id.layoutLoading);
         btnBookFloating = findViewById(R.id.btnBookFloating);
-        btnClose = findViewById(R.id.btnClose);
+        
+        tvReminderDate = findViewById(R.id.tvReminderDate);
+        tvReminderAdvice = findViewById(R.id.tvReminderAdvice);
         
         // Queue Status has been moved to Dashboard
 
@@ -103,7 +106,6 @@ public class AppointmentsActivity extends AppCompatActivity {
             android.content.Intent intent = new android.content.Intent(this, BookingActivity.class);
             startActivity(intent);
         });
-        if (btnClose != null) btnClose.setOnClickListener(v -> finish());
         
         // Express Booking Cards setup
         View cardExpress1 = findViewById(R.id.cardExpress1);
@@ -146,7 +148,12 @@ public class AppointmentsActivity extends AppCompatActivity {
         int firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 0 for Sunday
         calendar.add(Calendar.DAY_OF_MONTH, -firstDayOfWeek);
         
-        while (days.size() < 42) { // 6 rows of 7 days
+        while (days.size() < 42) {
+            // If we've completed 5 rows (35 days) and the next day is from the next month, stop.
+            if (days.size() >= 35 && calendar.get(Calendar.MONTH) != currentDisplayDate.get(Calendar.MONTH)) {
+                break;
+            }
+
             days.add(new CalendarDate(
                 calendar.get(Calendar.DAY_OF_MONTH),
                 calendar.get(Calendar.MONTH) == currentDisplayDate.get(Calendar.MONTH),
@@ -250,26 +257,29 @@ public class AppointmentsActivity extends AppCompatActivity {
                 try {
                     if (response.isSuccessful() && response.body() != null) {
                         String raw = response.body().string();
-                        // Attempt to parse JSON. If it's HTML (InfinityFree error), use mock data for demo.
                         if (raw.trim().startsWith("[")) {
                             AppointmentResponse.Appointment[] arr = new com.google.gson.Gson().fromJson(raw, AppointmentResponse.Appointment[].class);
                             fullList.clear();
                             for (AppointmentResponse.Appointment a : arr) fullList.add(a);
-                            if (fullList.isEmpty()) preloadMockData();
+                            
+                            // UPDATE REMINDER LOGIC (Match Maternity Old Flow)
+                            updateRemindersFromHistory();
+
+                            if (fullList.isEmpty()) {
+                                layoutEmpty.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                            }
                             updateCalendarView();
                             filterAppointmentsBySelectedDate();
                         } else {
-                            preloadMockData();
                             updateCalendarView();
                             filterAppointmentsBySelectedDate();
                         }
                     } else {
-                        preloadMockData();
                         updateCalendarView();
                         filterAppointmentsBySelectedDate();
                     }
                 } catch (Exception e) {
-                    preloadMockData();
                     updateCalendarView();
                     filterAppointmentsBySelectedDate();
                 }
@@ -278,39 +288,44 @@ public class AppointmentsActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<okhttp3.ResponseBody> call, Throwable t) {
                 layoutLoading.setVisibility(View.GONE);
-                preloadMockData();
                 updateCalendarView();
                 filterAppointmentsBySelectedDate();
             }
         });
     }
 
-    private void preloadMockData() {
-        fullList.clear();
-        String currentStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedDate.getTime());
-        String currentUser = prefs.getString("fullname", "Maria Santos");
-        
-        // MOCK DATA TO VERIFY UI
-        AppointmentResponse.Appointment m1 = new AppointmentResponse.Appointment();
-        m1.patientName = currentUser;
-        m1.serviceType = "Prenatal Check-up";
-        m1.status = "Confirmed";
-        m1.time = "9:00 AM";
-        m1.date = currentStr;
-        fullList.add(m1);
+    private void updateRemindersFromHistory() {
+        // Find most recent appointment with a next visit date
+        AppointmentResponse.Appointment latestWithReminder = null;
+        for (AppointmentResponse.Appointment a : fullList) {
+            if (a.nextVisitDate != null && !a.nextVisitDate.isEmpty() && !a.nextVisitDate.equals("0000-00-00")) {
+                latestWithReminder = a;
+                break; // fullList is ordered DESC (latest first) usually via API
+            }
+        }
 
-        AppointmentResponse.Appointment m2 = new AppointmentResponse.Appointment();
-        m2.patientName = "Ana Reyes";
-        m2.serviceType = "Ultrasound";
-        m2.status = "Pending";
-        m2.time = "10:00 AM";
-        m2.date = currentStr;
-        fullList.add(m2);
+        if (latestWithReminder != null && tvReminderDate != null) {
+            try {
+                SimpleDateFormat inFmt = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                SimpleDateFormat outFmt = new SimpleDateFormat("MMMM d", Locale.getDefault());
+                String dateDisp = outFmt.format(inFmt.parse(latestWithReminder.nextVisitDate));
+                tvReminderDate.setText("Recommended Next: " + dateDisp);
+                
+                if (tvReminderAdvice != null && latestWithReminder.checkupNotes != null && !latestWithReminder.checkupNotes.isEmpty()) {
+                    tvReminderAdvice.setText(latestWithReminder.checkupNotes);
+                } else if (tvReminderAdvice != null) {
+                    tvReminderAdvice.setText("Based on your last check-up, please return on the date above.");
+                }
+            } catch (Exception e) {
+                 tvReminderDate.setText("Recommended Next: " + latestWithReminder.nextVisitDate);
+            }
+        }
     }
 
 
+
     private void showBookAppointmentSheet() {
-        BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.TransparentDialog);
+        BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
         View sheet = getLayoutInflater().inflate(R.layout.layout_booking_sheet, null);
         dialog.setContentView(sheet);
         dialog.show();
@@ -319,7 +334,7 @@ public class AppointmentsActivity extends AppCompatActivity {
     private View selectedTimeSlotView = null; // Track selected slot
 
     private void showPremiumTimeslotSheet(String title, String subtitle, String[] slots) {
-        BottomSheetDialog dialog = new BottomSheetDialog(this, com.google.android.material.R.style.Theme_Design_Light_BottomSheetDialog);
+        BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
         View sheet = getLayoutInflater().inflate(R.layout.layout_premium_timeslot_sheet, null);
         dialog.setContentView(sheet);
 
@@ -409,8 +424,8 @@ public class AppointmentsActivity extends AppCompatActivity {
             String timeStr = (appointment.time != null) ? appointment.time : "09:00 AM";
             holder.tvDateTime.setText(timeStr + " - " + timeStr); 
 
-            // PIXEL-PERFECT STATE MAPPING (IMAGE 2)
-            if ("Confirmed".equalsIgnoreCase(appointment.status) || position == 0) {
+            // PIXEL-PERFECT STATE MAPPING (MATCHING WEB)
+            if ("Confirmed".equalsIgnoreCase(appointment.status)) {
                 holder.tvPatient.setText(appointment.patientName);
                 holder.tvService.setText(appointment.serviceType);
                 holder.tvDoctor.setText("Assigned: Dr. Cruz");
@@ -422,7 +437,7 @@ public class AppointmentsActivity extends AppCompatActivity {
                 holder.layoutActionsPending.setVisibility(View.GONE);
                 holder.ivTimeIcon.setImageTintList(android.content.res.ColorStateList.valueOf(0xFF00FBFB));
                 holder.tvDateTime.setTextColor(0xFF00FBFB);
-                holder.nodeIcon.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFF00FBFB));
+                holder.nodeCore.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFF00FBFB));
             } else {
                 holder.tvPatient.setText(appointment.patientName);
                 holder.tvService.setText(appointment.serviceType);
@@ -435,7 +450,7 @@ public class AppointmentsActivity extends AppCompatActivity {
                 holder.layoutActionsPending.setVisibility(View.VISIBLE);
                 holder.ivTimeIcon.setImageTintList(android.content.res.ColorStateList.valueOf(0x66FFFFFF));
                 holder.tvDateTime.setTextColor(0x66FFFFFF);
-                holder.nodeIcon.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0x33B9CAC9));
+                holder.nodeCore.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0x33B9CAC9));
             }
             
             holder.btnCancel.setOnClickListener(v -> Toast.makeText(v.getContext(), "Cancel requested", Toast.LENGTH_SHORT).show());
@@ -445,7 +460,7 @@ public class AppointmentsActivity extends AppCompatActivity {
         @Override public int getItemCount() { return list.size(); }
         static class ViewHolder extends RecyclerView.ViewHolder {
             TextView tvService, tvDoctor, tvDateTime, tvStatus, tvPatient;
-            View nodeIcon, containerStatus, statusPulse, layoutActionsConfirmed, layoutActionsPending;
+            View nodeCore, containerStatus, statusPulse, layoutActionsConfirmed, layoutActionsPending;
             View btnCancel, btnReschedule;
             ImageView ivTimeIcon;
             ViewHolder(View v) { super(v); 
@@ -454,7 +469,7 @@ public class AppointmentsActivity extends AppCompatActivity {
                 tvPatient = v.findViewById(R.id.tvPatientName);
                 tvDateTime = v.findViewById(R.id.tvDateTime);
                 tvStatus = v.findViewById(R.id.tvStatus);
-                nodeIcon = v.findViewById(R.id.nodeIcon);
+                nodeCore = v.findViewById(R.id.nodeCore);
                 containerStatus = v.findViewById(R.id.containerStatus);
                 statusPulse = v.findViewById(R.id.statusPulse);
                 layoutActionsConfirmed = v.findViewById(R.id.layoutActionsConfirmed);

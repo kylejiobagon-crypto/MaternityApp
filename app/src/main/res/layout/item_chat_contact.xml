@@ -1,18 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
-    android:background="@drawable/bg_glass_card_premium_light"
+    android:background="@drawable/bg_glass_card_navy_premium"
     android:elevation="6dp"
-    android:padding="16dp">
+    android:padding="20dp">
 
     <!-- AVATAR HUB WITH PULSE -->
     <RelativeLayout
         android:id="@+id/avatar_hub"
-        android:layout_width="56dp"
-        android:layout_height="56dp">
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+        android:background="@drawable/bg_avatar_3d_realistic_glow"
+        android:padding="3dp">
         
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivContactAvatar"
@@ -25,12 +26,12 @@
         <!-- LIVE STATUS PULSE -->
         <View
             android:id="@+id/statusPulse"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:background="@drawable/bg_dot_emerald_glow"
-            android:elevation="4dp" />
+            android:elevation="8dp" />
     </RelativeLayout>
 
     <!-- INFO HUB -->
@@ -38,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:layout_toEndOf="@id/avatar_hub"
         android:layout_toStartOf="@id/unread_hub"
         android:orientation="vertical">
@@ -48,8 +49,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dr. Reyes, OB"
-            android:textColor="#1A1A2E"
-            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:textSize="17sp"
             android:fontFamily="sans-serif-black" />
 
         <TextView
@@ -57,12 +58,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Your next checkup is on Monday..."
-            android:textColor="#64748B"
+            android:textColor="#BBFFD8"
             android:textSize="13sp"
             android:maxLines="1"
+            android:alpha="0.7"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
-            android:layout_marginTop="2dp" />
+            android:layout_marginTop="4dp" />
     </LinearLayout>
 
     <!-- UNREAD & TIME HUB -->
@@ -86,15 +88,15 @@
 
         <TextView
             android:id="@+id/tvUnreadCount"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="4dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginTop="6dp"
             android:background="@drawable/bg_unread_badge_neon"
             android:gravity="center"
             android:text="2"
             android:textColor="#FFFFFF"
             android:textSize="10sp"
-            android:fontFamily="sans-serif-bold" />
+            android:fontFamily="sans-serif-black" />
     </LinearLayout>
 
 </RelativeLayout>

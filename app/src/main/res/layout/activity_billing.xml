@@ -1,9 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_soft_gray_bg">
+    android:background="@drawable/bg_billing_cosmic_abyss">
+
+    <!-- Ambient Blobs (Atmospheric Glow) -->
+    <View
+        android:layout_width="450dp"
+        android:layout_height="150dp"
+        android:background="@drawable/bg_aura_blob_cyan"
+        android:alpha="0.25"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:translationX="100dp"
+        android:translationY="50dp" />
+
+    <View
+        android:layout_width="450dp"
+        android:layout_height="450dp"
+        android:background="@drawable/bg_aura_blob_violet"
+        android:alpha="0.15"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:translationX="-150dp"
+        android:translationY="100dp" />
 
     <!-- ══════════════════════════════════════════ -->
     <!--  SECTION 1: FISCAL SESSION BANNER          -->
@@ -28,10 +48,10 @@
             <RelativeLayout
                 android:id="@+id/billingHero"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
+                android:layout_height="190dp"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_billing_header_green_premium"
+                android:background="@drawable/bg_glass_card_billing"
                 android:elevation="14dp"
                 android:clipToOutline="true"
                 android:padding="24dp">
@@ -53,7 +73,7 @@
                     android:layout_alignParentEnd="true"
                     android:background="@drawable/bg_white_glass_circle"
                     android:elevation="6dp">
-                    <ImageView android:layout_width="26dp" android:layout_height="26dp" android:layout_centerInParent="true" android:src="@android:drawable/ic_menu_save" app:tint="#059669" />
+                    <ImageView android:layout_width="26dp" android:layout_height="26dp" android:layout_centerInParent="true" android:src="@android:drawable/ic_menu_save" app:tint="@color/neon_galactic_green_vibrant" />
                 </RelativeLayout>
 
                 <!-- Live Badge -->
@@ -77,9 +97,11 @@
                     android:layout_below="@id/liveBadge"
                     android:layout_marginTop="16dp"
                     android:text="Billing Overview"
-                    android:textColor="#0E7490"
-                    android:textSize="28sp"
-                    android:fontFamily="sans-serif-black" />
+                    android:textColor="@color/white"
+                    android:textSize="32sp"
+                    android:fontFamily="sans-serif-black"
+                    android:shadowColor="@color/billing_neon_cyan"
+                    android:shadowRadius="8"/>
 
                 <TextView
                     android:id="@+id/tvBillingUserName"
@@ -111,12 +133,12 @@
                     android:layout_columnWeight="1"
                     android:layout_marginEnd="6dp"
                     android:layout_marginBottom="12dp"
-                    android:background="@drawable/bg_premium_card_emerald"
+                    android:background="@drawable/bg_glass_card_emerald"
                     android:elevation="10dp"
                     android:padding="20dp">
-                    <ImageView android:id="@+id/ic1" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_save" app:tint="#FFFFFF" />
-                    <TextView android:id="@+id/tvTotalRevenue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic1" android:layout_marginTop="16dp" android:text="₱0.00" android:textColor="#FFFFFF" android:textSize="22sp" android:fontFamily="sans-serif-black" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvTotalRevenue" android:text="Total Settlements" android:textColor="#E0F2FE" android:textSize="11sp" android:fontFamily="sans-serif-bold" android:alpha="0.9" />
+                    <ImageView android:id="@+id/ic1" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_save" app:tint="@color/neon_galactic_green_vibrant" />
+                    <TextView android:id="@+id/tvTotalRevenue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic1" android:layout_marginTop="16dp" android:text="₱0.00" android:textColor="@color/white" android:textSize="22sp" android:fontFamily="sans-serif-black" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvTotalRevenue" android:text="Total Settlements" android:textColor="@color/billing_neon_cyan" android:textSize="11sp" android:fontFamily="sans-serif-bold" android:alpha="0.8" />
                 </RelativeLayout>
 
                 <!-- Card 2: Pending -->
@@ -126,12 +148,12 @@
                     android:layout_columnWeight="1"
                     android:layout_marginStart="6dp"
                     android:layout_marginBottom="12dp"
-                    android:background="@drawable/bg_premium_card_amber"
+                    android:background="@drawable/bg_glass_card_amber"
                     android:elevation="10dp"
                     android:padding="20dp">
-                    <ImageView android:id="@+id/ic2" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#FFFFFF" />
-                    <TextView android:id="@+id/tvPendingAmount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic2" android:layout_marginTop="16dp" android:text="₱0.00" android:textColor="#FFFFFF" android:textSize="22sp" android:fontFamily="sans-serif-black" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvPendingAmount" android:text="Awaiting Payment" android:textColor="#FEF3C7" android:textSize="11sp" android:fontFamily="sans-serif-bold" android:alpha="0.9" />
+                    <ImageView android:id="@+id/ic2" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="@color/neon_galactic_orange" />
+                    <TextView android:id="@+id/tvPendingAmount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic2" android:layout_marginTop="16dp" android:text="₱0.00" android:textColor="@color/white" android:textSize="22sp" android:fontFamily="sans-serif-black" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvPendingAmount" android:text="Awaiting Payment" android:textColor="@color/billing_neon_cyan" android:textSize="11sp" android:fontFamily="sans-serif-bold" android:alpha="0.8" />
                 </RelativeLayout>
 
                 <!-- Card 3: Verification -->
@@ -140,12 +162,12 @@
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_marginEnd="6dp"
-                    android:background="@drawable/bg_premium_card_cyan"
+                    android:background="@drawable/bg_glass_card_cyan"
                     android:elevation="10dp"
                     android:padding="20dp">
-                    <ImageView android:id="@+id/ic3" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_search" app:tint="#FFFFFF" />
-                    <TextView android:id="@+id/tvVerificationAmount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic3" android:layout_marginTop="16dp" android:text="₱0.00" android:textColor="#FFFFFF" android:textSize="22sp" android:fontFamily="sans-serif-black" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvVerificationAmount" android:text="Under Review" android:textColor="#CFFAFE" android:textSize="11sp" android:fontFamily="sans-serif-bold" android:alpha="0.9" />
+                    <ImageView android:id="@+id/ic3" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_search" app:tint="@color/billing_neon_cyan" />
+                    <TextView android:id="@+id/tvVerificationAmount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic3" android:layout_marginTop="16dp" android:text="₱0.00" android:textColor="@color/white" android:textSize="22sp" android:fontFamily="sans-serif-black" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvVerificationAmount" android:text="Under Review" android:textColor="@color/billing_neon_cyan" android:textSize="11sp" android:fontFamily="sans-serif-bold" android:alpha="0.8" />
                 </RelativeLayout>
 
                 <!-- Card 4: Downpayments -->
@@ -154,12 +176,12 @@
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_marginStart="6dp"
-                    android:background="@drawable/bg_premium_card_violet"
+                    android:background="@drawable/bg_glass_card_purple"
                     android:elevation="10dp"
                     android:padding="20dp">
-                    <ImageView android:id="@+id/ic4" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_agenda" app:tint="#FFFFFF" />
-                    <TextView android:id="@+id/tvDownpaymentTotal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic4" android:layout_marginTop="16dp" android:text="₱0.00" android:textColor="#FFFFFF" android:textSize="22sp" android:fontFamily="sans-serif-black" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvDownpaymentTotal" android:text="Downpayments Wallet" android:textColor="#F3E8FF" android:textSize="11sp" android:fontFamily="sans-serif-bold" android:alpha="0.9" />
+                    <ImageView android:id="@+id/ic4" android:layout_width="28dp" android:layout_height="28dp" android:src="@android:drawable/ic_menu_agenda" app:tint="@color/neon_galactic_purple" />
+                    <TextView android:id="@+id/tvDownpaymentTotal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/ic4" android:layout_marginTop="16dp" android:text="₱0.00" android:textColor="@color/white" android:textSize="22sp" android:fontFamily="sans-serif-black" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvDownpaymentTotal" android:text="Downpayments Wallet" android:textColor="@color/billing_neon_cyan" android:textSize="11sp" android:fontFamily="sans-serif-bold" android:alpha="0.8" />
                 </RelativeLayout>
 
             </GridLayout>
@@ -172,13 +194,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/bg_3d_real_glass"
+                android:background="@drawable/bg_glass_card_billing"
                 android:elevation="2dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="12dp">
-                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_search" app:tint="#94A3B8" />
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_search" app:tint="@color/billing_neon_cyan" />
                 <EditText
                     android:id="@+id/etBillingSearch"
                     android:layout_width="match_parent"
@@ -186,8 +208,8 @@
                     android:layout_marginStart="12dp"
                     android:background="@null"
                     android:hint="Search invoices or services…"
-                    android:textColorHint="#94A3B8"
-                    android:textColor="#0F172A"
+                    android:textColorHint="#4DFFFFFF"
+                    android:textColor="@color/white"
                     android:textSize="14sp"
                     android:fontFamily="sans-serif-medium"
                     android:singleLine="true" />
@@ -224,7 +246,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
                 android:layout_marginHorizontal="16dp"
-                android:background="@drawable/bg_billing_table_container"
+                android:background="@drawable/bg_glass_card_billing"
                 android:elevation="6dp"
                 android:orientation="vertical"
                 android:padding="16dp">
@@ -233,14 +255,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:background="@drawable/bg_table_header_pill"
+                    android:background="@color/billing_glass_highlight"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:paddingHorizontal="16dp">
-                    <TextView android:layout_width="0dp" android:layout_weight="1.8" android:layout_height="wrap_content" android:text="Date" android:textColor="#0E7490" android:textSize="12sp" android:fontFamily="sans-serif-bold" />
-                    <TextView android:layout_width="0dp" android:layout_weight="4" android:layout_height="wrap_content" android:text="Service" android:textColor="#0E7490" android:textSize="12sp" android:fontFamily="sans-serif-bold" />
-                    <TextView android:layout_width="0dp" android:layout_weight="2.5" android:layout_height="wrap_content" android:text="Amount" android:textColor="#0E7490" android:textSize="12sp" android:fontFamily="sans-serif-bold" />
-                    <TextView android:layout_width="0dp" android:layout_weight="1.7" android:layout_height="wrap_content" android:text="Status" android:textColor="#0E7490" android:textSize="12sp" android:fontFamily="sans-serif-bold" android:gravity="end" />
+                    <TextView android:layout_width="0dp" android:layout_weight="1.8" android:layout_height="wrap_content" android:text="Date" android:textColor="@color/billing_neon_cyan" android:textSize="12sp" android:fontFamily="sans-serif-bold" />
+                    <TextView android:layout_width="0dp" android:layout_weight="4" android:layout_height="wrap_content" android:text="Service" android:textColor="@color/billing_neon_cyan" android:textSize="12sp" android:fontFamily="sans-serif-bold" />
+                    <TextView android:layout_width="0dp" android:layout_weight="2.5" android:layout_height="wrap_content" android:text="Amount" android:textColor="@color/billing_neon_cyan" android:textSize="12sp" android:fontFamily="sans-serif-bold" />
+                    <TextView android:layout_width="0dp" android:layout_weight="1.7" android:layout_height="wrap_content" android:text="Status" android:textColor="@color/billing_neon_cyan" android:textSize="12sp" android:fontFamily="sans-serif-bold" android:gravity="end" />
                 </LinearLayout>
 
                 <LinearLayout

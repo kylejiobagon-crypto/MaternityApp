@@ -3,7 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F7F8">
+    android:background="@drawable/bg_billing_cosmic_abyss">
+    
+    <!-- Decorative Aura Blobs for 3D Depth -->
+    <View
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="-100dp"
+        android:layout_marginStart="-120dp"
+        android:background="@drawable/bg_aura_blob_cyan"
+        android:alpha="0.2" />
+        
+    <View
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="-100dp"
+        android:background="@drawable/bg_aura_blob_violet"
+        android:alpha="0.15" />
 
     <!-- ══════════════════════════════════════════ -->
     <!--  SECTION 1: APPOINTMENTS HEADER            -->
@@ -11,51 +30,36 @@
     <RelativeLayout
         android:id="@+id/appointmentsHeader"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@drawable/bg_billing_premium_header"
-        android:elevation="8dp"
-        android:padding="20dp">
+        android:layout_height="90dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_glass_card_navy_premium"
+        android:elevation="20dp"
+        android:paddingHorizontal="20dp">
 
-        <!-- Close Button (Floating Icon Style) -->
-        <RelativeLayout
-            android:id="@+id/btnClose"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/bg_glass_circle"
-            android:clickable="true"
-            android:focusable="true"
-            android:elevation="4dp">
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_centerInParent="true"
-                android:src="@android:drawable/ic_menu_close_clear_cancel"
-                app:tint="@color/white" />
-        </RelativeLayout>
 
-        <!-- Live Badge -->
+        <!-- Live Badge (Top Left Mini) -->
         <LinearLayout
             android:id="@+id/liveBadge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:background="@drawable/bg_glass_pill"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="4dp">
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="3dp">
             <View
-                android:layout_width="6dp"
-                android:layout_height="6dp"
+                android:layout_width="5dp"
+                android:layout_height="5dp"
                 android:background="@drawable/bg_circle_red"
-                android:layout_marginEnd="6dp" />
+                android:layout_marginEnd="4dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Booking Manager: Live"
                 android:textColor="@color/white"
-                android:textSize="10sp"
+                android:textSize="8sp"
                 android:fontFamily="sans-serif-medium" />
         </LinearLayout>
 
@@ -64,22 +68,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/liveBadge"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="2dp"
             android:text="Appointments"
             android:textColor="@color/white"
-            android:textSize="28sp"
+            android:textSize="22sp"
             android:fontFamily="sans-serif-black" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvTitle"
-            android:layout_marginTop="4dp"
             android:text="Manage your upcoming schedules"
             android:textColor="#BBFFD8"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:fontFamily="sans-serif-medium"
-            android:letterSpacing="0.05" />
+            android:alpha="0.7" />
 
     </RelativeLayout>
 
@@ -113,8 +116,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="12dp"
-                android:background="@drawable/bg_receipt_card"
-                android:elevation="3dp"
+                android:background="@drawable/bg_glass_card_billing"
+                android:elevation="6dp"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -130,7 +133,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="FEBRUARY 2026"
-                        android:textColor="#0B0E11"
+                        android:textColor="@color/white"
                         android:textSize="14sp"
                         android:fontFamily="sans-serif-black"
                         android:letterSpacing="0.1" />
@@ -153,7 +156,7 @@
                     android:layout_width="match_parent" 
                     android:layout_height="1dp" 
                     android:layout_marginTop="16dp" 
-                    android:background="#EFF1F5" />
+                    android:background="#1AFFFFFF" />
                 
                 <RelativeLayout 
                     android:layout_width="match_parent" 
@@ -178,9 +181,9 @@
                         android:orientation="horizontal">
                         
                         <View android:layout_width="6dp" android:layout_height="6dp" android:layout_gravity="center" android:background="#00F49C" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="CONFIRMED" android:textColor="#6B7280" android:textSize="9sp" android:fontFamily="sans-serif-bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="CONFIRMED" android:textColor="@color/white" android:textSize="9sp" android:fontFamily="sans-serif-bold" android:alpha="0.8" />
                         <View android:layout_width="6dp" android:layout_height="6dp" android:layout_marginStart="12dp" android:layout_gravity="center" android:background="#FFBC00" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="PENDING" android:textColor="#6B7280" android:textSize="9sp" android:fontFamily="sans-serif-bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="PENDING" android:textColor="@color/white" android:textSize="9sp" android:fontFamily="sans-serif-bold" android:alpha="0.8" />
                     </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>
@@ -196,7 +199,7 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
                 <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#00F49C" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:fontFamily="sans-serif-black" android:text="EXPRESS BOOKING SLOTS" android:textColor="#0B0E11" android:textSize="13sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:fontFamily="sans-serif-black" android:text="EXPRESS BOOKING SLOTS" android:textColor="@color/white" android:textSize="13sp" />
             </LinearLayout>
 
             <HorizontalScrollView
@@ -216,71 +219,71 @@
                     <RelativeLayout
                         android:id="@+id/cardExpress1"
                         android:layout_width="120dp"
-                        android:layout_height="100dp"
+                        android:layout_height="110dp"
                         android:layout_marginEnd="12dp"
-                        android:background="@drawable/bg_card_verif"
+                        android:background="@drawable/bg_glass_card_cyan"
                         android:clickable="true"
                         android:focusable="true"
-                        android:elevation="2dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 27" android:textColor="#0B0E11" android:fontFamily="sans-serif-black" android:textSize="18sp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Tomorrow" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
-                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="58dp" android:gravity="center_vertical">
-                            <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#4299F0" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="09:00 AM" android:textColor="#4299F0" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+                        android:elevation="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 27" android:textColor="@color/white" android:fontFamily="sans-serif-black" android:textSize="18sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Tomorrow" android:textColor="@color/white" android:textSize="11sp" android:fontFamily="sans-serif-medium" android:alpha="0.7" />
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="64dp" android:gravity="center_vertical">
+                            <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#00FFFF" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="09:00 AM" android:textColor="#00FFFF" android:textSize="10sp" android:fontFamily="sans-serif-black" />
                         </LinearLayout>
-                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:layout_margin="12dp" android:src="@android:drawable/ic_media_play" app:tint="#4299F0" />
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:layout_margin="12dp" android:src="@android:drawable/ic_media_play" app:tint="#00FFFF" />
                     </RelativeLayout>
 
                     <!-- CARD 2 -->
                     <RelativeLayout
                         android:id="@+id/cardExpress2"
                         android:layout_width="120dp"
-                        android:layout_height="100dp"
+                        android:layout_height="110dp"
                         android:layout_marginEnd="12dp"
-                        android:background="@drawable/bg_card_pending"
+                        android:background="@drawable/bg_glass_card_amber"
                         android:clickable="true"
                         android:focusable="true"
-                        android:elevation="2dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 28" android:textColor="#0B0E11" android:fontFamily="sans-serif-black" android:textSize="18sp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Wednesday" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
-                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="58dp" android:gravity="center_vertical">
-                            <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#FFBC00" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="10:30 AM" android:textColor="#FFBC00" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+                        android:elevation="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 28" android:textColor="@color/white" android:fontFamily="sans-serif-black" android:textSize="18sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Wednesday" android:textColor="@color/white" android:textSize="11sp" android:fontFamily="sans-serif-medium" android:alpha="0.7" />
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="64dp" android:gravity="center_vertical">
+                            <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#FFCC00" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="10:30 AM" android:textColor="#FFCC00" android:textSize="10sp" android:fontFamily="sans-serif-black" />
                         </LinearLayout>
-                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:layout_margin="12dp" android:src="@android:drawable/ic_media_play" app:tint="#FFBC00" />
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:layout_margin="12dp" android:src="@android:drawable/ic_media_play" app:tint="#FFCC00" />
                     </RelativeLayout>
 
                     <!-- CARD 3 -->
                     <RelativeLayout
                         android:id="@+id/cardExpress3"
                         android:layout_width="120dp"
-                        android:layout_height="100dp"
+                        android:layout_height="110dp"
                         android:layout_marginEnd="12dp"
-                        android:background="@drawable/bg_card_wallet"
+                        android:background="@drawable/bg_glass_card_purple"
                         android:clickable="true"
                         android:focusable="true"
-                        android:elevation="2dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 29" android:textColor="#0B0E11" android:fontFamily="sans-serif-black" android:textSize="18sp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Thursday" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
-                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="58dp" android:gravity="center_vertical">
-                            <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#F472B6" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="02:00 PM" android:textColor="#F472B6" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+                        android:elevation="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 29" android:textColor="@color/white" android:fontFamily="sans-serif-black" android:textSize="18sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Thursday" android:textColor="@color/white" android:textSize="11sp" android:fontFamily="sans-serif-medium" android:alpha="0.7" />
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="64dp" android:gravity="center_vertical">
+                            <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#FF00FF" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="02:00 PM" android:textColor="#FF00FF" android:textSize="10sp" android:fontFamily="sans-serif-black" />
                         </LinearLayout>
-                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:layout_margin="12dp" android:src="@android:drawable/ic_media_play" app:tint="#F472B6" />
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:layout_margin="12dp" android:src="@android:drawable/ic_media_play" app:tint="#FF00FF" />
                     </RelativeLayout>
 
                     <!-- CARD 4 -->
                     <RelativeLayout
                         android:id="@+id/cardExpress4"
                         android:layout_width="120dp"
-                        android:layout_height="100dp"
-                        android:background="@drawable/bg_card_revenue"
+                        android:layout_height="110dp"
+                        android:background="@drawable/bg_glass_card_emerald"
                         android:clickable="true"
                         android:focusable="true"
-                        android:elevation="2dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 30" android:textColor="#0B0E11" android:fontFamily="sans-serif-black" android:textSize="18sp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Friday" android:textColor="#6B7280" android:textSize="11sp" android:fontFamily="sans-serif-medium" />
-                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="58dp" android:gravity="center_vertical">
+                        android:elevation="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 30" android:textColor="@color/white" android:fontFamily="sans-serif-black" android:textSize="18sp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Friday" android:textColor="@color/white" android:textSize="11sp" android:fontFamily="sans-serif-medium" android:alpha="0.7" />
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="64dp" android:gravity="center_vertical">
                             <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#00F49C" />
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="04:15 PM" android:textColor="#00F49C" android:textSize="10sp" android:fontFamily="sans-serif-black" />
                         </LinearLayout>
@@ -306,7 +309,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:text="Appointments for Today"
-                    android:textColor="#0B0E11"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
                     android:fontFamily="sans-serif-black" />
 
@@ -339,7 +342,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
-                    android:background="@drawable/bg_reminder_mommy_aura"
+                    android:background="@drawable/bg_glass_card_purple"
                     android:padding="20dp"
                     android:elevation="6dp">
                     
@@ -347,7 +350,7 @@
                         android:id="@+id/ivAuraIcon"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@drawable/bg_white_glass_circle"
+                        android:background="@drawable/bg_glass_circle"
                         android:padding="10dp"
                         android:src="@android:drawable/ic_menu_help"
                         app:tint="#FF3C8E" />
@@ -374,10 +377,10 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Your doctor suggests a follow-up ultrasound for your 24th week check-up."
-                            android:textColor="#64748B"
+                            android:textColor="@color/white"
                             android:textSize="11sp"
                             android:fontFamily="sans-serif-medium"
-                            android:alpha="0.8" />
+                            android:alpha="0.7" />
                     </LinearLayout>
                 </RelativeLayout>
 

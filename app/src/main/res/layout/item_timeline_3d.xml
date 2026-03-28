@@ -5,55 +5,55 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="32dp">
 
-    <!-- VERTICAL TIMELINE -->
+    <!-- VERTICAL TIMELINE: QUANTUM NEBULA GLOW -->
     <View
         android:id="@+id/timelineLine"
-        android:layout_width="1dp"
+        android:layout_width="2.5dp"
         android:layout_height="0dp"
         android:layout_marginStart="24dp"
         android:background="@drawable/bg_pill_gradient_cyan"
-        android:backgroundTint="#2600FBFB"
+        android:alpha="0.2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- GLOWING NODE -->
+    <!-- QUANTUM NODE: ORBITAL GLOW -->
     <RelativeLayout
         android:id="@+id/nodeContainer"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="9dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="7dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/cardContent"
+        app:layout_constraintTop_toTopOf="@id/cardContent"
+        app:layout_constraintBottom_toBottomOf="@id/cardContent"
         app:layout_constraintVertical_bias="0.5">
         
         <View
-            android:id="@+id/nodeGlow"
+            android:id="@+id/nodePulse"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_neon_selected_date"
+            android:background="@drawable/bg_glass_circle"
             android:alpha="0.3"
             android:backgroundTint="@color/neo_cyan" />
 
         <View
-            android:id="@+id/nodeIcon"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+            android:id="@+id/nodeCore"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:layout_centerInParent="true"
-            android:background="@drawable/bg_mocha_circle"
-            android:backgroundTintMode="src_over"
-            android:backgroundTint="@color/neo_cyan" />
+            android:background="@drawable/bg_glass_circle"
+            android:backgroundTint="@color/neo_cyan"
+            android:elevation="6dp" />
     </RelativeLayout>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="24dp"
         android:layout_marginEnd="16dp"
         app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="24dp"
+        app:cardCornerRadius="28dp"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/nodeContainer"
@@ -62,51 +62,63 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_glass_card_neon"
+            android:background="@drawable/bg_glass_card_billing"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="22dp">
 
-            <!-- HEADER -->
-            <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+            <!-- HEADER: HI-FI GLOW -->
+            <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="18dp">
                 <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical">
-                    <ImageView android:layout_width="12dp" android:layout_height="12dp" android:src="@android:drawable/ic_menu_recent_history" android:id="@+id/ivTimeIcon" app:tint="@color/neo_cyan" />
-                    <TextView android:id="@+id/tvDateTime" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:fontFamily="sans-serif-black" android:text="9:00 AM - 9:30 AM" android:textColor="@color/neo_cyan" android:textSize="10sp" android:letterSpacing="0.05" />
+                    <ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@android:drawable/ic_menu_recent_history" android:id="@+id/ivTimeIcon" app:tint="#00F2FF" />
+                    <TextView android:id="@+id/tvDateTime" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="10dp" android:fontFamily="sans-serif-black" android:text="9:00 AM - 9:30 AM" android:textColor="#00F2FF" android:textSize="10.5sp" android:letterSpacing="0.05" />
                 </LinearLayout>
 
-                <LinearLayout android:id="@+id/containerStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:background="@drawable/bg_status_confirmed" android:paddingHorizontal="10dp" android:paddingVertical="4dp" android:gravity="center">
-                    <View android:id="@+id/statusPulse" android:layout_width="5dp" android:layout_height="5dp" android:background="@color/neo_green" />
-                    <TextView android:id="@+id/tvStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:fontFamily="sans-serif-black" android:text="CONFIRMED" android:textColor="@color/neo_green" android:textSize="8sp" />
+                <LinearLayout android:id="@+id/containerStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:background="@drawable/bg_glass_pill" android:backgroundTint="#1A00FF87" android:paddingHorizontal="12dp" android:paddingVertical="5dp" android:gravity="center">
+                    <View android:id="@+id/statusPulse" android:layout_width="5dp" android:layout_height="5dp" android:background="@drawable/bg_mocha_circle" android:backgroundTint="#00FF87" />
+                    <TextView android:id="@+id/tvStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:fontFamily="sans-serif-black" android:text="CONFIRMED" android:textColor="#00FF87" android:textSize="8.5sp" android:letterSpacing="0.08" />
                 </LinearLayout>
             </RelativeLayout>
 
-            <!-- PATIENT -->
-            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:gravity="center_vertical">
-                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@android:drawable/ic_menu_myplaces" app:tint="@color/neo_primary" android:alpha="0.7" />
-                <TextView android:id="@+id/tvPatientName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="14dp" android:fontFamily="sans-serif-black" android:text="Maria Santos" android:textColor="@color/neo_primary" android:textSize="16sp" />
-            </LinearLayout>
-
-            <!-- DETAILS (Vertical Overhaul) -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="vertical">
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginBottom="6dp">
-                    <ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@android:drawable/ic_menu_send" app:tint="@color/neo_slate" />
-                    <TextView android:id="@+id/tvServiceType" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:fontFamily="sans-serif" android:text="Prenatal Check-up" android:textColor="@color/neo_slate" android:textSize="11sp" />
-                </LinearLayout>
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
-                    <ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@android:drawable/ic_menu_help" app:tint="@color/neo_slate" />
-                    <TextView android:id="@+id/tvDoctorName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:fontFamily="sans-serif" android:text="Assigned: Dr. Cruz" android:textColor="@color/neo_slate" android:textSize="11sp" />
+            <!-- PATIENT: PRO TYPOGRAPHY -->
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical">
+                <RelativeLayout android:layout_width="44dp" android:layout_height="44dp" android:background="@drawable/bg_glass_circle" android:backgroundTint="#1AFFFFFF">
+                    <ImageView android:layout_width="20dp" android:layout_height="20dp" android:layout_centerInParent="true" android:src="@android:drawable/ic_menu_myplaces" app:tint="@color/white" android:alpha="0.9" />
+                </RelativeLayout>
+                
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:orientation="vertical">
+                    <TextView android:id="@+id/tvPatientName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="sans-serif-black" android:text="Maria Santos" android:textColor="@color/white" android:textSize="18sp" android:letterSpacing="-0.01" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="REGISTERED PATIENT • 2026" android:textColor="#BBFFD8" android:textSize="8.5sp" android:fontFamily="sans-serif-bold" android:letterSpacing="0.1" android:alpha="0.6" />
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- UPDATED ACTIONS: CANCEL & RESCHEDULE -->
-            <LinearLayout android:id="@+id/layoutActionsConfirmed" android:layout_width="match_parent" android:layout_height="36dp" android:layout_marginTop="20dp" android:orientation="horizontal">
-                <TextView android:id="@+id/btnCancel" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="8dp" android:background="@drawable/bg_pill_gradient_cyan" android:backgroundTint="#0DFBFB" android:gravity="center" android:text="CANCEL" android:textColor="@color/neo_cyan" android:textSize="9sp" android:fontFamily="sans-serif-black" />
-                <TextView android:id="@+id/btnReschedule" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1.2" android:background="@drawable/bg_outline_button" android:gravity="center" android:text="RESCHEDULE" android:textColor="@color/neo_primary" android:textSize="9sp" android:fontFamily="sans-serif-black" />
+            <!-- DETAILS GRID -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:orientation="vertical">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginBottom="10dp" android:background="@drawable/bg_glass_pill" android:backgroundTint="#0DFFFFFF" android:paddingHorizontal="14dp" android:paddingVertical="8dp">
+                    <ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@android:drawable/ic_menu_send" app:tint="#00F2FF" />
+                    <TextView android:id="@+id/tvServiceType" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:fontFamily="sans-serif-medium" android:text="Prenatal Check-up" android:textColor="@color/white" android:textSize="11.5sp" android:alpha="0.9" />
+                </LinearLayout>
+                
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:background="@drawable/bg_glass_pill" android:backgroundTint="#0DFFFFFF" android:paddingHorizontal="14dp" android:paddingVertical="8dp">
+                    <ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@android:drawable/ic_menu_help" app:tint="#BFFF69" />
+                    <TextView android:id="@+id/tvDoctorName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:fontFamily="sans-serif-medium" android:text="Assigned: Dr. Cruz" android:textColor="@color/white" android:textSize="11.5sp" android:alpha="0.8" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- HI-FI ACTIONS: PRO 3D -->
+            <LinearLayout android:id="@+id/layoutActionsConfirmed" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="24dp" android:orientation="horizontal">
+                <RelativeLayout android:id="@+id/btnCancel" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="10dp" android:background="@drawable/bg_button_ultra_3d" android:backgroundTint="@color/neo_cyan" android:clickable="true" android:focusable="true">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:text="CANCEL" android:textColor="@color/white" android:textSize="10sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
+                </RelativeLayout>
+                
+                <RelativeLayout android:id="@+id/btnReschedule" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1.2" android:background="@drawable/bg_3d_real_glass" android:clickable="true" android:focusable="true">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:text="RESCHEDULE" android:textColor="@color/white" android:textSize="10sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
+                </RelativeLayout>
             </LinearLayout>
 
             <!-- ACTIONS FOR PENDING -->
-            <LinearLayout android:id="@+id/layoutActionsPending" android:layout_width="match_parent" android:layout_height="36dp" android:layout_marginTop="20dp" android:orientation="horizontal" android:visibility="gone">
-                <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1.2" android:layout_marginEnd="8dp" android:background="@drawable/bg_button_schedule_neon" android:gravity="center" android:text="CONFIRM" android:textColor="@color/white" android:textSize="9sp" android:fontFamily="sans-serif-black" />
-                <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/bg_outline_button" android:backgroundTint="#1A9333FF" android:gravity="center" android:text="CLOSE" android:textColor="#9333FF" android:textSize="9sp" android:fontFamily="sans-serif-black" />
+            <LinearLayout android:id="@+id/layoutActionsPending" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="24dp" android:orientation="horizontal" android:visibility="gone">
+                <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="10dp" android:background="@drawable/bg_button_schedule_neon" android:gravity="center" android:text="CONFIRM" android:textColor="@color/white" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+                <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/bg_3d_real_glass" android:gravity="center" android:text="CLOSE" android:textColor="@color/white" android:textSize="10sp" android:fontFamily="sans-serif-black" />
             </LinearLayout>
 
         </LinearLayout>

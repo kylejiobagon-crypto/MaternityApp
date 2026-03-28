@@ -46,36 +46,37 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     @Override
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
         CalendarDate date = days.get(position);
-        holder.tvDate.setText(String.valueOf(date.day));
-
-        boolean isSelected = false;
-        if (selectedDate != null) {
-            isSelected = date.date.get(Calendar.YEAR) == selectedDate.get(Calendar.YEAR) &&
-                         date.date.get(Calendar.MONTH) == selectedDate.get(Calendar.MONTH) &&
-                         date.date.get(Calendar.DAY_OF_MONTH) == selectedDate.get(Calendar.DAY_OF_MONTH);
-        }
-
-        if (isSelected) {
-            holder.bgSelected.setVisibility(View.VISIBLE);
-            holder.tvDate.setTextColor(Color.WHITE);
-        } else if (date.isCurrentMonth) {
-            holder.bgSelected.setVisibility(View.GONE);
-            holder.tvDate.setTextColor(holder.itemView.getContext().getColor(R.color.neo_primary));
-        } else {
-            holder.bgSelected.setVisibility(View.GONE);
-            holder.tvDate.setTextColor(Color.parseColor("#401A5276")); // faded
-        }
-
-        holder.itemView.setOnClickListener(v -> {
-            if (date.isCurrentMonth) {
-                listener.onDateSelected(date.date);
+        if (date.isCurrentMonth) {
+            holder.itemView.setVisibility(View.VISIBLE);
+            holder.tvDate.setText(String.valueOf(date.day));
+            
+            boolean isSelected = false;
+            if (selectedDate != null) {
+                isSelected = date.date.get(Calendar.YEAR) == selectedDate.get(Calendar.YEAR) &&
+                             date.date.get(Calendar.MONTH) == selectedDate.get(Calendar.MONTH) &&
+                             date.date.get(Calendar.DAY_OF_MONTH) == selectedDate.get(Calendar.DAY_OF_MONTH);
             }
-        });
-        
-        // Mock dots or status tracking could be set here
-        holder.layoutDots.setVisibility(date.hasDots ? View.VISIBLE : View.GONE);
-        holder.dotConfirmed.setVisibility(View.VISIBLE);
-        holder.dotPending.setVisibility(View.GONE);
+
+            if (isSelected) {
+                holder.bgSelected.setVisibility(View.VISIBLE);
+                holder.tvDate.setTextColor(Color.WHITE);
+            } else {
+                holder.bgSelected.setVisibility(View.GONE);
+                holder.tvDate.setTextColor(Color.WHITE);
+            }
+
+            holder.itemView.setOnClickListener(v -> {
+                listener.onDateSelected(date.date);
+            });
+
+            holder.layoutDots.setVisibility(date.hasDots ? View.VISIBLE : View.GONE);
+            holder.dotConfirmed.setVisibility(View.VISIBLE);
+            holder.dotPending.setVisibility(View.GONE);
+
+        } else {
+            // Hide dates from previous/next month for a cleaner look
+            holder.itemView.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

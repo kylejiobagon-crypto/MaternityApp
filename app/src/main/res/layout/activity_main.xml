@@ -4,7 +4,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_soft_gray_bg">
+    android:background="@drawable/bg_billing_cosmic_abyss">
 
     <!-- MAIN CONTENT WRAPPER -->
     <RelativeLayout
@@ -12,6 +12,26 @@
         android:layout_height="match_parent"
         android:clipChildren="false"
         android:clipToPadding="false">
+
+        <!-- Ambient Blobs (Atmospheric Glow) -->
+        <View
+            android:layout_width="450dp"
+            android:layout_height="250dp"
+            android:background="@drawable/bg_aura_blob_cyan"
+            android:alpha="0.25"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:translationX="150dp"
+            android:translationY="-50dp" />
+
+        <View
+            android:layout_width="550dp"
+            android:layout_height="550dp"
+            android:background="@drawable/bg_aura_blob_violet"
+            android:alpha="0.15"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:translationX="-200dp" />
 
         <!-- 1. SCROLLABLE DASHBOARD -->
         <ScrollView
@@ -35,7 +55,7 @@
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="16dp"
                     android:paddingHorizontal="20dp"
-                    android:background="@drawable/bg_header_floating_3d"
+                    android:background="@drawable/bg_glass_card_navy_premium"
                     android:elevation="20dp">
 
                     <LinearLayout
@@ -58,7 +78,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="ey, "
-                            android:textColor="#0F172A"
+                            android:textColor="@color/white"
                             android:textSize="29sp"
                             android:fontFamily="sans-serif-condensed-medium"
                             android:letterSpacing="-0.03" />
@@ -67,7 +87,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="dustin pogi"
-                            android:textColor="#0F172A"
+                            android:textColor="@color/white"
                             android:textSize="29sp"
                             android:fontFamily="sans-serif-condensed-medium"
                             android:letterSpacing="-0.03" />
@@ -81,22 +101,12 @@
                         android:orientation="horizontal"
                         android:gravity="center_vertical">
 
-                        <ImageView
-                            android:id="@+id/navChat"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_marginEnd="16dp"
-                            android:src="@android:drawable/ic_menu_send"
-                            app:tint="#64748B"
-                            android:elevation="4dp"
-                            android:clickable="true"
-                            android:focusable="true" />
 
                         <RelativeLayout
                             android:id="@+id/ivMenu"
                             android:layout_width="56dp"
                             android:layout_height="56dp"
-                            android:background="@drawable/bg_header_button_orange_premium"
+                            android:background="@drawable/bg_glass_card_navy_premium"
                             android:elevation="12dp"
                             android:clickable="true"
                             android:focusable="true">
@@ -120,7 +130,7 @@
                     android:layout_height="240dp"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="28dp"
-                    android:background="@drawable/bg_charcoal_premium_card"
+                    android:background="@drawable/bg_glass_card_navy_premium"
                     android:elevation="20dp"
                     android:clipToOutline="true"
                     android:padding="20dp">
@@ -149,25 +159,27 @@
                             <com.example.alagwaapp.MaternityWaveView
                                 android:id="@+id/maternityWaveView"
                                 android:layout_width="match_parent"
-                                android:layout_height="80dp"
+                                android:layout_height="100dp"
                                 android:layout_centerInParent="true" />
                                 
                             <!-- TOP OVERLAY: Trimester Label (DARK STYLE FOR VISIBILITY) -->
-                            <TextView
+                             <TextView
                                 android:id="@+id/tvOrbitSubValue"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentTop="true"
                                 android:layout_centerHorizontal="true"
                                 android:text="2nd Trimester"
-                                android:textColor="#FFFFFF"
-                                android:textSize="12sp"
+                                android:textColor="@color/white"
+                                android:textSize="11sp"
                                 android:fontFamily="sans-serif-black"
                                 android:letterSpacing="0.1"
-                                android:background="@drawable/bg_orbit_outer"
-                                android:backgroundTint="#0F172A"
-                                android:paddingHorizontal="14dp"
-                                android:paddingVertical="4dp" />
+                                android:background="@drawable/bg_glass_pill"
+                                android:backgroundTint="#0A0F1F"
+                                android:paddingHorizontal="20dp"
+                                android:paddingVertical="8dp"
+                                android:layout_marginTop="12dp"
+                                android:elevation="6dp" />
                         </RelativeLayout>
 
                         <!-- SECTION 2: WAVE HUD (Heads Up Display) -->
@@ -189,14 +201,14 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="24"
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="32sp"
+                                    android:textColor="@color/white"
+                                    android:textSize="42sp"
                                     android:fontFamily="sans-serif-black"
                                     android:includeFontPadding="false"
-                                    android:shadowColor="#40000000"
-                                    android:shadowDx="2"
-                                    android:shadowDy="2"
-                                    android:shadowRadius="4" />
+                                    android:shadowColor="@color/billing_neon_cyan"
+                                    android:shadowDx="0"
+                                    android:shadowDy="0"
+                                    android:shadowRadius="14" />
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -270,7 +282,7 @@
                             android:id="@+id/qaWalkIn"
                             android:layout_width="wrap_content"
                             android:layout_height="52dp"
-                            android:background="@drawable/bg_orange_premium_accent"
+                            android:background="@drawable/bg_pill_glass_navy_aura"
                             android:elevation="8dp"
                             android:gravity="center"
                             android:paddingHorizontal="24dp"
@@ -286,7 +298,7 @@
                             android:id="@+id/qaBookAppt"
                             android:layout_width="wrap_content"
                             android:layout_height="52dp"
-                            android:background="@drawable/bg_action_blue_premium"
+                            android:background="@drawable/bg_pill_glass_navy_aura"
                             android:elevation="8dp"
                             android:gravity="center"
                             android:paddingHorizontal="24dp"
@@ -302,7 +314,7 @@
                             android:id="@+id/qaViewBilling"
                             android:layout_width="wrap_content"
                             android:layout_height="52dp"
-                            android:background="@drawable/bg_action_teal_premium"
+                            android:background="@drawable/bg_pill_glass_navy_aura"
                             android:elevation="8dp"
                             android:gravity="center"
                             android:paddingHorizontal="24dp"
@@ -318,7 +330,7 @@
                             android:id="@+id/qaViewRecords"
                             android:layout_width="wrap_content"
                             android:layout_height="52dp"
-                            android:background="@drawable/bg_action_violet_premium"
+                            android:background="@drawable/bg_pill_glass_navy_aura"
                             android:elevation="8dp"
                             android:gravity="center"
                             android:paddingHorizontal="24dp"
@@ -334,8 +346,8 @@
                 <!-- 4. STATISTICS GRID (2x2 Squircles) -->
                 <GridLayout
                     android:layout_width="match_parent"
-                    android:layout_height="380dp"
-                    android:layout_marginHorizontal="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="20dp"
                     android:columnCount="2"
                     android:rowCount="2">
@@ -344,141 +356,158 @@
                     <RelativeLayout
                         android:id="@+id/statCardToday"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_rowWeight="1"
+                        android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
-                        android:layout_margin="8dp"
-                        android:background="@drawable/bg_white_glassmorphic"
+                        android:layout_marginEnd="6dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="@drawable/bg_glass_card_amber"
                         android:elevation="10dp"
                         android:padding="20dp">
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:id="@+id/ic_stat1"
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
                             android:src="@android:drawable/ic_menu_today"
-                            app:tint="#FF9F1C" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:text="Appointments\nToday"
-                            android:textColor="#64748B"
-                            android:textSize="13sp"
-                            android:fontFamily="sans-serif-medium"
-                            android:gravity="start" />
+                            app:tint="@color/neon_galactic_orange"
+                            android:shadowColor="@color/neon_galactic_orange"
+                            android:shadowRadius="12" />
                         <TextView
                             android:id="@+id/tvStatValue1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
+                            android:layout_below="@id/ic_stat1"
+                            android:layout_marginTop="16dp"
                             android:text="0"
-                            android:textColor="#0F172A"
+                            android:textColor="@color/white"
                             android:textSize="22sp"
                             android:fontFamily="sans-serif-black" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tvStatValue1"
+                            android:text="Appointments Today"
+                            android:textColor="@color/billing_neon_cyan"
+                            android:textSize="11sp"
+                            android:fontFamily="sans-serif-bold"
+                            android:alpha="0.8" />
                     </RelativeLayout>
 
                     <!-- Upcoming (Charcoal Squircle) -->
                     <RelativeLayout
                         android:id="@+id/statCardUpcoming"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_rowWeight="1"
+                        android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
-                        android:layout_margin="8dp"
-                        android:background="@drawable/bg_charcoal_premium_card"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="@drawable/bg_glass_card_cyan"
                         android:elevation="12dp"
                         android:padding="20dp">
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:id="@+id/ic_stat2"
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
                             android:src="@android:drawable/ic_menu_recent_history"
-                            app:tint="#FFFFFFFF" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:text="Upcoming\nNext Visits"
-                            android:textColor="#94A3B8"
-                            android:textSize="13sp"
-                            android:fontFamily="sans-serif-medium" />
+                            app:tint="@color/billing_neon_cyan"
+                            android:shadowColor="@color/billing_neon_cyan"
+                            android:shadowRadius="12" />
                         <TextView
                             android:id="@+id/tvStatValue2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
+                            android:layout_below="@id/ic_stat2"
+                            android:layout_marginTop="16dp"
                             android:text="0"
                             android:textColor="#FFFFFF"
                             android:textSize="22sp"
                             android:fontFamily="sans-serif-black" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tvStatValue2"
+                            android:text="Upcoming Next Visits"
+                            android:textColor="@color/billing_neon_cyan"
+                            android:textSize="11sp"
+                            android:fontFamily="sans-serif-bold"
+                            android:alpha="0.8" />
                     </RelativeLayout>
 
                     <!-- Financial (Charcoal Squircle) -->
                     <RelativeLayout
                         android:id="@+id/statCardBilling"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_rowWeight="1"
+                        android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
-                        android:layout_margin="8dp"
-                        android:background="@drawable/bg_charcoal_premium_card"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/bg_glass_card_emerald"
                         android:elevation="12dp"
                         android:padding="20dp">
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:id="@+id/ic_stat3"
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
                             android:src="@android:drawable/ic_menu_save"
-                            app:tint="#FFFFFFFF" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:text="Financial\nPending Bills"
-                            android:textColor="#94A3B8"
-                            android:textSize="13sp"
-                            android:fontFamily="sans-serif-medium" />
+                            app:tint="@color/neon_galactic_green_vibrant"
+                            android:shadowColor="@color/neon_galactic_green_vibrant"
+                            android:shadowRadius="12" />
                         <TextView
                             android:id="@+id/tvStatValue3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
+                            android:layout_below="@id/ic_stat3"
+                            android:layout_marginTop="16dp"
                             android:text="0"
                             android:textColor="#FFFFFF"
                             android:textSize="22sp"
                             android:fontFamily="sans-serif-black" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tvStatValue3"
+                            android:text="Financial Pending Bills"
+                            android:textColor="@color/billing_neon_cyan"
+                            android:textSize="11sp"
+                            android:fontFamily="sans-serif-bold"
+                            android:alpha="0.8" />
                     </RelativeLayout>
 
                     <!-- Records (White Glass Squircle) -->
                     <RelativeLayout
                         android:id="@+id/statCardRecords"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_rowWeight="1"
+                        android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
-                        android:layout_margin="8dp"
-                        android:background="@drawable/bg_white_glassmorphic"
+                        android:layout_marginStart="6dp"
+                        android:background="@drawable/bg_glass_card_purple"
                         android:elevation="10dp"
                         android:padding="20dp">
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:id="@+id/ic_stat4"
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
                             android:src="@android:drawable/ic_menu_myplaces"
-                            app:tint="#FF9F1C" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:text="Records\nMedical History"
-                            android:textColor="#64748B"
-                            android:textSize="13sp"
-                            android:fontFamily="sans-serif-medium" />
+                            app:tint="@color/neon_galactic_purple"
+                            android:shadowColor="@color/neon_galactic_purple"
+                            android:shadowRadius="12" />
                         <TextView
                             android:id="@+id/tvStatValue4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
+                            android:layout_below="@id/ic_stat4"
+                            android:layout_marginTop="16dp"
                             android:text="0"
-                            android:textColor="#0F172A"
+                            android:textColor="@color/white"
                             android:textSize="22sp"
                             android:fontFamily="sans-serif-black" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tvStatValue4"
+                            android:text="Records Medical History"
+                            android:textColor="@color/billing_neon_cyan"
+                            android:textSize="11sp"
+                            android:fontFamily="sans-serif-bold"
+                            android:alpha="0.8" />
                     </RelativeLayout>
                 </GridLayout>
 
@@ -493,7 +522,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Recent Appointment"
-                        android:textColor="#0F172A"
+                        android:textColor="@color/white"
                         android:textSize="18sp"
                         android:fontFamily="sans-serif-black" />
                     <TextView
@@ -514,17 +543,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
-                    android:background="@drawable/bg_white_neumorphic_card"
+                    android:background="@drawable/bg_glass_card_billing"
                     android:padding="20dp"
                     android:elevation="8dp">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-                        <RelativeLayout android:layout_width="52dp" android:layout_height="64dp" android:background="@drawable/bg_charcoal_premium_card" android:elevation="4dp">
+                        <RelativeLayout android:layout_width="52dp" android:layout_height="64dp" android:background="@drawable/bg_glass_card_cyan" android:elevation="4dp">
                              <TextView android:id="@+id/tvApptDate1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:layout_marginTop="10dp" android:text="27" android:textColor="#FFFFFF" android:textSize="22sp" android:fontFamily="sans-serif-black" />
                              <TextView android:id="@+id/tvApptMonth1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:layout_alignParentBottom="true" android:layout_marginBottom="10dp" android:text="MAR" android:textColor="#FFFFFF" android:textSize="10sp" android:alpha="0.7" />
                         </RelativeLayout>
                         <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="20dp" android:orientation="vertical">
-                            <TextView android:id="@+id/tvApptTitle1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="No Appointments" android:textColor="#0F172A" android:textSize="16sp" android:fontFamily="sans-serif-bold" />
-                            <TextView android:id="@+id/tvApptTime1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Update your schedule" android:textColor="#64748B" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvApptTitle1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="No Appointments" android:textColor="@color/white" android:textSize="16sp" android:fontFamily="sans-serif-bold" />
+                            <TextView android:id="@+id/tvApptTime1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Update your schedule" android:textColor="#94A3B8" android:textSize="13sp" />
                         </LinearLayout>
                     </LinearLayout>
                 </RelativeLayout>

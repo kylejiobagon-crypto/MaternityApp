@@ -17,6 +17,24 @@
     <color name="neon_galactic_emerald">#004D2E</color>
     <color name="neon_galactic_green_vibrant">#00FF87</color>
     
+    <!-- BILLING PREMIUM THEME (REALAPP PARITY) -->
+    <color name="billing_abyss_start">#0A0F2B</color>
+    <color name="billing_abyss_end">#020617</color>
+    <color name="billing_neon_cyan">#00F2FF</color>
+    <color name="billing_violet_aura">#8B5CF6</color>
+    <color name="billing_glass_stroke">#5900F2FF</color>
+    <color name="billing_glass_highlight">#2600F2FF</color>
+    <color name="billing_glass_bg_start">#14FFFFFF</color>
+    <color name="billing_glass_bg_end">#05FFFFFF</color>
+    
+    <!-- Colored Glass Resources -->
+    <color name="glass_emerald_stroke">#5900FF87</color>
+    <color name="glass_emerald_highlight">#2600FF87</color>
+    <color name="glass_amber_stroke">#59FFA756</color>
+    <color name="glass_amber_highlight">#26FFA756</color>
+    <color name="glass_purple_stroke">#59B049FF</color>
+    <color name="glass_purple_highlight">#26B049FF</color>
+    
     <color name="glass_galactic_surface">#5919233C</color>
     <color name="glass_nav_dark">#99020617</color>
     <color name="nav_inactive_teal">#4A6572</color>
@@ -49,6 +67,21 @@
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_slate_300">#cbd5e1</color>
+    <color name="text_slate_400">#94a3b8</color>
+    <color name="text_slate_500">#64748b</color>
+    <color name="text_slate_600">#475569</color>
+    <color name="text_slate_700">#334155</color>
+    <color name="text_slate_800">#1e293b</color>
+    <color name="text_slate_900">#0f172a</color>
+    <color name="electric_cyan">#00F2FF</color>
+    <color name="neon_cyan">#00F2FF</color>
+    <color name="violet_accent">#8B5CF6</color>
+    <color name="midnight_blue">#0A0F1D</color>
+    <color name="deep_obsidian">#020617</color>
+    <color name="slate_deep">#0f172a</color>
+    <color name="slate_custom">#0f172a</color>
     <color name="primary">#00F2FF</color>
     <color name="secondary">#26D0CE</color>
     <color name="tertiary">#B049FF</color>

@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
     private View qaWalkIn, qaBookAppt, qaViewBilling, qaViewRecords;
 
     // ─── BOTTOM NAV STUBS ────────────────────────
-    private View navChat;
 
     // ─── NETWORKING ──────────────────────────────
     private SharedPreferences prefs;
@@ -186,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
         // Profile warning
 
         // Ghost stubs
-        navChat   = findViewById(R.id.navChat);
     }
 
     // ─────────────────────────────────────────────
@@ -498,28 +496,28 @@ public class MainActivity extends AppCompatActivity {
                                    Response<okhttp3.ResponseBody> response) {
                 try {
                     if (!response.isSuccessful() || response.body() == null) {
-                        showMockApptPreview();
+                        clearApptPreview();
                         return;
                     }
                     String raw = response.body().string();
-                    if (!raw.trim().startsWith("[")) { showMockApptPreview(); return; }
+                    if (!raw.trim().startsWith("[")) { clearApptPreview(); return; }
 
                     AppointmentResponse.Appointment[] arr =
                             new com.google.gson.Gson().fromJson(raw, AppointmentResponse.Appointment[].class);
 
-                    if (arr == null || arr.length == 0) { showMockApptPreview(); return; }
+                    if (arr == null || arr.length == 0) { clearApptPreview(); return; }
 
                     bindApptPreviewCard(1, arr.length > 0 ? arr[0] : null);
                     bindApptPreviewCard(2, arr.length > 1 ? arr[1] : null);
 
                 } catch (Exception e) {
                     Log.w(TAG, "Appt parse error: " + e.getMessage());
-                    showMockApptPreview();
+                    clearApptPreview();
                 }
             }
 
             @Override public void onFailure(Call<okhttp3.ResponseBody> call, Throwable t) {
-                showMockApptPreview();
+                clearApptPreview();
             }
         });
     }
@@ -560,20 +558,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /** Hardcoded preview if API is unavailable */
-    private void showMockApptPreview() {
-        // Card 1
-        setTv("tvApptDate1",   "27");
-        setTv("tvApptMonth1",  "MAR");
-        setTv("tvApptTitle1",  "Prenatal Check-up");
-        setTv("tvApptTime1",   "10:00 AM · Dr. Cruz");
-        setTv("tvApptStatus1", "Confirmed");
+    private void clearApptPreview() {
+        // Clear Card 1
+        setTv("tvApptDate1",   "—");
+        setTv("tvApptMonth1",  "Empty");
+        setTv("tvApptTitle1",  "No upcoming appts");
+        setTv("tvApptTime1",   "Tap to book a schedule");
+        setTv("tvApptStatus1", "");
 
-        // Card 2
-        setTv("tvApptDate2",   "29");
-        setTv("tvApptMonth2",  "MAR");
-        setTv("tvApptTitle2",  "Ultrasound");
-        setTv("tvApptTime2",   "02:30 PM · Dr. Reyes");
-        setTv("tvApptStatus2", "Pending");
+        // Clear Card 2
+        setTv("tvApptDate2",   "—");
+        setTv("tvApptMonth2",  "Empty");
+        setTv("tvApptTitle2",  "No data available");
+        setTv("tvApptTime2",   "–");
+        setTv("tvApptStatus2", "");
     }
 
     // ─────────────────────────────────────────────

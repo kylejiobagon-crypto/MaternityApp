@@ -399,7 +399,7 @@ public class BillingActivity extends AppCompatActivity {
     //  BOTTOM SHEET RECEIPT
     // ─────────────────────────────────────────────
     private void showBottomSheetReceipt(JsonObject inv) {
-        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
         View view = getLayoutInflater().inflate(R.layout.layout_bottom_sheet_receipt, null);
         dialog.setContentView(view);
         

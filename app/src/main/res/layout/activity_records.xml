@@ -4,8 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_premium_sky_gradient"
+    android:background="@drawable/bg_billing_cosmic_abyss"
     tools:context=".RecordsActivity">
+
+    <!-- 0. AMBIENT AURA BLOBS -->
+    <View
+        android:layout_width="450dp"
+        android:layout_height="450dp"
+        android:layout_marginTop="-150dp"
+        android:layout_marginStart="-150dp"
+        android:background="@drawable/bg_aura_blob_cyan"
+        android:alpha="0.25" />
+
+    <View
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="-100dp"
+        android:layout_marginEnd="-100dp"
+        android:background="@drawable/bg_aura_blob_violet"
+        android:alpha="0.2" />
 
     <!-- 1. FLOATING GLASS HEADER -->
     <RelativeLayout
@@ -14,20 +33,10 @@
         android:layout_height="100dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/bg_glass_card_white"
-        android:elevation="12dp"
+        android:background="@drawable/bg_glass_card_navy_premium"
+        android:elevation="20dp"
         android:paddingHorizontal="24dp">
         
-        <ImageView
-            android:id="@+id/btnBackRecords"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_centerVertical="true"
-            android:src="@android:drawable/ic_menu_revert"
-            app:tint="#1E293B"
-            android:clickable="true"
-            android:focusable="true" />
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,16 +47,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="MEDICAL JOURNEY"
-                android:textColor="#1E293B"
+                android:textColor="@color/white"
                 android:textSize="20sp"
-                android:fontFamily="sans-serif-black" />
+                android:fontFamily="sans-serif-black"
+                android:shadowColor="@color/neon_galactic_cyan"
+                android:shadowRadius="8"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tracking your health progress"
-                android:textColor="#64748B"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif-medium" />
+                android:textColor="#BBFFD8"
+                android:textSize="10sp"
+                android:fontFamily="sans-serif-medium"
+                android:alpha="0.7" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -71,7 +83,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_vitals_card_3d"
+                android:background="@drawable/bg_glass_card_flagship"
                 android:elevation="16dp"
                 android:padding="24dp">
 
@@ -80,11 +92,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="LATEST VITALS"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
                     android:fontFamily="sans-serif-black"
-                    android:alpha="0.8"
-                    android:letterSpacing="0.1" />
+                    android:alpha="0.6"
+                    android:letterSpacing="0.2" />
 
                 <GridLayout
                     android:layout_width="match_parent"
@@ -105,15 +117,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Weight"
-                            android:textColor="#FFFFFF"
-                            android:alpha="0.7"
-                            android:textSize="12sp" />
+                            android:textColor="@color/white"
+                            android:alpha="0.5"
+                            android:textSize="11sp"
+                            android:fontFamily="sans-serif-medium"/>
                         <TextView
                             android:id="@+id/tvLatestWeight"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="62.5 kg"
-                            android:textColor="#FFFFFF"
+                            android:textColor="@color/white"
                             android:textSize="22sp"
                             android:fontFamily="sans-serif-black" />
                     </LinearLayout>
@@ -129,15 +142,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Blood Pressure"
-                            android:textColor="#FFFFFF"
-                            android:alpha="0.7"
-                            android:textSize="12sp" />
+                            android:textColor="@color/white"
+                            android:alpha="0.5"
+                            android:textSize="11sp"
+                            android:fontFamily="sans-serif-medium"/>
                         <TextView
                             android:id="@+id/tvLatestBP"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="115/75"
-                            android:textColor="#FFFFFF"
+                            android:textColor="@color/white"
                             android:textSize="22sp"
                             android:fontFamily="sans-serif-black" />
                     </LinearLayout>
@@ -154,17 +168,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="FHT (Heart Tone)"
-                            android:textColor="#FFFFFF"
-                            android:alpha="0.7"
-                            android:textSize="12sp" />
+                            android:textColor="@color/white"
+                            android:alpha="0.5"
+                            android:textSize="11sp"
+                            android:fontFamily="sans-serif-medium"/>
                         <TextView
                             android:id="@+id/tvLatestFHT"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="145 bpm"
-                            android:textColor="#00FBFB"
+                            android:textColor="@color/neon_galactic_cyan"
                             android:textSize="22sp"
-                            android:fontFamily="sans-serif-black" />
+                            android:fontFamily="sans-serif-black"
+                            android:shadowColor="@color/neon_galactic_cyan"
+                            android:shadowRadius="10"/>
                     </LinearLayout>
 
                     <!-- AOG -->
@@ -179,15 +196,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="AOG (Weeks)"
-                            android:textColor="#FFFFFF"
-                            android:alpha="0.7"
-                            android:textSize="12sp" />
+                            android:textColor="@color/white"
+                            android:alpha="0.5"
+                            android:textSize="11sp"
+                            android:fontFamily="sans-serif-medium"/>
                         <TextView
                             android:id="@+id/tvLatestAOG"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="24 Weeks"
-                            android:textColor="#FFFFFF"
+                            android:textColor="@color/white"
                             android:textSize="22sp"
                             android:fontFamily="sans-serif-black" />
                     </LinearLayout>
@@ -201,27 +219,19 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="16dp"
                 android:text="CHECK-UP HISTORY"
-                android:textColor="#1E293B"
-                android:textSize="13sp"
+                android:textColor="@color/white"
+                android:textSize="12sp"
                 android:fontFamily="sans-serif-black"
-                android:letterSpacing="0.1" />
+                android:letterSpacing="0.2"
+                android:alpha="0.6"/>
 
-            <!-- Mock Item 1 -->
-            <include layout="@layout/item_record" />
-
-            <!-- Mock Item 2 -->
-            <include layout="@layout/item_record" />
-
-            <!-- Mock Item 3 -->
-            <include layout="@layout/item_record" />
-
-            <!-- Keep RV for future API binding -->
+            <!-- RV for real API binding -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewRecords"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <View android:layout_width="match_parent" android:layout_height="40dp" />
 

@@ -11,11 +11,8 @@ public class RecordsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_records);
+        // 1. Navigation Setup
         NavigationHelper.setupBottomNav(this);
-
-        // 1. Back navigation
-        View btnBack = findViewById(R.id.btnBackRecords);
-        if (btnBack != null) btnBack.setOnClickListener(v -> finish());
         
         // 2. Activate Mock Buttons (For UI Demo)
         setupMockInteractions();

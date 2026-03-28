@@ -169,6 +169,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
+        NavigationHelper.setupBottomNav(this); // Enable all premium bottom navigation items
+        
         btnEdit.setOnClickListener(v -> toggleEditMode());
         btnSave.setOnClickListener(v -> saveChanges());
         btnReset.setOnClickListener(v -> showResetBottomSheet());
@@ -176,15 +178,12 @@ public class ProfileActivity extends AppCompatActivity {
         if (avatarContainer != null) {
             avatarContainer.setOnClickListener(v -> {
                 Toast.makeText(this, "Opening Secure Gallery Hub... 📸", Toast.LENGTH_SHORT).show();
-                // Simulation of gallery selection
             });
         }
 
         etDob.setOnClickListener(v -> {
             if (isEditMode) showDatePicker();
         });
-
-        findViewById(R.id.navHome).setOnClickListener(v -> finish());
     }
 
     private void toggleEditMode() {
@@ -395,7 +394,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void showResetBottomSheet() {
-        BottomSheetDialog resetSheet = new BottomSheetDialog(this);
+        BottomSheetDialog resetSheet = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
         resetSheet.setContentView(R.layout.dialog_password_reset_aura);
         
         View btnUpdate = resetSheet.findViewById(R.id.btnUpdatePass);

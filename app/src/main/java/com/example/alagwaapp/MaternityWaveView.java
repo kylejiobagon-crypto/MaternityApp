@@ -18,10 +18,12 @@ public class MaternityWaveView extends View {
     private Paint progressPaint;
     private Paint beaconPaint;
     private Path wavePath;
+    private Paint glowPaint;
+    private Paint fillPaint;
+    private Paint specularPaint;
+    private Paint targetPaint; // For birth point
     
     private float progress = 0.6f; // 0.0 to 1.0 (e.g. 24/40 weeks)
-    private int waveCount = 5;
-    private float waveHeight = 15f;
     
     public MaternityWaveView(Context context) {
         super(context);
@@ -38,16 +40,37 @@ public class MaternityWaveView extends View {
         wavePaint.setStyle(Paint.Style.STROKE);
         wavePaint.setStrokeWidth(12f);
         wavePaint.setStrokeCap(Paint.Cap.ROUND);
+        wavePaint.setColor(0x18FFFFFF); // Faint background path
 
         progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         progressPaint.setStyle(Paint.Style.STROKE);
-        progressPaint.setStrokeWidth(12f);
+        progressPaint.setStrokeWidth(16f);
         progressPaint.setStrokeCap(Paint.Cap.ROUND);
+
+        glowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        glowPaint.setStyle(Paint.Style.STROKE);
+        glowPaint.setStrokeWidth(35f);
+        glowPaint.setStrokeCap(Paint.Cap.ROUND);
+        glowPaint.setAlpha(55);
+
+        fillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        fillPaint.setStyle(Paint.Style.FILL);
+
+        specularPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        specularPaint.setStyle(Paint.Style.STROKE);
+        specularPaint.setStrokeWidth(3f);
+        specularPaint.setStrokeCap(Paint.Cap.ROUND);
+        specularPaint.setColor(0x90FFFFFF);
 
         beaconPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         beaconPaint.setStyle(Paint.Style.FILL);
-        beaconPaint.setShadowLayer(15f, 0, 0, 0xFFFF3C8E);
-        setLayerType(LAYER_TYPE_SOFTWARE, null); // For shadow
+
+        targetPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        targetPaint.setStyle(Paint.Style.STROKE);
+        targetPaint.setStrokeWidth(4f);
+        targetPaint.setColor(0xFFFFFFFF);
+        
+        setLayerType(LAYER_TYPE_SOFTWARE, null); 
 
         wavePath = new Path();
     }
@@ -63,29 +86,50 @@ public class MaternityWaveView extends View {
         
         float w = getWidth();
         float h = getHeight();
-        float centerY = h / 2f;
+        float centerY = h / 1.25f;
         
-        // Define 2-Stop Gradient: Ruby Red (Start) -> Rose (End)
-        int[] colors = { 0xFFE11D48, 0xFFFB7185 };
-        float[] positions = { 0f, 1f };
+        // --- 1. DEFINE GRADIENTS ---
+        int[] progressColors = { 0xFFFF1F7D, 0xFFFF70A6 };
+        LinearGradient mainGrad = new LinearGradient(0, centerY, w, centerY, progressColors, null, Shader.TileMode.CLAMP);
+        progressPaint.setShader(mainGrad);
         
-        LinearGradient gradient = new LinearGradient(0, centerY, w, centerY,
-                colors, positions, Shader.TileMode.CLAMP);
-        progressPaint.setShader(gradient);
+        // --- 2. DRAW THE ENTIRE BACKGROUND WAVE ---
+        drawWavePath(canvas, wavePaint, 0, 1.0f, false);
         
-        // Background Path (Dotted or Faint)
-        wavePaint.setColor(0x1A64748B);
-        drawWave(canvas, wavePaint, 0, 1.0f);
+        // --- 3. DRAW BIRTH POINT (Target at 100%) ---
+        float targetX = w * 0.98f;
+        float targetY = calculateWaveY(targetX, w, h);
+        targetPaint.setShadowLayer(40f, 0, 0, 0xFF00F2FF); // Electric Cyan Target
+        canvas.drawCircle(targetX, targetY, 15f, targetPaint);
         
-        // Progress Path
-        drawWave(canvas, progressPaint, 0, progress);
+        targetPaint.setStyle(Paint.Style.FILL);
+        targetPaint.setColor(0x4000F2FF);
+        canvas.drawCircle(targetX, targetY, 8f, targetPaint);
+        targetPaint.setStyle(Paint.Style.STROKE);
+        targetPaint.setColor(0xFFFFFFFF);
+
+        // --- 4. DRAW 3D VOLUME FALLOFF (Better than vertical cut) ---
+        // We draw the fill under the whole wave but mask its alpha by progress
+        int[] fillColors = { 0x30FF1F7D, 0x00FF1F7D };
+        LinearGradient fillGrad = new LinearGradient(0, centerY - 40, 0, h, fillColors, null, Shader.TileMode.CLAMP);
+        fillPaint.setShader(fillGrad);
+        drawWavePath(canvas, fillPaint, 0, progress, true);
         
-        // Beacon (Glowing marker at current progress)
+        // --- 5. DRAW NEON GLOW ---
+        glowPaint.setShader(mainGrad);
+        glowPaint.setMaskFilter(new android.graphics.BlurMaskFilter(20f, android.graphics.BlurMaskFilter.Blur.NORMAL));
+        drawWavePath(canvas, glowPaint, 0, progress, false);
+
+        // --- 6. MAIN PROGRESS PATH ---
+        drawWavePath(canvas, progressPaint, 0, progress, false);
+        
+        // --- 7. BEACON (Current Week) ---
         float beaconX = w * progress;
         float beaconY = calculateWaveY(beaconX, w, h);
         
-        beaconPaint.setColor(0xFFFF0000); // Pure Red
-        beaconPaint.setShadowLayer(35f, 0, 0, 0xFFFF0000);
+        beaconPaint.setColor(0xFFFF1F7D);
+        beaconPaint.setAlpha(255);
+        beaconPaint.setShadowLayer(35f, 0, 0, 0xFFFF1F7D);
         canvas.drawCircle(beaconX, beaconY, 14f, beaconPaint);
         
         beaconPaint.setColor(0xFFFFFFFF);
@@ -93,32 +137,35 @@ public class MaternityWaveView extends View {
         canvas.drawCircle(beaconX, beaconY, 6f, beaconPaint);
     }
     
-    private void drawWave(Canvas canvas, Paint paint, float start, float end) {
+    private void drawWavePath(Canvas canvas, Paint paint, float start, float end, boolean isFill) {
         float w = getWidth();
         float h = getHeight();
-        float centerY = h / 2f;
         
         wavePath.reset();
+        float startY = calculateWaveY(w * start, w, h);
+        wavePath.moveTo(w * start, startY);
         
-        float currentX = w * start;
-        wavePath.moveTo(currentX, calculateWaveY(currentX, w, h));
-        
-        int steps = 100;
+        int steps = 120;
         for (int i = 1; i <= steps; i++) {
-            float t = (float) i / steps;
-            if (t > end) break;
-            
+            float t = start + (end - start) * (float) i / steps;
             float x = w * t;
             float y = calculateWaveY(x, w, h);
             wavePath.lineTo(x, y);
         }
         
-        canvas.drawPath(wavePath, paint);
+        if (isFill) {
+            wavePath.lineTo(w * end, h);
+            wavePath.lineTo(w * start, h);
+            wavePath.close();
+            canvas.drawPath(wavePath, paint);
+        } else {
+            canvas.drawPath(wavePath, paint);
+        }
     }
     
     private float calculateWaveY(float x, float w, float h) {
-        float centerY = h / 2f;
-        // Bezier-like wave using Sine
-        return centerY + (float) Math.sin((x / w) * Math.PI * 3) * 30f;
+        float centerY = h / 1.25f; // Deep shift
+        return centerY + (float) Math.sin((x / w) * Math.PI * 2.5) * 28f 
+                    + (float) Math.cos((x / w) * Math.PI * 6.0) * 6f;
     }
 }

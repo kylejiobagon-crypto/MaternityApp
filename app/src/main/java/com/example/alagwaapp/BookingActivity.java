@@ -1,6 +1,7 @@
 package com.example.alagwaapp;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -72,7 +73,6 @@ public class BookingActivity extends AppCompatActivity {
             findViewById(R.id.slot3Pm), findViewById(R.id.slot4Pm)
         };
 
-        findViewById(R.id.btnClose).setOnClickListener(v -> finish());
         findViewById(R.id.btnCancel).setOnClickListener(v -> finish());
 
         btnSelectDate.setOnClickListener(v -> showDatePicker());
@@ -95,10 +95,19 @@ public class BookingActivity extends AppCompatActivity {
         selectTimeSlot(2); 
         
         Calendar c = Calendar.getInstance();
+        if (c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            c.add(Calendar.DAY_OF_MONTH, 1);
+        }
         selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(c.getTime());
         tvDate.setText(new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(c.getTime()));
 
+        fetchAvailableSlots(selectedDate);
+
         findViewById(R.id.btnFinalize).setOnClickListener(v -> {
+            if (selectedTimeSlot == null || selectedTimeSlot.isEmpty()) {
+                Toast.makeText(this, "Please select an available time slot first", Toast.LENGTH_SHORT).show();
+                return;
+            }
             v.setAlpha(0.7f);
             new Handler().postDelayed(() -> v.setAlpha(1.0f), 200);
             submitAppointment();
@@ -140,12 +149,102 @@ public class BookingActivity extends AppCompatActivity {
 
     private void showDatePicker() {
         Calendar c = Calendar.getInstance();
-        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+        DatePickerDialog dialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
             Calendar chosen = Calendar.getInstance();
             chosen.set(year, month, dayOfMonth);
+            
+            // Sunday Check (0 = Sunday in PHP/Calendar, but Calendar.DAY_OF_WEEK: 1=Sun, 2=Mon...)
+            if (chosen.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                Toast.makeText(this, "The clinic is closed on Sundays. Please select another date.", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(chosen.getTime());
             tvDate.setText(new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(chosen.getTime()));
-        }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+            
+            fetchAvailableSlots(selectedDate);
+        }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        
+        // Block past dates
+        dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        dialog.show();
+    }
+
+    private void fetchAvailableSlots(String date) {
+        // Show loading state for slots
+        for (View v : slotViews) {
+            if (v != null) {
+                v.setAlpha(0.3f);
+                v.setEnabled(false);
+            }
+        }
+
+        apiService.getAvailableSlots("available_slots", "true", date).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String raw = response.body().string();
+                        com.google.gson.JsonObject json = new com.google.gson.Gson().fromJson(raw, com.google.gson.JsonObject.class);
+                        if (json.has("success") && json.get("success").getAsBoolean()) {
+                            com.google.gson.JsonArray data = json.getAsJsonArray("data");
+                            updateSlotsUI(data);
+                        } else {
+                            resetSlotsUI();
+                        }
+                    } else {
+                        resetSlotsUI();
+                    }
+                } catch (Exception e) {
+                    resetSlotsUI();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                resetSlotsUI();
+            }
+        });
+    }
+
+    private void updateSlotsUI(com.google.gson.JsonArray data) {
+        for (int i = 0; i < data.size() && i < slotViews.length; i++) {
+            com.google.gson.JsonObject slot = data.get(i).getAsJsonObject();
+            boolean available = slot.get("available").getAsBoolean();
+            String reason = slot.get("reason").getAsString();
+            
+            View view = slotViews[i];
+            if (view == null) continue;
+
+            TextView tvSub = view.findViewById(getResources().getIdentifier("tvSlot" + getHourName(i) + "Sub", "id", getPackageName()));
+            
+            if (available) {
+                view.setEnabled(true);
+                view.setAlpha(1.0f);
+                if (tvSub != null) tvSub.setText(reason.toUpperCase());
+            } else {
+                view.setEnabled(false);
+                view.setAlpha(0.4f);
+                if (tvSub != null) {
+                    tvSub.setText(reason.toUpperCase());
+                    tvSub.setTextColor(0xFFFF4D4D); // Red for booked/passed
+                }
+                // Deselect if it was selected but now unavailable
+                if (selectedTimeSlot.equals(timeSlots[i])) {
+                    selectedTimeSlot = "";
+                    view.setBackgroundResource(R.drawable.bg_3d_real_glass);
+                }
+            }
+        }
+    }
+
+    private void resetSlotsUI() {
+        for (View v : slotViews) {
+            if (v != null) {
+                v.setAlpha(1.0f);
+                v.setEnabled(true);
+            }
+        }
     }
 
     private void selectService(int index) {
@@ -165,11 +264,11 @@ public class BookingActivity extends AppCompatActivity {
                     btnIndicator.setAlpha(1.0f);
                 }
             } else {
-                view.setBackgroundResource(R.drawable.bg_booking_card_ultra_premium_white);
+                view.setBackgroundResource(R.drawable.bg_glass_card_billing);
                 view.setElevation(4f);
                 if (btnIndicator != null) {
                     btnIndicator.setBackgroundResource(R.drawable.bg_glass_circle);
-                    btnIndicator.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFF1F5F9));
+                    btnIndicator.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0x1AFFFFFF));
                     btnIndicator.setAlpha(1.0f);
                 }
             }
@@ -194,11 +293,11 @@ public class BookingActivity extends AppCompatActivity {
                 tvSub.setTextColor(0xCCFFFFFF);
                 tvSub.setAlpha(1.0f);
             } else {
-                view.setBackgroundResource(R.drawable.bg_booking_field_ultra_premium);
+                view.setBackgroundResource(R.drawable.bg_3d_real_glass);
                 view.setElevation(2f);
-                tvMain.setTextColor(0xFF0F172A);
-                tvSub.setTextColor(0xFF94A3B8);
-                tvSub.setAlpha(1.0f);
+                tvMain.setTextColor(0xFFFFFFFF);
+                tvSub.setTextColor(0xAAFFFFFF);
+                tvSub.setAlpha(0.6f);
             }
         }
     }
@@ -249,19 +348,25 @@ public class BookingActivity extends AppCompatActivity {
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         String body = response.body() != null ? response.body().string() : "";
-                        if (body.contains("\"success\":true")) {
-                            Toast.makeText(BookingActivity.this, "✅ Appointment Scheduled Successfully!", Toast.LENGTH_LONG).show();
-                            finish();
-                        } else {
-                            // Extract error message
-                            String msg = "Failed to schedule.";
-                            if (body.contains("\"message\":\"")) {
-                                msg = body.split("\"message\":\"")[1].split("\"")[0];
-                            }
-                            Toast.makeText(BookingActivity.this, "❌ " + msg, Toast.LENGTH_LONG).show();
-                        }
+                        int paymentId = 0;
+                        try {
+                            org.json.JSONObject obj = new org.json.JSONObject(body);
+                            paymentId = obj.optInt("payment_id", 0);
+                        } catch (Exception e) {}
+
+                        // PROCEED TO CHECKOUT PREVIEW (Using ₱300 downpayment as per clinical policy)
+                        Intent intent = new Intent(BookingActivity.this, PaymentCheckoutActivity.class);
+                        intent.putExtra("service_name", selectedService != null ? selectedService : "General Check-up");
+                        intent.putExtra("amount", "₱300.00");
+                        intent.putExtra("payment_id", paymentId);
+                        startActivity(intent);
+                        finish();
                     } catch (Exception e) {
-                        Toast.makeText(BookingActivity.this, "✅ Done!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(BookingActivity.this, PaymentCheckoutActivity.class);
+                        intent.putExtra("service_name", selectedService != null ? selectedService : "General Check-up");
+                        intent.putExtra("amount", "₱300.00");
+                        intent.putExtra("payment_id", 0);
+                        startActivity(intent);
                         finish();
                     }
                 }

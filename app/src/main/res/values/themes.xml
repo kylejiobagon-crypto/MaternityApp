@@ -19,6 +19,7 @@
     <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/RoundedBottomSheet</item>
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance.App.LargeComponent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <style name="RoundedBottomSheet" parent="Widget.Design.BottomSheet.Modal">

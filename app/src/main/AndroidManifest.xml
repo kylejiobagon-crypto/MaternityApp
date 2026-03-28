@@ -41,6 +41,7 @@
         <activity android:name=".ChatActivity" android:exported="false" />
         <activity android:name=".ConversationDetailActivity" android:exported="false" />
         <activity android:name=".BookingActivity" android:exported="false" />
+        <activity android:name=".PaymentCheckoutActivity" android:exported="false" />
     </application>
 
 </manifest>

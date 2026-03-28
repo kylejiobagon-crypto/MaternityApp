@@ -1,48 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
-    app:cardCornerRadius="24dp"
-    app:cardElevation="16dp"
-    app:cardBackgroundColor="@android:color/transparent">
+    android:background="@drawable/bg_glass_card_dark_realapp"
+    android:elevation="12dp"
+    android:orientation="vertical"
+    android:padding="24dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvPendingClinic"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_pending_rating_glass"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:text="Prenatal Checkup"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        android:fontFamily="sans-serif-black" />
 
+    <TextView
+        android:id="@+id/tvPendingDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="March 20, 2026"
+        android:textColor="#BBFFD8"
+        android:textSize="11sp"
+        android:fontFamily="sans-serif-medium"
+        android:alpha="0.6"
+        android:layout_marginBottom="16dp" />
+
+    <RelativeLayout
+        android:id="@+id/btnRateNow"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_pro_max_button"
+        android:backgroundTint="#EC4899"
+        android:clickable="true"
+        android:focusable="true">
         <TextView
-            android:id="@+id/tvPendingClinic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Prenatal Checkup"
-            android:textColor="#1E293B"
-            android:textSize="15sp"
-            android:fontFamily="sans-serif-black" />
-
-        <TextView
-            android:id="@+id/tvPendingDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="March 20, 2026"
-            android:textColor="#94A3B8"
+            android:layout_centerInParent="true"
+            android:text="RATE NOW"
+            android:textColor="@color/white"
             android:textSize="12sp"
-            android:layout_marginBottom="16dp" />
-
-        <Button
-            android:id="@+id/btnRateNow"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:backgroundTint="#EC4899"
-            android:text="Rate Now"
-            android:textColor="#FFFFFF"
-            android:textSize="11sp"
             android:fontFamily="sans-serif-black"
-            android:padding="0dp"
-            app:cornerRadius="10dp" />
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+            android:letterSpacing="0.1" />
+    </RelativeLayout>
+</LinearLayout>

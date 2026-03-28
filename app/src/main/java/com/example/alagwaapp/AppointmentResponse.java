@@ -37,5 +37,11 @@ public class AppointmentResponse {
 
         @SerializedName("patient_name")
         public String patientName;
+
+        @SerializedName("next_visit_date")
+        public String nextVisitDate;
+
+        @SerializedName("checkup_notes")
+        public String checkupNotes;
     }
 }

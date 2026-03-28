@@ -114,4 +114,13 @@ public interface ApiService {
             @Field("emergency_relationship") String emergencyRelationship,
             @Field("emergency_number") String emergencyNumber
     );
+
+    @POST("api_downpayment.php")
+    @FormUrlEncoded
+    Call<ResponseBody> submitDownpaymentProof(
+            @Query("action") String action,
+            @Query("mobile") String mobile,
+            @Field("payment_id") int paymentId,
+            @Field("reference_number") String referenceNumber
+    );
 }

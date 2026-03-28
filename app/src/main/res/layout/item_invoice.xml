@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:clickable="true"
     android:focusable="true"
-    android:background="?attr/selectableItemBackground">
+    android:background="@android:color/transparent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:layout_weight="1.8"
             android:layout_height="wrap_content"
             android:text="Mar 26"
-            android:textColor="#64748B"
+            android:textColor="#94A3B8"
             android:textSize="12sp"
             android:fontFamily="sans-serif-medium" />
 
@@ -32,7 +32,7 @@
             android:layout_weight="4"
             android:layout_height="wrap_content"
             android:text="Check-up"
-            android:textColor="#0F172A"
+            android:textColor="@color/white"
             android:textSize="13sp"
             android:fontFamily="sans-serif-bold"
             android:maxLines="2"
@@ -45,7 +45,7 @@
             android:layout_weight="2.5"
             android:layout_height="wrap_content"
             android:text="₱0.00"
-            android:textColor="#0F172A"
+            android:textColor="@color/billing_neon_cyan"
             android:textSize="14sp"
             android:fontFamily="sans-serif-black" />
 
@@ -82,7 +82,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#F1F5F9"
+        android:background="#1AFFFFFF"
         android:layout_marginHorizontal="16dp" />
 
 </LinearLayout>
