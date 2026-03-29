@@ -44,8 +44,8 @@
             </RelativeLayout>
             
             <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="20dp" android:orientation="vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="sans-serif-black" android:text="Book New Appointment" android:textColor="@color/white" android:textSize="21sp" android:letterSpacing="-0.01" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="sans-serif-bold" android:text="SECURE TRANSACTION • JANUARY 2026" android:textColor="#BBFFD8" android:textSize="10sp" android:letterSpacing="0.1" android:alpha="0.7" />
+                <TextView android:id="@+id/tvBookingTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="sans-serif-black" android:text="Book New Appointment" android:textColor="@color/white" android:textSize="21sp" android:letterSpacing="-0.01" />
+                <TextView android:id="@+id/tvBookingSubtitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="sans-serif-bold" android:text="SECURE TRANSACTION • JANUARY 2026" android:textColor="#BBFFD8" android:textSize="10sp" android:letterSpacing="0.1" android:alpha="0.7" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
@@ -213,7 +213,7 @@
                 <RelativeLayout android:layout_width="32dp" android:layout_height="32dp" android:background="@drawable/bg_glass_circle" android:backgroundTint="#4D000000">
                     <ImageView android:layout_width="18dp" android:layout_height="18dp" android:layout_centerInParent="true" android:src="@android:drawable/ic_media_play" app:tint="@color/white" />
                 </RelativeLayout>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="CONFIRM APPOINTMENT" android:textColor="@color/white" android:fontFamily="sans-serif-black" android:textSize="18sp" android:letterSpacing="0.05" />
+                <TextView android:id="@+id/tvFinalizeBtn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:text="CONFIRM APPOINTMENT" android:textColor="@color/white" android:fontFamily="sans-serif-black" android:textSize="18sp" android:letterSpacing="0.05" />
             </LinearLayout>
 
             <TextView android:id="@+id/btnCancel" android:layout_width="match_parent" android:layout_height="64dp" android:layout_marginTop="16dp" android:gravity="center" android:text="CLOSE MANAGER" android:textColor="#BBFFD8" android:fontFamily="sans-serif-black" android:textSize="14sp" android:letterSpacing="0.1" android:alpha="0.6" />

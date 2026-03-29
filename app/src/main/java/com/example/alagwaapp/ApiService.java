@@ -13,7 +13,10 @@ public interface ApiService {
     Call<SummaryResponse> getSummary(
             @Query("action") String action,
             @Query("mobile") String mobile,
-            @Query("email") String email
+            @Query("email") String email,
+            @Query("username") String username,
+            @Query("role") String role,
+            @Query("tenant_id") int tenantId
     );
 
     @GET("api_login.php")
@@ -26,18 +29,28 @@ public interface ApiService {
     @GET("api_dashboard.php")
     Call<ResponseBody> getSummaryRaw(
             @Query("action") String action,
-            @Query("mobile") String mobile
+            @Query("mobile") String mobile,
+            @Query("email") String email,
+            @Query("username") String username,
+            @Query("role") String role,
+            @Query("tenant_id") int tenantId
     );
 
     @GET("api_patients.php")
     Call<PatientListResponse> getPatients(
             @Query("action") String action,
             @Query("mobile") String mobile,
-            @Query("email") String email
+            @Query("email") String email,
+            @Query("username") String username
     );
 
     @GET("api_patients.php")
-    Call<ResponseBody> getPatientsRaw(@Query("action") String action, @Query("mobile") String mobile);
+    Call<ResponseBody> getPatientsRaw(
+            @Query("action") String action,
+            @Query("mobile") String mobile,
+            @Query("email") String email,
+            @Query("username") String username
+    );
 
     @GET("api_chats.php")
     Call<ChatResponse> fetchChats(
@@ -50,7 +63,10 @@ public interface ApiService {
     Call<AppointmentResponse> getAppointments(
             @Query("action") String action,
             @Query("mobile") String mobile,
-            @Query("email") String email
+            @Query("email") String email,
+            @Query("username") String username,
+            @Query("role") String role,
+            @Query("tenant_id") int tenantId
     );
 
     @POST("api_bookings.php")
@@ -58,6 +74,8 @@ public interface ApiService {
     Call<ResponseBody> createAppointment(
             @Query("action") String action,
             @Query("mobile") String mobile,
+            @Query("email") String email,
+            @Query("username") String username,
             @Field("patient_id") int patientId,
             @Field("booking_date") String date,
             @Field("booking_time") String time,
@@ -66,30 +84,93 @@ public interface ApiService {
             @Field("philhealth_number") String philhealthNumber
     );
 
+    @POST("api_bookings.php")
+    @FormUrlEncoded
+    Call<ResponseBody> rescheduleBooking(
+            @Query("action") String action,
+            @Query("mobile") String mobile,
+            @Query("email") String email,
+            @Query("username") String username,
+            @Field("booking_id") int bookingId,
+            @Field("booking_date") String date,
+            @Field("booking_time") String time
+    );
+
     @GET("api_bookings.php")
     Call<ResponseBody> getAvailableSlots(
             @Query("action") String action,
             @Query("mobile") String mobile,
+            @Query("email") String email,
+            @Query("username") String username,
+            @Query("role") String role,
+            @Query("tenant_id") int tenantId,
             @Query("date") String date
     );
 
     @GET("api_bookings.php")
-    Call<ResponseBody> getBookingsRaw(@Query("action") String action, @Query("mobile") String mobile);
+    Call<ResponseBody> getExpressSlots(
+            @Query("action") String action,
+            @Query("mobile") String mobile,
+            @Query("email") String email,
+            @Query("username") String username,
+            @Query("tenant_id") int tenantId
+    );
+
+    @GET("api_bookings.php")
+    Call<ResponseBody> getBookingsRaw(
+            @Query("action") String action,
+            @Query("mobile") String mobile,
+            @Query("email") String email,
+            @Query("username") String username,
+            @Query("role") String role,
+            @Query("tenant_id") int tenantId
+    );
 
     @GET("api_dashboard.php")
-    Call<ResponseBody> getDashboardRaw(@Query("action") String action, @Query("mobile") String mobile);
+    Call<ResponseBody> getDashboardRaw(
+            @Query("action") String action,
+            @Query("mobile") String mobile,
+            @Query("email") String email,
+            @Query("username") String username,
+            @Query("role") String role,
+            @Query("tenant_id") int tenantId
+    );
 
     @GET("api_dashboard.php")
     Call<CheckupHistoryResponse> getCheckupHistory(
             @Query("action") String action,
-            @Query("mobile") String mobile
+            @Query("mobile") String mobile,
+            @Query("email") String email,
+            @Query("username") String username,
+            @Query("role") String role,
+            @Query("tenant_id") int tenantId
+    );
+
+    @GET("api_dashboard.php")
+    Call<ResponseBody> getCheckupHistoryRaw(
+            @Query("action") String action,
+            @Query("mobile") String mobile,
+            @Query("email") String email,
+            @Query("username") String username,
+            @Query("role") String role,
+            @Query("tenant_id") int tenantId
     );
 
     @GET("api_checkups.php")
-    Call<ResponseBody> getCheckupsRaw(@Query("action") String action, @Query("mobile") String mobile);
+    Call<ResponseBody> getCheckupsRaw(
+            @Query("action") String action,
+            @Query("mobile") String mobile,
+            @Query("email") String email,
+            @Query("username") String username
+    );
 
     @GET("api_patient_flow.php")
-    Call<ResponseBody> getPatientFlowRaw(@Query("action") String action, @Query("mobile") String mobile);
+    Call<ResponseBody> getPatientFlowRaw(
+            @Query("action") String action,
+            @Query("mobile") String mobile,
+            @Query("email") String email,
+            @Query("username") String username
+    );
 
     @POST("api_login.php")
     @FormUrlEncoded
@@ -143,6 +224,10 @@ public interface ApiService {
     @GET("api_billing.php")
     Call<ResponseBody> getBillingRaw(
             @Query("action") String action,
-            @Query("mobile") String mobile
+            @Query("mobile") String mobile,
+            @Query("email") String email,
+            @Query("username") String username,
+            @Query("role") String role,
+            @Query("tenant_id") int tenantId
     );
 }

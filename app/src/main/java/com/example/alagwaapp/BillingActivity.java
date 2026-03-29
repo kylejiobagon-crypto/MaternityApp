@@ -2,6 +2,7 @@ package com.example.alagwaapp;
 
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
@@ -74,6 +75,11 @@ public class BillingActivity extends AppCompatActivity {
     private final String BASE_URL = "http://alagawa.ct.ws/";
     private final String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36";
 
+    // ─── Auto-Refresh Polling ─────────────────────
+    private android.os.Handler pollHandler;
+    private Runnable pollRunnable;
+    private static final long POLL_INTERVAL_MS = 10_000; // Refresh every 10 seconds
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +97,64 @@ public class BillingActivity extends AppCompatActivity {
         fetchBillingSummary();
         fetchInvoices();
         setupHeroAnimations();
+        
+        checkAutoOpenPayment();
+
+        // Set up polling runnable
+        pollHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+        pollRunnable = new Runnable() {
+            @Override
+            public void run() {
+                fetchBillingSummary();
+                fetchInvoices();
+                pollHandler.postDelayed(this, POLL_INTERVAL_MS);
+            }
+        };
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh immediately when screen is visible (e.g. returning from payment)
+        fetchBillingSummary();
+        fetchInvoices();
+        // Start periodic polling
+        if (pollHandler != null && pollRunnable != null) {
+            pollHandler.removeCallbacks(pollRunnable);
+            pollHandler.postDelayed(pollRunnable, POLL_INTERVAL_MS);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Stop polling when screen is hidden to save battery
+        if (pollHandler != null && pollRunnable != null) {
+            pollHandler.removeCallbacks(pollRunnable);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (pollHandler != null && pollRunnable != null) {
+            pollHandler.removeCallbacks(pollRunnable);
+        }
+    }
+
+    private void checkAutoOpenPayment() {
+        int autoPayId = getIntent().getIntExtra("auto_pay_id", -1);
+        if (autoPayId != -1) {
+            // We need to wait for invoices to load
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                for (JsonObject inv : allInvoices) {
+                    if (safeInt(inv, "payment_id") == autoPayId) {
+                        onPayNow(autoPayId, safeDouble(inv, "amount"), safeStr(inv, "payment_type"));
+                        break;
+                    }
+                }
+            }, 1200); // Wait for data fetch
+        }
     }
 
     private void bindViews() {
@@ -215,7 +279,11 @@ public class BillingActivity extends AppCompatActivity {
     }
 
     private void fetchBillingSummary() {
-        apiService.getBillingRaw("summary", "true").enqueue(new retrofit2.Callback<okhttp3.ResponseBody>() {
+        String email = prefs.getString("email", "");
+        String username = prefs.getString("username", "");
+        String role = prefs.getString("role", "patient");
+        int tenantId = prefs.getInt("tenant_id", 1);
+        apiService.getBillingRaw("summary", "true", email, username, role, tenantId).enqueue(new retrofit2.Callback<okhttp3.ResponseBody>() {
             @Override
             public void onResponse(retrofit2.Call<okhttp3.ResponseBody> call, retrofit2.Response<okhttp3.ResponseBody> resp) {
                 try {
@@ -233,13 +301,13 @@ public class BillingActivity extends AppCompatActivity {
                         double revenue = safeDouble(data, "total_revenue");
                         double pending = safeDouble(data, "pending_amount");
                         double verif   = safeDouble(data, "verification_amount");
-                        double downpay = safeDouble(data, "downpayment_total");
+                        double wallet  = safeDouble(data, "wallet_balance");
 
                         runOnUiThread(() -> {
                             tvTotalRevenue.setText(formatPeso(revenue));
                             tvPendingAmount.setText(formatPeso(pending));
                             tvVerificationAmount.setText(formatPeso(verif));
-                            tvDownpaymentTotal.setText(formatPeso(downpay));
+                            tvDownpaymentTotal.setText(formatPeso(wallet));
                         });
                     }
                 } catch (Exception e) {
@@ -256,7 +324,11 @@ public class BillingActivity extends AppCompatActivity {
 
     private void fetchInvoices() {
         showLoading(true);
-        apiService.getBillingRaw("list", "true").enqueue(new retrofit2.Callback<okhttp3.ResponseBody>() {
+        String email = prefs.getString("email", "");
+        String username = prefs.getString("username", "");
+        String role = prefs.getString("role", "patient");
+        int tenantId = prefs.getInt("tenant_id", 1);
+        apiService.getBillingRaw("list", "true", email, username, role, tenantId).enqueue(new retrofit2.Callback<okhttp3.ResponseBody>() {
             @Override
             public void onResponse(retrofit2.Call<okhttp3.ResponseBody> call, retrofit2.Response<okhttp3.ResponseBody> resp) {
                 try {
@@ -328,55 +400,150 @@ public class BillingActivity extends AppCompatActivity {
         });
     }
 
-    private String selectedMethod = "gcash";
+    private String selectedMethod = ""; // No default — user must pick
 
-    private void onPayNow(int paymentId, double amount, String type) {
+    /** Uses ZXing Core to generate a real, scannable QR code bitmap */
+    private Bitmap generateRealQrCode(String content, int sizePx) {
+        try {
+            com.google.zxing.qrcode.QRCodeWriter writer = new com.google.zxing.qrcode.QRCodeWriter();
+            java.util.Map<com.google.zxing.EncodeHintType, Object> hints = new java.util.EnumMap<>(com.google.zxing.EncodeHintType.class);
+            hints.put(com.google.zxing.EncodeHintType.MARGIN, 1);
+            hints.put(com.google.zxing.EncodeHintType.ERROR_CORRECTION, com.google.zxing.qrcode.decoder.ErrorCorrectionLevel.H);
+            com.google.zxing.common.BitMatrix matrix = writer.encode(content, com.google.zxing.BarcodeFormat.QR_CODE, sizePx, sizePx, hints);
+
+            Bitmap bmp = Bitmap.createBitmap(sizePx, sizePx, Bitmap.Config.ARGB_8888);
+            for (int x = 0; x < sizePx; x++) {
+                for (int y = 0; y < sizePx; y++) {
+                    bmp.setPixel(x, y, matrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                }
+            }
+            return bmp;
+        } catch (Exception e) {
+            Log.e(TAG, "QR generation failed", e);
+            return null;
+        }
+    }
+
+    /** Called with service name so receipt can show what the patient is paying for */
+    private void onPayNow(int paymentId, double amount, String type, String serviceName) {
         BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
         View view = getLayoutInflater().inflate(R.layout.layout_bottom_sheet_payment, null);
         dialog.setContentView(view);
-
-        // Ensure background is transparent
         View parent = (View) view.getParent();
         if (parent != null) parent.setBackgroundColor(Color.TRANSPARENT);
 
-        TextView bsPayAmount = view.findViewById(R.id.bsPayAmount);
-        TextView bsPayService = view.findViewById(R.id.bsPayService);
-        EditText etRefNo = view.findViewById(R.id.etRefNo);
-        View btnSubmit = view.findViewById(R.id.btnSubmitPayment);
-        View methodGcash = view.findViewById(R.id.methodGcash);
-        View methodMaya = view.findViewById(R.id.methodMaya);
-        View methodCash = view.findViewById(R.id.methodCash);
-        View refContainer = view.findViewById(R.id.refContainer);
+        // ── Bind all views ──────────────────────────────────────────
+        TextView bsPayAmount   = view.findViewById(R.id.bsPayAmount);
+        TextView bsPayService  = view.findViewById(R.id.bsPayService);
+        TextView tvClinicName  = view.findViewById(R.id.tvClinicName);
+        TextView tvClinicAddr  = view.findViewById(R.id.tvClinicAddress);
+        TextView tvClinicPhone = view.findViewById(R.id.tvClinicPhone);
+        ImageView ivQr         = view.findViewById(R.id.ivQrCode);
+        View scanLine          = view.findViewById(R.id.scanLine);
+        View receiptCard       = view.findViewById(R.id.receiptCard);
+        EditText etRefNo       = view.findViewById(R.id.etRefNo);
+        TextView btnSubmit     = view.findViewById(R.id.btnSubmitPayment);
+        View methodGcash       = view.findViewById(R.id.methodGcash);
+        View methodMaya        = view.findViewById(R.id.methodMaya);
+        View methodCash        = view.findViewById(R.id.methodCash);
+        View refContainer      = view.findViewById(R.id.refContainer);
+        View cashContainer     = view.findViewById(R.id.cashInfoContainer);
 
+        // ── Populate receipt fields ──────────────────────────────────
         bsPayAmount.setText(formatPeso(amount));
-        bsPayService.setText(type.equals("downpayment") ? "Downpayment / Deposit" : "Service Payment");
+        String displayService = (serviceName != null && !serviceName.isEmpty()) ? serviceName
+                : (type.equals("downpayment") ? "Appointment Deposit" : "Medical Service Fee");
+        bsPayService.setText(displayService);
 
-        selectedMethod = "gcash"; // default
+        SharedPreferences prefs = getSharedPreferences("AlagwaPrefs", MODE_PRIVATE);
+        String clinicName  = prefs.getString("clinic_name",  "Alagwa Maternity Clinic").toUpperCase();
+        String clinicAddr  = prefs.getString("clinic_address", "");
+        String clinicPhone = prefs.getString("contact_number", "0000 000 0000");
+        tvClinicName.setText(clinicName);
+        if (!clinicAddr.isEmpty()) tvClinicAddr.setText(clinicAddr); else tvClinicAddr.setVisibility(View.GONE);
+        tvClinicPhone.setText(clinicPhone); // already formatted, no "Tel: Tel:" double prefix
 
+        // ── Generate REAL scannable QR via ZXing (background thread) ───
+        String qrContent = "ALAGWA:PAY-" + paymentId + ":" + amount;
+        new Thread(() -> {
+            Bitmap qrBitmap = generateRealQrCode(qrContent, 640);
+            runOnUiThread(() -> {
+                if (qrBitmap != null) ivQr.setImageBitmap(qrBitmap);
+            });
+        }).start();
+
+        // ── Entrance animation: receipt card scales + fades in ─────────
+        receiptCard.setAlpha(0f);
+        receiptCard.setScaleX(0.92f);
+        receiptCard.setScaleY(0.92f);
+        receiptCard.animate()
+                .alpha(1f).scaleX(1f).scaleY(1f)
+                .setDuration(400)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .start();
+
+        // ── Scan laser animation ───────────────────────────────────────
+        float qrBoxDp = 160f;
+        float laserTravel = (qrBoxDp - 12f) * getResources().getDisplayMetrics().density;
+        ObjectAnimator scanAnim = ObjectAnimator.ofFloat(scanLine, "translationY", 0f, laserTravel);
+        scanAnim.setDuration(1600);
+        scanAnim.setRepeatMode(ObjectAnimator.REVERSE);
+        scanAnim.setRepeatCount(ObjectAnimator.INFINITE);
+        scanAnim.setInterpolator(new android.view.animation.LinearInterpolator());
+        scanAnim.start();
+        // Also pulse the laser alpha
+        ObjectAnimator laserPulse = ObjectAnimator.ofFloat(scanLine, "alpha", 0.55f, 1f);
+        laserPulse.setDuration(800);
+        laserPulse.setRepeatMode(ObjectAnimator.REVERSE);
+        laserPulse.setRepeatCount(ObjectAnimator.INFINITE);
+        laserPulse.start();
+
+        // Stop animations when dialog dismissed
+        dialog.setOnDismissListener(d -> { scanAnim.cancel(); laserPulse.cancel(); });
+
+        // ── Initial state: nothing selected, CTA disabled ──────────────
+        selectedMethod = "";
+        refContainer.setVisibility(View.GONE);
+        cashContainer.setVisibility(View.GONE);
+        if (type.equals("downpayment")) methodCash.setVisibility(View.GONE);
+        btnSubmit.setAlpha(0.38f);
+        btnSubmit.setClickable(false);
+        btnSubmit.setFocusable(false);
+
+        // ── Method selection ───────────────────────────────────────────
         View.OnClickListener methodListener = v -> {
-            methodGcash.setBackgroundResource(R.drawable.bg_glass_card_dark_realapp);
-            methodMaya.setBackgroundResource(R.drawable.bg_glass_card_dark_realapp);
-            methodCash.setBackgroundResource(R.drawable.bg_glass_card_dark_realapp);
-            ((TextView)((ViewGroup)methodGcash).getChildAt(0)).setTextColor(Color.parseColor("#6B7280"));
-            ((TextView)((ViewGroup)methodMaya).getChildAt(0)).setTextColor(Color.parseColor("#6B7280"));
-            ((TextView)((ViewGroup)methodCash).getChildAt(0)).setTextColor(Color.parseColor("#6B7280"));
+            // Reset cards
+            methodGcash.setBackgroundResource(R.drawable.bg_payment_method_default);
+            methodMaya.setBackgroundResource(R.drawable.bg_payment_method_default);
+            methodCash.setBackgroundResource(R.drawable.bg_payment_method_default);
+            // Scale-bounce selected card
+            v.setBackgroundResource(R.drawable.bg_payment_method_selected);
+            v.animate().scaleX(0.93f).scaleY(0.93f).setDuration(80).withEndAction(() ->
+                v.animate().scaleX(1f).scaleY(1f).setDuration(140)
+                    .setInterpolator(new AccelerateDecelerateInterpolator()).start()
+            ).start();
+
+            refContainer.setVisibility(View.GONE);
+            cashContainer.setVisibility(View.GONE);
 
             if (v.getId() == R.id.methodGcash) {
                 selectedMethod = "gcash";
-                v.setBackgroundResource(R.drawable.bg_glass_card_flagship);
-                ((TextView)((ViewGroup)v).getChildAt(0)).setTextColor(Color.parseColor("#0B0E11"));
-                refContainer.setVisibility(View.VISIBLE);
+                revealView(refContainer);
+                btnSubmit.setText("Pay via GCash — " + formatPeso(amount));
             } else if (v.getId() == R.id.methodMaya) {
                 selectedMethod = "maya";
-                v.setBackgroundResource(R.drawable.bg_glass_card_flagship);
-                ((TextView)((ViewGroup)v).getChildAt(0)).setTextColor(Color.parseColor("#0B0E11"));
-                refContainer.setVisibility(View.VISIBLE);
+                revealView(refContainer);
+                btnSubmit.setText("Pay via Maya — " + formatPeso(amount));
             } else {
                 selectedMethod = "cash";
-                v.setBackgroundResource(R.drawable.bg_glass_card_flagship);
-                ((TextView)((ViewGroup)v).getChildAt(0)).setTextColor(Color.parseColor("#0B0E11"));
-                refContainer.setVisibility(View.GONE);
+                revealView(cashContainer);
+                btnSubmit.setText("Confirm Cash Payment — " + formatPeso(amount));
             }
+
+            // Animate CTA enabling
+            btnSubmit.animate().alpha(1f).setDuration(200).start();
+            btnSubmit.setClickable(true);
+            btnSubmit.setFocusable(true);
         };
 
         methodGcash.setOnClickListener(methodListener);
@@ -384,16 +551,49 @@ public class BillingActivity extends AppCompatActivity {
         methodCash.setOnClickListener(methodListener);
 
         btnSubmit.setOnClickListener(v -> {
+            if (selectedMethod.isEmpty()) return;
             String ref = etRefNo.getText().toString().trim();
-            if (!selectedMethod.equals("cash") && ref.isEmpty()) {
-                Toast.makeText(this, "Please enter Reference Number", Toast.LENGTH_SHORT).show();
-                return;
+            if (type.equals("downpayment")) {
+                if (ref.isEmpty()) {
+                    Toast.makeText(this, "Please enter your GCash/Maya reference number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                submitDownpaymentToApi(selectedMethod, paymentId, ref);
+            } else {
+                if (!selectedMethod.equals("cash") && ref.isEmpty()) {
+                    Toast.makeText(this, "Please enter your reference number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                submitPaymentToApi(paymentId, selectedMethod, ref);
             }
-            submitPaymentToApi(paymentId, selectedMethod, ref);
             dialog.dismiss();
+        });
+        dialog.setOnShowListener(d -> {
+            BottomSheetDialog bsd = (BottomSheetDialog) d;
+            View bottomSheetInternal = bsd.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if (bottomSheetInternal != null) {
+                com.google.android.material.bottomsheet.BottomSheetBehavior.from(bottomSheetInternal)
+                        .setState(com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED);
+                com.google.android.material.bottomsheet.BottomSheetBehavior.from(bottomSheetInternal)
+                        .setSkipCollapsed(true);
+            }
         });
 
         dialog.show();
+    }
+
+    // Overload to keep backward compatibility with call sites that don't pass a service name
+    private void onPayNow(int paymentId, double amount, String type) {
+        onPayNow(paymentId, amount, type, "");
+    }
+
+    /** Smoothly animate a hidden view into view */
+    private void revealView(View v) {
+        v.setVisibility(View.VISIBLE);
+        v.setAlpha(0f);
+        v.setTranslationY(-12f);
+        v.animate().alpha(1f).translationY(0f).setDuration(250)
+                .setInterpolator(new AccelerateDecelerateInterpolator()).start();
     }
 
     private void submitPaymentToApi(int paymentId, String method, String ref) {
@@ -420,6 +620,45 @@ public class BillingActivity extends AppCompatActivity {
             }
             @Override public void onFailure(retrofit2.Call<okhttp3.ResponseBody> call, Throwable t) {
                 runOnUiThread(() -> Toast.makeText(BillingActivity.this, "Network Error", Toast.LENGTH_SHORT).show());
+            }
+        });
+    }
+
+    private void submitDownpaymentToApi(String method, int paymentId, String ref) {
+        apiService.submitDownpaymentProof("submit_proof", "true", paymentId, ref).enqueue(new retrofit2.Callback<okhttp3.ResponseBody>() {
+            @Override
+            public void onResponse(retrofit2.Call<okhttp3.ResponseBody> call, retrofit2.Response<okhttp3.ResponseBody> resp) {
+                try {
+                    String body = resp.body() != null ? resp.body().string() : "";
+                    Log.d(TAG, "Downpayment submit response [" + resp.code() + "]: " + body);
+                    if (resp.isSuccessful() && !body.isEmpty()) {
+                        // Strip any PHP warnings before JSON
+                        int jsonStart = body.indexOf('{');
+                        if (jsonStart > 0) body = body.substring(jsonStart);
+                        JsonObject json = new JsonParser().parse(body).getAsJsonObject();
+                        boolean success = json.has("success") && json.get("success").getAsBoolean();
+                        if (success) {
+                            runOnUiThread(() -> {
+                                Toast.makeText(BillingActivity.this, "✅ Downpayment Submitted! Awaiting admin verification.", Toast.LENGTH_LONG).show();
+                                fetchBillingSummary();
+                                fetchInvoices();
+                            });
+                            return;
+                        } else {
+                            String msg = json.has("message") ? json.get("message").getAsString() : "Submission failed";
+                            runOnUiThread(() -> Toast.makeText(BillingActivity.this, "❌ " + msg, Toast.LENGTH_LONG).show());
+                            return;
+                        }
+                    }
+                    runOnUiThread(() -> Toast.makeText(BillingActivity.this, "❌ Submission Failed (HTTP " + resp.code() + ")", Toast.LENGTH_SHORT).show());
+                } catch (Exception e) {
+                    Log.e(TAG, "Downpayment submit error: " + e.getMessage());
+                    runOnUiThread(() -> Toast.makeText(BillingActivity.this, "❌ Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                }
+            }
+            @Override public void onFailure(retrofit2.Call<okhttp3.ResponseBody> call, Throwable t) {
+                Log.e(TAG, "Downpayment network failure: " + t.getMessage());
+                runOnUiThread(() -> Toast.makeText(BillingActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show());
             }
         });
     }
@@ -453,14 +692,41 @@ public class BillingActivity extends AppCompatActivity {
         TextView bsDownpaymentApplied = view.findViewById(R.id.bsDownpaymentApplied);
         TextView bsFinalTotal = view.findViewById(R.id.bsFinalTotal);
         
+        TextView bsClinicName = view.findViewById(R.id.bsClinicName);
+        TextView bsClinicAddress = view.findViewById(R.id.bsClinicAddress);
+        TextView bsServicesList = view.findViewById(R.id.bsServicesList);
+        TextView bsMedicationsList = view.findViewById(R.id.bsMedicationsList);
+        View rowServices = view.findViewById(R.id.rowServices);
+        View rowMedications = view.findViewById(R.id.rowMedications);
+
         LinearLayout bsDiscountRow = view.findViewById(R.id.bsDiscountRow);
         LinearLayout bsDownpaymentRow = view.findViewById(R.id.bsDownpaymentRow);
+
+        // Populate Branding
+        String cName = safeStr(inv, "clinic_name");
+        String cAddr = safeStr(inv, "clinic_address");
+        if (!cName.isEmpty()) bsClinicName.setText(cName);
+        if (!cAddr.isEmpty()) bsClinicAddress.setText(cAddr);
+
+        // Populate Itemized List
+        String sList = safeStr(inv, "services_list").replace("; ", "\n• ");
+        String mList = safeStr(inv, "medications_list").replace("; ", "\n• ");
+
+        if (!sList.isEmpty()) {
+            rowServices.setVisibility(View.VISIBLE);
+            bsServicesList.setText("• " + sList);
+        }
+        if (!mList.isEmpty()) {
+            rowMedications.setVisibility(View.VISIBLE);
+            bsMedicationsList.setText("• " + mList);
+        }
 
         bsInvoiceId.setText("#PAY-" + String.format("%04d", safeInt(inv, "payment_id")));
         bsTotalAmount.setText(formatPeso(finalTotal));
         bsSubtotal.setText(formatPeso(subtotal));
-        bsStatus.setText(friendlyStatus(status));
-        bsStatus.setTextColor(statusColors(status)[0]);
+        boolean isDownpay = "downpayment".equalsIgnoreCase(safeStr(inv, "payment_type"));
+        bsStatus.setText(friendlyStatus(status, isDownpay));
+        bsStatus.setTextColor(statusColors(status, isDownpay)[0]);
         
         if (discount > 0) {
             bsDiscountRow.setVisibility(View.VISIBLE);
@@ -530,7 +796,9 @@ public class BillingActivity extends AppCompatActivity {
             JsonObject inv = items.get(pos);
 
             String id       = safeStr(inv, "payment_id");
-            String status   = safeStr(inv, "status");
+            String status   = inv.has("synced_status") && !inv.get("synced_status").isJsonNull() 
+                              ? safeStr(inv, "synced_status") 
+                              : safeStr(inv, "status");
             String service  = safeStr(inv, "service_type");
             if (service.isEmpty()) service = safeStr(inv, "payment_type");
             String date     = safeStr(inv, "payment_date");
@@ -539,7 +807,7 @@ public class BillingActivity extends AppCompatActivity {
             String patient  = safeStr(inv, "patient_name");
 
             h.tvInvoiceId.setText("#PAY-" + String.format("%04d", safeInt(inv, "payment_id")));
-            h.tvInvoiceStatus.setText(friendlyStatus(status));
+            h.tvInvoiceStatus.setText(friendlyStatus(status, "downpayment".equals(payType)));
             h.tvInvoiceService.setText(service.isEmpty() ? "Check-up" : service);
             h.tvInvoiceDate.setText(formatDate(date));
             h.tvInvoiceAmount.setText(formatPeso(amount));
@@ -553,15 +821,17 @@ public class BillingActivity extends AppCompatActivity {
             }
             h.tvInitials.setText(initials.toUpperCase());
 
-            // Colors
-            int[] colors = statusColors(status);
-            h.statusStrip.setBackgroundColor(colors[0]);
-            h.tvInvoiceStatus.setTextColor(colors[0]);
-
             // Visibility
             boolean isDownpay = "downpayment".equals(payType);
-            boolean canPay = "pending".equalsIgnoreCase(status) || "unpaid".equalsIgnoreCase(status);
-            boolean hasPaid = "paid".equalsIgnoreCase(status) || "for_verification".equalsIgnoreCase(status) || "applied".equalsIgnoreCase(status);
+            boolean canPay = ("unpaid".equalsIgnoreCase(status)) || (!isDownpay && "pending".equalsIgnoreCase(status));
+            boolean hasPaid = "paid".equalsIgnoreCase(status) || "for_verification".equalsIgnoreCase(status) || "applied".equalsIgnoreCase(status) || 
+                              "credited".equalsIgnoreCase(status) || "declined".equalsIgnoreCase(status) || "rejected".equalsIgnoreCase(status) ||
+                              (isDownpay && "pending".equalsIgnoreCase(status));
+
+            h.tvInvoiceStatus.setText(friendlyStatus(status, isDownpay));
+            int[] colors = statusColors(status, isDownpay);
+            h.statusStrip.setBackgroundColor(colors[0]);
+            h.tvInvoiceStatus.setTextColor(colors[0]);
 
             h.btnPayNow.setVisibility(canPay && !isDownpay ? View.VISIBLE : View.GONE);
             h.btnPayDownpayment.setVisibility(canPay && isDownpay ? View.VISIBLE : View.GONE);
@@ -573,13 +843,89 @@ public class BillingActivity extends AppCompatActivity {
             h.btnViewReceipt.setOnClickListener(v -> showBottomSheetReceipt(inv));
 
             // Make the status pill clickable as well for better UX
-            h.tvInvoiceStatus.setOnClickListener(v -> {
+            // Final status string for comparison (trimmed and lowercase)
+            final String finalStatus = status != null ? status.trim().toLowerCase() : "";
+
+            // Unified Action for Rejected/Credited status using a BottomSheet
+            java.lang.Runnable showWalletCredit = () -> {
+                com.google.android.material.bottomsheet.BottomSheetDialog bsd = new com.google.android.material.bottomsheet.BottomSheetDialog(BillingActivity.this, R.style.BottomSheetDialogTheme);
+                View v = getLayoutInflater().inflate(R.layout.layout_bottom_sheet_payment, null);
+                View parent = (View) v.getParent();
+                if (parent != null) parent.setBackgroundColor(Color.TRANSPARENT);
+
+                // Hide generic elements
+                View paymentDetails = v.findViewById(R.id.paymentDetailsContainer);
+                View dashedSep = v.findViewById(R.id.dashedSeparator);
+                View qrBox = v.findViewById(R.id.qrContainer);
+                
+                if (paymentDetails != null) paymentDetails.setVisibility(View.GONE);
+                if (dashedSep != null) dashedSep.setVisibility(View.GONE);
+                if (qrBox != null) qrBox.setVisibility(View.GONE);
+
+                // Also hide the "Payment Method" selection blocks
+                for (int i = 0; i < ((ViewGroup)v).getChildCount(); i++) {
+                    View child = ((ViewGroup)v).getChildAt(i);
+                    if (child instanceof TextView) {
+                        String txt = ((TextView)child).getText().toString().toUpperCase();
+                        if (txt.contains("PAYMENT METHOD") || txt.contains("SECURE CHECKOUT") || txt.contains("CANCEL CHECKOUT")) {
+                            child.setVisibility(View.GONE);
+                        }
+                    }
+                }
+                View methodG = v.findViewById(R.id.methodGcash);
+                if (methodG != null && methodG.getParent() instanceof View) {
+                    ((View)methodG.getParent()).setVisibility(View.GONE);
+                }
+                View btnSubmit = v.findViewById(R.id.btnSubmitPayment);
+                if (btnSubmit != null) btnSubmit.setVisibility(View.GONE);
+
+                // Show and construct the premium Wallet Message Container
+                View walletContainer = v.findViewById(R.id.walletMessageContainer);
+                if (walletContainer != null) {
+                    walletContainer.setVisibility(View.VISIBLE);
+                    TextView tvNotice = v.findViewById(R.id.tvWalletNotice);
+                    if (tvNotice != null) {
+                        tvNotice.setText("This appointment was rejected. Your ₱" + formatPeso(amount) + " deposit was safely credited to your wallet to be used for your next booking without needing to pay again.");
+                    }
+                    TextView btnReschedule = v.findViewById(R.id.btnReschedule);
+                    if (btnReschedule != null) {
+                        btnReschedule.setOnClickListener(v2 -> {
+                            bsd.dismiss();
+                            android.content.Intent nIntent = new android.content.Intent(BillingActivity.this, BookingActivity.class);
+                            startActivity(nIntent);
+                        });
+                    }
+                }
+
+                bsd.setContentView(v);
+                bsd.show();
+            };
+
+            // Master Click Listener
+            android.view.View.OnClickListener masterListener = v -> {
                 if (canPay) {
                     onPayNow(payId, amount, isDownpay ? "downpayment" : "checkup");
                 } else if (hasPaid) {
-                    showBottomSheetReceipt(inv);
+                    if ("credited".equals(finalStatus) || "declined".equals(finalStatus) || "rejected".equals(finalStatus)) {
+                        showWalletCredit.run();
+                    } else {
+                        showBottomSheetReceipt(inv);
+                    }
                 }
-            });
+            };
+
+            // Force clickable/focusable and attach
+            h.itemView.setClickable(true);
+            h.itemView.setFocusable(true);
+            h.itemView.setOnClickListener(masterListener);
+            
+            h.tvInvoiceStatus.setClickable(true);
+            h.tvInvoiceStatus.setFocusable(true);
+            h.tvInvoiceStatus.setOnClickListener(masterListener);
+            
+            h.tvInvoiceService.setOnClickListener(masterListener);
+            h.tvInvoiceDate.setOnClickListener(masterListener);
+            h.tvInvoiceAmount.setOnClickListener(masterListener);
         }
 
         @Override public int getItemCount() { return items.size(); }
@@ -605,26 +951,32 @@ public class BillingActivity extends AppCompatActivity {
         }
     }
 
-    private String friendlyStatus(String raw) {
+    private String friendlyStatus(String raw, boolean isDownpay) {
         if (raw == null) return "Unknown";
         switch (raw.toLowerCase()) {
             case "paid":             return "Payment Complete";
             case "for_verification": return "Under Review";
-            case "pending":          return "Pay Now";
+            case "pending":          return isDownpay ? "Under Review" : "Pay Now";
             case "unpaid":           return "Pay Now";
-            case "applied":          return "Applied to Bill";
+            case "applied":          return "Applied from Wallet";
+            case "credited":
+            case "declined":         return "Rejected";
+            case "cancelled":        return "Cancelled";
             default:                 return raw;
         }
     }
 
-    private int[] statusColors(String status) {
+    private int[] statusColors(String status, boolean isDownpay) {
         if (status == null) return new int[]{Color.parseColor("#6B7280"), Color.parseColor("#6B7280")};
         switch (status.toLowerCase()) {
             case "paid":             return new int[]{Color.parseColor("#00F49C"), Color.parseColor("#065F46")};
             case "for_verification": return new int[]{Color.parseColor("#4299F0"), Color.parseColor("#1E3A8A")};
-            case "pending":          return new int[]{Color.parseColor("#FFBC00"), Color.parseColor("#78350F")};
+            case "pending":          return isDownpay ? new int[]{Color.parseColor("#4299F0"), Color.parseColor("#1E3A8A")} : new int[]{Color.parseColor("#FFBC00"), Color.parseColor("#78350F")};
             case "unpaid":           return new int[]{Color.parseColor("#F472B6"), Color.parseColor("#BE185D")};
-            case "applied":          return new int[]{Color.parseColor("#8B5CF6"), Color.parseColor("#4C1D95")};
+            case "applied":          return new int[]{Color.parseColor("#8B5CF6"), Color.parseColor("#8B5CF6")};
+            case "credited":
+            case "declined":
+            case "cancelled":        return new int[]{Color.parseColor("#FF3B30"), Color.parseColor("#7F1D1D")};
             default:                 return new int[]{Color.parseColor("#6B7280"), Color.parseColor("#6B7280")};
         }
     }

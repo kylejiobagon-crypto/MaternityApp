@@ -149,6 +149,14 @@ public class ProfileActivity extends AppCompatActivity {
         etDob.setOnClickListener(v -> {
             if (isEditMode) showDatePicker();
         });
+
+        etLmp.setOnClickListener(v -> {
+            if (isEditMode) showLmpDatePicker();
+        });
+
+        etBlood.setOnClickListener(v -> {
+            if (isEditMode) showBloodTypePicker();
+        });
     }
 
     private void toggleEditMode() {
@@ -208,8 +216,10 @@ public class ProfileActivity extends AppCompatActivity {
     private void fetchProfile() {
         if (apiService == null || loadingOverlay == null) return;
         loadingOverlay.setVisibility(View.VISIBLE);
+        String email = prefs.getString("email", "");
+        String username = prefs.getString("username", "");
 
-        apiService.getPatientsRaw("list", "true").enqueue(new Callback<okhttp3.ResponseBody>() {
+        apiService.getPatientsRaw("list", "true", email, username).enqueue(new Callback<okhttp3.ResponseBody>() {
             @Override
             public void onResponse(Call<okhttp3.ResponseBody> call, Response<okhttp3.ResponseBody> response) {
                 if (loadingOverlay != null) loadingOverlay.setVisibility(View.GONE);
@@ -308,6 +318,11 @@ public class ProfileActivity extends AppCompatActivity {
         
         calculatePregnancyStats(patient.lmp);
         calculateAgeFromDob(patient.dob);
+
+        // Calculate and update Months Pregnant based on LMP
+        if (patient.lmp != null && !patient.lmp.isEmpty() && !patient.lmp.equals("0000-00-00")) {
+            updateMonthsPregnant(patient.lmp);
+        }
     }
 
     private void calculatePregnancyStats(String lmp) {
@@ -358,6 +373,26 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    private void updateMonthsPregnant(String lmp) {
+        if (lmp == null || lmp.isEmpty() || lmp.equals("0000-00-00")) {
+            etMonths.setText("0.0");
+            return;
+        }
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            Date lmpDate = sdf.parse(lmp);
+            long diff = System.currentTimeMillis() - lmpDate.getTime();
+            double days = diff / (1000.0 * 60 * 60 * 24);
+            double months = days / 30.4375; // Average month length
+            if (months < 0) months = 0;
+            if (months > 10) months = 10; // Cap at 10 (rare)
+            
+            etMonths.setText(String.format(Locale.US, "%.1f", months));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void showResetBottomSheet() {
         BottomSheetDialog resetSheet = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
         resetSheet.setContentView(R.layout.dialog_password_reset_aura);
@@ -388,6 +423,50 @@ public class ProfileActivity extends AppCompatActivity {
         etAge.setText(String.valueOf(age));
     }
 
+    private void showLmpDatePicker() {
+        Calendar c = Calendar.getInstance();
+        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+            String date = String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, dayOfMonth);
+            etLmp.setText(date);
+            updateMonthsPregnant(date);
+            calculatePregnancyStats(date);
+        }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    private void showBloodTypePicker() {
+        String[] types = {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"};
+        com.google.android.material.bottomsheet.BottomSheetDialog sheet = new com.google.android.material.bottomsheet.BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
+        View view = getLayoutInflater().inflate(R.layout.dialog_blood_type_selection, null);
+        android.widget.GridLayout grid = view.findViewById(R.id.gridBloodTypes);
+        
+        for (String type : types) {
+            TextView tv = new TextView(this);
+            tv.setText(type);
+            tv.setTextColor(android.graphics.Color.WHITE);
+            tv.setGravity(android.view.Gravity.CENTER);
+            tv.setTextSize(16);
+            tv.setPadding(0, 32, 0, 32);
+            tv.setTypeface(android.graphics.Typeface.create("sans-serif-black", android.graphics.Typeface.BOLD));
+            tv.setBackgroundResource(R.drawable.bg_timeslot_3d_unselected);
+            
+            android.widget.GridLayout.LayoutParams params = new android.widget.GridLayout.LayoutParams();
+            params.width = 0;
+            params.height = android.widget.GridLayout.LayoutParams.WRAP_CONTENT;
+            params.columnSpec = android.widget.GridLayout.spec(android.widget.GridLayout.UNDEFINED, 1f);
+            params.setMargins(10, 10, 10, 10);
+            tv.setLayoutParams(params);
+            
+            tv.setOnClickListener(v -> {
+                etBlood.setText(type);
+                sheet.dismiss();
+            });
+            grid.addView(tv);
+        }
+        
+        sheet.setContentView(view);
+        sheet.show();
+    }
+
     private void lockFields() {
         setAllEnabled(false);
     }
@@ -400,7 +479,14 @@ public class ProfileActivity extends AppCompatActivity {
         EditText[] fields = {etFirstName, etLastName, etEmail, etPhone, etPhilHealth, etAddress, etLmp, etBlood, etMonths, etEmergencyName, etEmergencyRel, etEmergencyPhone};
         for (EditText f : fields) {
             f.setEnabled(enabled);
-            f.setFocusableInTouchMode(enabled);
+            // Non-keyboard fields
+            if (f == etDob || f == etLmp || f == etBlood || f == etAge || f == etMonths) {
+                f.setFocusable(false);
+                f.setFocusableInTouchMode(false);
+            } else {
+                f.setFocusableInTouchMode(enabled);
+                f.setFocusable(enabled);
+            }
             f.setAlpha(enabled ? 1.0f : 0.85f);
         }
     }

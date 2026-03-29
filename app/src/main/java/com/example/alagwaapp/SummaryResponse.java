@@ -23,10 +23,13 @@ public class SummaryResponse {
         public int unpaid_count;
 
         public double total_unpaid;
+        public double wallet_balance;
         public String next_booking;
 
         // Backend does not return records_count directly; default 0
         public int records_count;
+        public int pending_count;
+        public int total_appointments;
 
         public PregnancyStats pregnancy_stats;
 

@@ -70,8 +70,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
             });
 
             holder.layoutDots.setVisibility(date.hasDots ? View.VISIBLE : View.GONE);
-            holder.dotConfirmed.setVisibility(View.VISIBLE);
-            holder.dotPending.setVisibility(View.GONE);
+            holder.dotConfirmed.setVisibility(date.hasConfirmed ? View.VISIBLE : View.GONE);
+            holder.dotPending.setVisibility(date.hasPending ? View.VISIBLE : View.GONE);
 
         } else {
             // Hide dates from previous/next month for a cleaner look

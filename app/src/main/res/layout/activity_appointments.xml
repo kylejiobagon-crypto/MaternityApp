@@ -225,11 +225,11 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:elevation="4dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 27" android:textColor="@color/white" android:fontFamily="sans-serif-black" android:textSize="18sp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Tomorrow" android:textColor="@color/white" android:textSize="11sp" android:fontFamily="sans-serif-medium" android:alpha="0.7" />
+                        <TextView android:id="@+id/tvExpressDate1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="--" android:textColor="@color/white" android:fontFamily="sans-serif-black" android:textSize="18sp" />
+                        <TextView android:id="@+id/tvExpressDay1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="--" android:textColor="@color/white" android:textSize="11sp" android:fontFamily="sans-serif-medium" android:alpha="0.7" />
                         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="64dp" android:gravity="center_vertical">
                             <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#00FFFF" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="09:00 AM" android:textColor="#00FFFF" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+                            <TextView android:id="@+id/tvExpressTime1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="--" android:textColor="#00FFFF" android:textSize="10sp" android:fontFamily="sans-serif-black" />
                         </LinearLayout>
                         <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:layout_margin="12dp" android:src="@android:drawable/ic_media_play" app:tint="#00FFFF" />
                     </RelativeLayout>
@@ -244,11 +244,11 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:elevation="4dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 28" android:textColor="@color/white" android:fontFamily="sans-serif-black" android:textSize="18sp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Wednesday" android:textColor="@color/white" android:textSize="11sp" android:fontFamily="sans-serif-medium" android:alpha="0.7" />
+                        <TextView android:id="@+id/tvExpressDate2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="--" android:textColor="@color/white" android:fontFamily="sans-serif-black" android:textSize="18sp" />
+                        <TextView android:id="@+id/tvExpressDay2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="--" android:textColor="@color/white" android:textSize="11sp" android:fontFamily="sans-serif-medium" android:alpha="0.7" />
                         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="64dp" android:gravity="center_vertical">
                             <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#FFCC00" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="10:30 AM" android:textColor="#FFCC00" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+                            <TextView android:id="@+id/tvExpressTime2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="--" android:textColor="#FFCC00" android:textSize="10sp" android:fontFamily="sans-serif-black" />
                         </LinearLayout>
                         <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:layout_margin="12dp" android:src="@android:drawable/ic_media_play" app:tint="#FFCC00" />
                     </RelativeLayout>
@@ -263,11 +263,11 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:elevation="4dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 29" android:textColor="@color/white" android:fontFamily="sans-serif-black" android:textSize="18sp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Thursday" android:textColor="@color/white" android:textSize="11sp" android:fontFamily="sans-serif-medium" android:alpha="0.7" />
+                        <TextView android:id="@+id/tvExpressDate3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="--" android:textColor="@color/white" android:fontFamily="sans-serif-black" android:textSize="18sp" />
+                        <TextView android:id="@+id/tvExpressDay3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="--" android:textColor="@color/white" android:textSize="11sp" android:fontFamily="sans-serif-medium" android:alpha="0.7" />
                         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="64dp" android:gravity="center_vertical">
                             <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#FF00FF" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="02:00 PM" android:textColor="#FF00FF" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+                            <TextView android:id="@+id/tvExpressTime3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="--" android:textColor="#FF00FF" android:textSize="10sp" android:fontFamily="sans-serif-black" />
                         </LinearLayout>
                         <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:layout_margin="12dp" android:src="@android:drawable/ic_media_play" app:tint="#FF00FF" />
                     </RelativeLayout>
@@ -281,11 +281,11 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:elevation="4dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="MAR 30" android:textColor="@color/white" android:fontFamily="sans-serif-black" android:textSize="18sp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="Friday" android:textColor="@color/white" android:textSize="11sp" android:fontFamily="sans-serif-medium" android:alpha="0.7" />
+                        <TextView android:id="@+id/tvExpressDate4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="16dp" android:text="--" android:textColor="@color/white" android:fontFamily="sans-serif-black" android:textSize="18sp" />
+                        <TextView android:id="@+id/tvExpressDay4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="40dp" android:text="--" android:textColor="@color/white" android:textSize="11sp" android:fontFamily="sans-serif-medium" android:alpha="0.7" />
                         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginTop="64dp" android:gravity="center_vertical">
                             <ImageView android:layout_width="10dp" android:layout_height="10dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#00F49C" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="04:15 PM" android:textColor="#00F49C" android:textSize="10sp" android:fontFamily="sans-serif-black" />
+                            <TextView android:id="@+id/tvExpressTime4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="--" android:textColor="#00F49C" android:textSize="10sp" android:fontFamily="sans-serif-black" />
                         </LinearLayout>
                         <ImageView android:layout_width="16dp" android:layout_height="16dp" android:layout_alignParentBottom="true" android:layout_alignParentEnd="true" android:layout_margin="12dp" android:src="@android:drawable/ic_media_play" app:tint="#00F49C" />
                     </RelativeLayout>
@@ -312,6 +312,91 @@
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:fontFamily="sans-serif-black" />
+
+                <!-- PREMIUM 3D FILTERS -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:scrollbars="none"
+                    android:clipToPadding="false">
+                    
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        
+                        <TextView
+                            android:id="@+id/filterAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/bg_filter_chip"
+                            android:gravity="center"
+                            android:paddingHorizontal="16dp"
+                            android:text="ALL"
+                            android:textColor="@color/white"
+                            android:textSize="9sp"
+                            android:fontFamily="sans-serif-black"
+                            android:letterSpacing="0.1" />
+
+                        <TextView
+                            android:id="@+id/filterPending"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/bg_filter_chip"
+                            android:gravity="center"
+                            android:paddingHorizontal="16dp"
+                            android:text="PENDING"
+                            android:textColor="@color/white"
+                            android:textSize="9sp"
+                            android:fontFamily="sans-serif-black"
+                            android:letterSpacing="0.1" />
+
+                        <TextView
+                            android:id="@+id/filterConfirmed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/bg_filter_chip"
+                            android:gravity="center"
+                            android:paddingHorizontal="16dp"
+                            android:text="CONFIRMED"
+                            android:textColor="@color/white"
+                            android:textSize="9sp"
+                            android:fontFamily="sans-serif-black"
+                            android:letterSpacing="0.1" />
+
+                        <TextView
+                            android:id="@+id/filterRejected"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/bg_filter_chip"
+                            android:gravity="center"
+                            android:paddingHorizontal="16dp"
+                            android:text="REJECTED"
+                            android:textColor="@color/white"
+                            android:textSize="9sp"
+                            android:fontFamily="sans-serif-black"
+                            android:letterSpacing="0.1" />
+
+                        <TextView
+                            android:id="@+id/filterCompleted"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:background="@drawable/bg_filter_chip"
+                            android:gravity="center"
+                            android:paddingHorizontal="16dp"
+                            android:text="COMPLETED"
+                            android:textColor="@color/white"
+                            android:textSize="9sp"
+                            android:fontFamily="sans-serif-black"
+                            android:letterSpacing="0.1" />
+                    </LinearLayout>
+                </HorizontalScrollView>
 
                 <!-- EMPTY/LOADING STATES -->
                 <LinearLayout

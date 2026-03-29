@@ -1,46 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_pay_flagship_main">
+    android:background="#F9FAFB">
 
-    <!-- Ambient Aura Blobs -->
-    <View
-        android:layout_width="450dp"
-        android:layout_height="450dp"
-        android:background="@drawable/bg_aura_blob_cyan"
-        android:alpha="0.25"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:translationX="150dp"
-        android:translationY="20dp" />
-
-    <View
-        android:layout_width="450dp"
-        android:layout_height="450dp"
-        android:background="@drawable/bg_aura_blob_violet"
-        android:alpha="0.15"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:translationX="-150dp"
-        android:translationY="-20dp" />
-
-    <!-- TOP HEADER: SECURE TERMINAL -->
+    <!-- Top Navigation Bar -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/headerBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="16dp"
-        android:paddingTop="16dp"
+        android:paddingTop="20dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <FrameLayout
             android:id="@+id/btnClose"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/bg_glass_card_dark_realapp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:clickable="true"
@@ -50,31 +27,15 @@
                 android:layout_height="22dp"
                 android:layout_gravity="center"
                 android:src="@android:drawable/ic_menu_close_clear_cancel"
-                app:tint="@color/text_white" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/btnHelp"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/bg_glass_card_dark_realapp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_gravity="center"
-                android:src="@android:drawable/ic_menu_help"
-                app:tint="@color/text_white" />
+                app:tint="#6B7280" />
         </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         android:clipToPadding="false"
-        android:paddingBottom="120dp"
+        android:paddingBottom="40dp"
         app:layout_constraintTop_toBottomOf="@id/headerBar"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -84,324 +45,417 @@
             android:orientation="vertical"
             android:paddingHorizontal="24dp">
 
-            <!-- Title -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Secure Checkout"
-                android:textColor="@color/text_white"
-                android:textSize="36sp"
-                android:fontFamily="sans-serif-black"
-                android:gravity="center"
-                android:letterSpacing="-0.02"
-                android:shadowColor="#8000F2FF"
-                android:shadowRadius="15"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="APPOINTMENT DEPOSIT TERMINAL"
-                android:textColor="@color/text_slate_400"
-                android:textSize="11sp"
-                android:fontFamily="sans-serif-bold"
-                android:letterSpacing="0.2"
-                android:gravity="center"
-                android:alpha="0.8"/>
-
-            <!-- Main Service Card (Quick Repayment style) -->
+            <!-- ═══════════════════ RECEIPT 3D CARD ═══════════════════ -->
             <LinearLayout
+                android:id="@+id/receiptCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:background="@drawable/bg_glass_card_flagship"
                 android:orientation="vertical"
-                android:padding="24dp">
+                android:background="@drawable/bg_3d_card"
+                android:elevation="8dp"
+                android:outlineProvider="background"
+                android:clipToPadding="false"
+                android:layout_marginBottom="24dp">
 
+                <!-- ── SECURE HEADER BAND ── -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="24dp">
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="8dp">
 
-                    <FrameLayout
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:background="@drawable/icon_blue_glass">
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_gravity="center"
-                            android:src="@android:drawable/ic_menu_today"
-                            app:tint="@color/text_white" />
-                    </FrameLayout>
-
+                    <!-- Verified Badge Row -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <LinearLayout
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:gravity="center"
+                            android:background="@drawable/bg_success_badge"
+                            android:layout_marginEnd="8dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="✓"
+                                android:textColor="#FFFFFF"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-black" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Verified Merchant"
+                            android:textColor="#111827"
+                            android:textSize="14sp"
+                            android:letterSpacing="0.02"
+                            android:fontFamily="sans-serif-black" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvClinicName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ALAGWA MATERNITY CLINIC"
+                        android:textColor="#111827"
+                        android:textSize="20sp"
+                        android:fontFamily="sans-serif-black"
+                        android:gravity="center"
+                        android:letterSpacing="-0.02"
+                        android:layout_marginBottom="6dp"
+                        android:paddingHorizontal="24dp" />
+
+                    <TextView
+                        android:id="@+id/tvClinicAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="123 Healthcare Avenue"
+                        android:textColor="#6B7280"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:layout_marginBottom="2dp"
+                        android:paddingHorizontal="24dp" />
+
+                    <TextView
+                        android:id="@+id/tvClinicPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0912 345 6789"
+                        android:textColor="#6B7280"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <!-- ── PAYMENT FOR (SERVICE) ── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="24dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="16dp"
+                    android:baselineAligned="false">
+
+                    <!-- Left: Service -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PAYMENT FOR"
+                            android:textColor="#9CA3AF"
+                            android:textSize="10sp"
+                            android:fontFamily="sans-serif-black"
+                            android:letterSpacing="0.1" />
                         <TextView
                             android:id="@+id/tvServiceName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Normal Delivery"
-                            android:textColor="@color/text_white"
-                            android:textSize="20sp"
-                            android:fontFamily="sans-serif-black"/>
-                        <LinearLayout
+                            android:text="Appointment Deposit"
+                            android:textColor="#111827"
+                            android:textSize="16sp"
+                            android:fontFamily="sans-serif-black"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
+
+                    <!-- Right: Amount -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="end">
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:layout_marginTop="4dp">
-                            <View
-                                android:layout_width="8dp"
-                                android:layout_height="8dp"
-                                android:background="@drawable/ic_dot_cyan" />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="SECURE SLOT NOW"
-                                android:textColor="@color/electric_cyan"
-                                android:textSize="10sp"
-                                android:fontFamily="sans-serif-black"
-                                android:letterSpacing="0.1" />
-                        </LinearLayout>
+                            android:text="AMOUNT DUE"
+                            android:textColor="#9CA3AF"
+                            android:textSize="10sp"
+                            android:fontFamily="sans-serif-black"
+                            android:letterSpacing="0.1" />
+                        <TextView
+                            android:id="@+id/tvDepositAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="₱200.00"
+                            android:textColor="#16A34A"
+                            android:textSize="24sp"
+                            android:fontFamily="sans-serif-black"
+                            android:layout_marginTop="-2dp" />
                     </LinearLayout>
                 </LinearLayout>
 
+                <!-- Realistic Receipt Perforation -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="@drawable/bg_dashed_line"
+                    android:layerType="software" />
+
+                <!-- ── QR SECTION ── -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_glass_input_dark"
-                    android:padding="20dp"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:padding="24dp"
+                    android:gravity="center">
+
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="INITIAL DEPOSIT"
-                        android:textColor="@color/text_slate_400"
-                        android:textSize="10sp"
-                        android:fontFamily="sans-serif-black"
-                        android:letterSpacing="0.1"/>
-                    <TextView
-                        android:id="@+id/tvDepositAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="₱200.00"
-                        android:textColor="@color/electric_cyan"
-                        android:textSize="24sp"
+                        android:text="SCAN TO PAY"
+                        android:textColor="#9CA3AF"
+                        android:textSize="10sp"
                         android:fontFamily="sans-serif-black"
-                        android:shadowColor="@color/electric_cyan"
-                        android:shadowRadius="15"/>
-                </LinearLayout>
+                        android:letterSpacing="0.15"
+                        android:layout_marginBottom="16dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="*This deposit will be fully credited to your billing account."
-                    android:textColor="@color/text_slate_500"
-                    android:textSize="10sp"
-                    android:fontFamily="sans-serif-medium" />
+                    <!-- QR Box with Scanner Overlay -->
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        android:background="@drawable/bg_3d_card"
+                        android:elevation="4dp"
+                        android:outlineProvider="background">
+
+                        <LinearLayout
+                            android:layout_width="140dp"
+                            android:layout_height="140dp"
+                            android:background="@drawable/bg_qr_border"
+                            android:padding="8dp"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/ivQrCode"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitCenter"
+                                android:contentDescription="Payment QR Code" />
+                        </LinearLayout>
+
+                        <!-- Animated Scan Laser -->
+                        <View
+                            android:id="@+id/scanLine"
+                            android:layout_width="120dp"
+                            android:layout_height="3dp"
+                            android:layout_gravity="top|center_horizontal"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/bg_scan_laser" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Powered by InstaPay · Secure &amp; Encrypted"
+                        android:textColor="#9CA3AF"
+                        android:textSize="9sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginTop="16dp" />
+                </LinearLayout>
             </LinearLayout>
 
-            <!-- Grid Items (Partners) -->
-            <GridLayout
+            <!-- ═══════════════════ METHOD SELECTOR ═══════════════════ -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CHOOSE DEPOSIT METHOD"
+                android:textColor="#6B7280"
+                android:textSize="10sp"
+                android:fontFamily="sans-serif-black"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="4dp"/>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="2"
-                android:useDefaultMargins="true"
-                android:layout_marginTop="24dp">
+                android:orientation="horizontal"
+                android:layout_marginBottom="24dp">
 
-                <!-- G-Cash -->
+                <!-- GCash -->
                 <LinearLayout
                     android:id="@+id/methodGcash"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
+                    android:layout_weight="1"
+                    android:layout_height="64dp"
                     android:orientation="vertical"
                     android:gravity="center"
-                    android:background="@drawable/bg_glass_card_dark_realapp"
-                    android:padding="20dp"
-                    android:alpha="0.6"
+                    android:background="@drawable/bg_payment_method_default"
+                    android:layout_marginEnd="6dp"
                     android:clickable="true"
-                    android:focusable="true">
-                    
-                    <FrameLayout
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:background="@drawable/icon_blue_glass">
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@android:drawable/ic_menu_gallery"
-                            android:layout_gravity="center"
-                            app:tint="@color/text_white"/>
-                    </FrameLayout>
-                    
+                    android:focusable="true"
+                    android:elevation="2dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="G-Cash"
-                        android:textColor="@color/text_white"
-                        android:textSize="13sp"
-                        android:fontFamily="sans-serif-black"
-                        android:layout_marginTop="12dp"/>
+                        android:text="G"
+                        android:textColor="#005AFF"
+                        android:textSize="22sp"
+                        android:fontFamily="sans-serif-black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="GCash"
+                        android:textColor="#374151"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black" />
                 </LinearLayout>
 
                 <!-- Maya -->
                 <LinearLayout
                     android:id="@+id/methodMaya"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
+                    android:layout_weight="1"
+                    android:layout_height="64dp"
                     android:orientation="vertical"
                     android:gravity="center"
-                    android:background="@drawable/bg_glass_card_dark_realapp"
-                    android:padding="20dp"
-                    android:alpha="0.6"
+                    android:background="@drawable/bg_payment_method_default"
+                    android:layout_marginEnd="6dp"
                     android:clickable="true"
-                    android:focusable="true">
-                    
-                    <FrameLayout
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:background="@drawable/icon_green_glass">
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@android:drawable/ic_menu_compass"
-                            android:layout_gravity="center"
-                            app:tint="@color/text_white"/>
-                    </FrameLayout>
-                    
+                    android:focusable="true"
+                    android:elevation="2dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="M"
+                        android:textColor="#00C398"
+                        android:textSize="22sp"
+                        android:fontFamily="sans-serif-black" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Maya"
-                        android:textColor="@color/text_slate_300"
-                        android:textSize="13sp"
-                        android:fontFamily="sans-serif-black"
-                        android:layout_marginTop="12dp"/>
+                        android:textColor="#374151"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black" />
                 </LinearLayout>
-            </GridLayout>
+            </LinearLayout>
 
-            <!-- DYNAMIC PAYMENT DETAILS (LUMALABAS KAPAG CLICKED) -->
+            <!-- ═══════════════════ REVEALING INPUTS ═══════════════════ -->
             <LinearLayout
                 android:id="@+id/detailsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
                 android:orientation="vertical"
-                android:background="@drawable/bg_glass_card_flagship"
-                android:padding="20dp"
                 android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tvAccountLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="GCASH MERCHANT NO."
-                    android:textColor="@color/text_slate_500"
+                    android:text="MERCHANT NUMBER"
+                    android:textColor="#6B7280"
                     android:textSize="10sp"
                     android:fontFamily="sans-serif-black"
                     android:letterSpacing="0.1"
-                    android:layout_marginBottom="12dp"/>
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="4dp"/>
 
-                <FrameLayout
+                <EditText
+                    android:id="@+id/etAccountNumber"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/etAccountNumber"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="+63 917 123 4567"
-                        android:background="@drawable/bg_glass_input_dark"
-                        android:padding="16dp"
-                        android:textSize="18sp"
-                        android:fontFamily="monospace"
-                        android:textColor="@color/electric_cyan"
-                        android:enabled="false"/>
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@android:drawable/ic_menu_save" 
-                        app:tint="@color/electric_cyan"
-                        android:layout_gravity="center_vertical|end"
-                        android:layout_marginEnd="16dp"/>
-                </FrameLayout>
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_payment_ref_field"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="14dp"
+                    android:textSize="18sp"
+                    android:fontFamily="monospace"
+                    android:textColor="#111827"
+                    android:enabled="false"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="REFERENCE NUMBER"
-                    android:textColor="@color/text_slate_500"
+                    android:text="YOUR REFERENCE NUMBER"
+                    android:textColor="#6B7280"
                     android:textSize="10sp"
                     android:fontFamily="sans-serif-black"
                     android:letterSpacing="0.1"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="12dp"/>
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="4dp"/>
 
                 <EditText
                     android:id="@+id/etReferenceNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Paste GCash Ref No. here"
-                    android:background="@drawable/bg_glass_input_dark"
+                    android:background="@drawable/bg_payment_ref_field"
                     android:padding="16dp"
-                    android:textSize="14sp"
-                    android:textColor="@color/text_white"
-                    android:textColorHint="@color/text_slate_600"/>
+                    android:hint="Paste 13-digit Reference No."
+                    android:textColor="#111827"
+                    android:textColorHint="#9CA3AF"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif"
+                    android:inputType="number"
+                    android:maxLength="13"
+                    android:layout_marginBottom="8dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Please send the ₱200.00 deposit to the number above and paste the Ref. No. to authorize."
-                    android:textColor="@color/text_slate_400"
-                    android:textSize="11sp"
-                    android:fontFamily="sans-serif-medium"
-                    android:alpha="0.7"/>
+                    android:text="*This deposit will be fully credited and is required to secure your appointment slot."
+                    android:textColor="#9CA3AF"
+                    android:textSize="10sp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginBottom="24dp"/>
+
             </LinearLayout>
 
-            <!-- ACTION AREA (INSIDE SCROLL NOW TO PREVENT BLOCKING) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
                 android:orientation="vertical">
 
-                <RelativeLayout
+                <!-- ═══════════════════ SUBMIT CTA ═══════════════════ -->
+                <TextView
                     android:id="@+id/btnPayNow"
                     android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:background="@drawable/bg_button_ultra_3d"
-                    android:backgroundTint="@color/electric_cyan">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="CONFIRM PAYMENT"
-                        android:textColor="@color/deep_obsidian"
-                        android:textSize="14sp"
-                        android:fontFamily="sans-serif-black"
-                        android:letterSpacing="0.1" />
-                </RelativeLayout>
-
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_btn_pay_green"
+                    android:text="Choose Method to Confirm"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:paddingVertical="18dp"
+                    android:elevation="4dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:alpha="0.4" />
+                    
+                <!-- Secondary CTA -->
                 <TextView
                     android:id="@+id/btnLater"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="Cancel &amp; Go Back"
-                    android:textColor="#FF4D4D"
+                    android:textColor="#EF4444"
                     android:textSize="12sp"
-                    android:fontFamily="sans-serif-black"
-                    android:alpha="0.6" />
+                    android:fontFamily="sans-serif-bold"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:padding="8dp"
+                    android:alpha="0.8" />
             </LinearLayout>
 
         </LinearLayout>

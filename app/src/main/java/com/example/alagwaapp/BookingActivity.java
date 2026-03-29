@@ -35,6 +35,7 @@ public class BookingActivity extends AppCompatActivity {
     private String selectedDate = "";
     private String selectedService = "Normal Delivery";
     private String selectedTimeSlot = "";
+    private int rescheduleBookingId = -1; // -1 means new booking
     
     private View btnSelectDate;
     private View[] serviceViews;
@@ -91,17 +92,55 @@ public class BookingActivity extends AppCompatActivity {
             }
         }
 
-        selectService(0);
-        selectTimeSlot(2); 
+        // ══════════════════════════════════════════
+        //  EXTRACT INTENT EXTRAS (Express Booking)
+        // ══════════════════════════════════════════
+        String intentDate = getIntent().getStringExtra("selected_date");
+        String intentTime = getIntent().getStringExtra("selected_time");
         
-        Calendar c = Calendar.getInstance();
-        if (c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-            c.add(Calendar.DAY_OF_MONTH, 1);
+        rescheduleBookingId = getIntent().getIntExtra("reschedule_booking_id", -1);
+        if (rescheduleBookingId != -1) {
+            TextView tvTitle = findViewById(R.id.tvBookingTitle);
+            TextView tvSubtitle = findViewById(R.id.tvBookingSubtitle);
+            TextView tvBtn = findViewById(R.id.tvFinalizeBtn);
+            if (tvTitle != null) tvTitle.setText("RESCHEDULE APPOINTMENT");
+            if (tvSubtitle != null) tvSubtitle.setText("Select a new date and time for your visit");
+            if (tvBtn != null) tvBtn.setText("REQUEST RESCHEDULE");
         }
-        selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(c.getTime());
-        tvDate.setText(new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(c.getTime()));
+
+        if (intentDate != null && !intentDate.isEmpty()) {
+            selectedDate = intentDate;
+            try {
+                SimpleDateFormat inFmt = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                SimpleDateFormat outFmt = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+                tvDate.setText(outFmt.format(inFmt.parse(intentDate)));
+            } catch (Exception e) {
+                tvDate.setText(intentDate);
+            }
+        } else {
+            Calendar c = Calendar.getInstance();
+            if (c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                c.add(Calendar.DAY_OF_MONTH, 1);
+            }
+            selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(c.getTime());
+            tvDate.setText(new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).format(c.getTime()));
+        }
+
+        if (intentTime != null && !intentTime.isEmpty()) {
+            selectedTimeSlot = intentTime;
+            // Immediate pre-selection for snappier UI
+            for (int i = 0; i < timeSlots.length; i++) {
+                if (timeSlots[i].equalsIgnoreCase(intentTime)) {
+                    selectTimeSlot(i);
+                    break;
+                }
+            }
+        } else {
+            selectTimeSlot(2); // Default to 11AM if no intent
+        }
 
         fetchAvailableSlots(selectedDate);
+        fetchPatientProfile();
 
         findViewById(R.id.btnFinalize).setOnClickListener(v -> {
             if (selectedTimeSlot == null || selectedTimeSlot.isEmpty()) {
@@ -111,6 +150,40 @@ public class BookingActivity extends AppCompatActivity {
             v.setAlpha(0.7f);
             new Handler().postDelayed(() -> v.setAlpha(1.0f), 200);
             submitAppointment();
+        });
+    }
+
+    private void fetchPatientProfile() {
+        String email = prefs.getString("email", "");
+        String username = prefs.getString("username", "");
+        
+        apiService.getPatientsRaw("list", "true", email, username).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String raw = response.body().string();
+                        com.google.gson.JsonObject json = new com.google.gson.Gson().fromJson(raw, com.google.gson.JsonObject.class);
+                        if (json.has("success") && json.get("success").getAsBoolean()) {
+                            com.google.gson.JsonArray data = json.getAsJsonArray("data");
+                            if (data.size() > 0) {
+                                com.google.gson.JsonObject p = data.get(0).getAsJsonObject();
+                                String ph = p.has("philhealth_number") ? p.get("philhealth_number").getAsString() : "";
+                                if (ph != null && !ph.isEmpty() && !ph.equals("N/A")) {
+                                    etPhilhealth.setText(ph);
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // Silently fail, manual input still possible
+            }
         });
     }
 
@@ -151,7 +224,12 @@ public class BookingActivity extends AppCompatActivity {
             }
         }
 
-        apiService.getAvailableSlots("available_slots", "true", date).enqueue(new Callback<ResponseBody>() {
+        String email = prefs.getString("email", "");
+        String username = prefs.getString("username", "");
+        String role = prefs.getString("role", "patient");
+        int tenantId = prefs.getInt("tenant_id", 1);
+        
+        apiService.getAvailableSlots("available_slots", "true", email, username, role, tenantId, date).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
@@ -194,6 +272,11 @@ public class BookingActivity extends AppCompatActivity {
                 view.setEnabled(true);
                 view.setAlpha(1.0f);
                 if (tvSub != null) tvSub.setText(reason.toUpperCase());
+                
+                // If this slot matches the "Express" intent time, select it automatically
+                if (selectedTimeSlot != null && !selectedTimeSlot.isEmpty() && selectedTimeSlot.equalsIgnoreCase(timeSlots[i])) {
+                    selectTimeSlot(i);
+                }
             } else {
                 view.setEnabled(false);
                 view.setAlpha(0.4f);
@@ -202,7 +285,7 @@ public class BookingActivity extends AppCompatActivity {
                     tvSub.setTextColor(0xFFFF4D4D); // Red for booked/passed
                 }
                 // Deselect if it was selected but now unavailable
-                if (selectedTimeSlot.equals(timeSlots[i])) {
+                if (selectedTimeSlot != null && selectedTimeSlot.equals(timeSlots[i])) {
                     selectedTimeSlot = "";
                     view.setBackgroundResource(R.drawable.bg_3d_real_glass);
                 }
@@ -321,7 +404,43 @@ public class BookingActivity extends AppCompatActivity {
         }
 
         final String finalFormattedTime = formattedTime;
-        apiService.createAppointment("create", "true", patientId, selectedDate, finalFormattedTime, selectedService, notes, phNumber)
+        String email = prefs.getString("email", "");
+        String username = prefs.getString("username", "");
+
+        if (rescheduleBookingId != -1) {
+            // RESCHEDULE MODE
+            apiService.rescheduleBooking("reschedule", "true", email, username, rescheduleBookingId, selectedDate, finalFormattedTime)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (btnFinalize != null) {
+                            btnFinalize.setEnabled(true);
+                            btnFinalize.setAlpha(1.0f);
+                        }
+                        try {
+                            String raw = response.body() != null ? response.body().string() : "{}";
+                            org.json.JSONObject obj = new org.json.JSONObject(raw);
+                            if (obj.optBoolean("success")) {
+                                Toast.makeText(BookingActivity.this, "Reschedule request sent! Waiting for approval.", Toast.LENGTH_LONG).show();
+                                finish();
+                            } else {
+                                Toast.makeText(BookingActivity.this, obj.optString("message", "Error rescheduling"), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (Exception e) { e.printStackTrace(); }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        if (btnFinalize != null) {
+                            btnFinalize.setEnabled(true);
+                            btnFinalize.setAlpha(1.0f);
+                        }
+                        Toast.makeText(BookingActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        } else {
+            // NEW BOOKING MODE
+            apiService.createAppointment("create", "true", email, username, patientId, selectedDate, finalFormattedTime, selectedService, notes, phNumber)
             .enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -366,15 +485,43 @@ public class BookingActivity extends AppCompatActivity {
                         int paymentId = obj.optInt("payment_id", 0);
                         int bookingId = obj.optInt("booking_id", 0);
 
-                        Intent intent = new Intent(BookingActivity.this, PaymentCheckoutActivity.class);
-                        intent.putExtra("service_name", selectedService != null ? selectedService : "General Check-up");
-                        intent.putExtra("amount", "₱300.00");
-                        intent.putExtra("payment_id", paymentId);
-                        intent.putExtra("booking_id", bookingId);
-                        intent.putExtra("booking_date", selectedDate);
-                        intent.putExtra("booking_time", finalFormattedTime);
-                        startActivity(intent);
-                        finish();
+                        // SHOW CUSTOM PENDING DIALOG
+                        View dialogView = getLayoutInflater().inflate(R.layout.dialog_booking_pending, null);
+                        android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(BookingActivity.this)
+                            .setView(dialogView)
+                            .setCancelable(false)
+                            .create();
+                        
+                        // Ensure the dialog window itself is transparent to show the glass card correctly
+                        if (dialog.getWindow() != null) {
+                            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        }
+
+                        ((TextView) dialogView.findViewById(R.id.tvDialogMessage)).setText(
+                            "Your request has been received! \n\nTo secure your " + selectedService + " for " + selectedDate + ", a downpayment is required.");
+
+                        dialogView.findViewById(R.id.btnDialogPay).setOnClickListener(vPay -> {
+                            dialog.dismiss();
+                            Intent nIntent = new Intent(BookingActivity.this, PaymentCheckoutActivity.class);
+                            nIntent.putExtra("service_name", selectedService);
+                            nIntent.putExtra("amount", "₱300.00");
+                            nIntent.putExtra("payment_id", paymentId);
+                            nIntent.putExtra("booking_id", bookingId);
+                            nIntent.putExtra("booking_date", selectedDate);
+                            nIntent.putExtra("booking_time", finalFormattedTime);
+                            startActivity(nIntent);
+                            finish();
+                        });
+
+                        dialogView.findViewById(R.id.btnDialogLater).setOnClickListener(vLater -> {
+                            dialog.dismiss();
+                            Intent nIntent = new Intent(BookingActivity.this, AppointmentsActivity.class);
+                            nIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(nIntent);
+                            finish();
+                        });
+
+                        dialog.show();
 
                     } catch (Exception e) {
                         android.util.Log.e("BOOKING_DEBUG", "Parse error: " + e.getMessage() + " | Raw: " + rawBody);
@@ -397,6 +544,7 @@ public class BookingActivity extends AppCompatActivity {
                     Toast.makeText(BookingActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
+        }
     }
 }
 

@@ -54,13 +54,15 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvStatValue2;   // Upcoming appointments
     private TextView tvStatValue3;   // Pending bills
     private TextView tvStatValue4;   // Total records
+    private TextView tvStatValuePending; // Pending Approval
+    private TextView tvStatValueTotal; // Total Appointments
 
     // ─── PREGNANCY TRACKER (WAVE - OPTION 2) ─────
     private MaternityWaveView maternityWaveView;
     private TextView tvOrbitValue, tvOrbitSubValue, tvDetailDueDate, tvDetailWeeks;
     private View viewTimelineProgress;
     private View statusPulseLive;
-    private TextView tvQueueNumber, tvEstimatedWait;
+    private TextView tvQueueNumber, tvEstimatedWait, tvNavWalletBalance;
 
     // All dashboard clean-up.
 
@@ -109,6 +111,14 @@ public class MainActivity extends AppCompatActivity {
         fetchDashboardSummary();   // hits API → fills stat cards + name
         fetchUpcomingAppointments(); // hits API → fills appointment preview
         setupHeroAnimations();     // moving smoke effect
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh dashboard data when returning to the activity
+        fetchDashboardSummary();
+        fetchUpcomingAppointments();
     }
 
     private void setupHeroAnimations() {
@@ -169,6 +179,8 @@ public class MainActivity extends AppCompatActivity {
         tvStatValue2      = findViewById(R.id.tvStatValue2);
         tvStatValue3      = findViewById(R.id.tvStatValue3);
         tvStatValue4      = findViewById(R.id.tvStatValue4);
+        tvStatValuePending = findViewById(R.id.tvStatValuePending);
+        tvStatValueTotal  = findViewById(R.id.tvStatValueTotal);
 
         // Queue Status (Inside Drawer Header)
         if (navigationView != null && navigationView.getHeaderCount() > 0) {
@@ -176,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
             statusPulseLive = header.findViewById(R.id.statusPulseLive);
             tvQueueNumber   = header.findViewById(R.id.tvQueueNumber);
             tvEstimatedWait = header.findViewById(R.id.tvEstimatedWait);
+            tvNavWalletBalance = header.findViewById(R.id.tvNavWalletBalance);
             setupLivePulse();
         }
 
@@ -257,6 +270,8 @@ public class MainActivity extends AppCompatActivity {
         View card2 = findViewById(R.id.statCardUpcoming);
         View card3 = findViewById(R.id.statCardBilling);
         View card4 = findViewById(R.id.statCardRecords);
+        View card5 = findViewById(R.id.statCardPending);
+        View card6 = findViewById(R.id.statCardTotal);
 
         if (card1 != null) card1.setOnClickListener(v -> {
             startActivity(new Intent(this, AppointmentsActivity.class)
@@ -275,6 +290,16 @@ public class MainActivity extends AppCompatActivity {
         });
         if (card4 != null) card4.setOnClickListener(v -> {
             startActivity(new Intent(this, RecordsActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            overridePendingTransition(0, 0);
+        });
+        if (card5 != null) card5.setOnClickListener(v -> {
+            startActivity(new Intent(this, AppointmentsActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            overridePendingTransition(0, 0);
+        });
+        if (card6 != null) card6.setOnClickListener(v -> {
+            startActivity(new Intent(this, AppointmentsActivity.class)
                     .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
             overridePendingTransition(0, 0);
         });
@@ -311,6 +336,11 @@ public class MainActivity extends AppCompatActivity {
                 ci.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(ci);
                 overridePendingTransition(0, 0);
+            } else if (id == R.id.nav_wallet) {
+                Intent bi = new Intent(this, BillingActivity.class);
+                bi.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(bi);
+                overridePendingTransition(0, 0);
             } else if (id == R.id.nav_logout) {
                 handleLogout();
             }
@@ -341,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
     //  API: CLINIC BRANDING
     // ─────────────────────────────────────────────
     private void fetchClinicBranding() {
-        apiService.getClinicInfo("get_clinic_info", prefs.getInt("tenantId", 1), "true")
+        apiService.getClinicInfo("get_clinic_info", prefs.getInt("tenant_id", 1), "true")
                 .enqueue(new Callback<ClinicResponse>() {
                     @Override
                     public void onResponse(Call<ClinicResponse> call, Response<ClinicResponse> response) {
@@ -364,13 +394,16 @@ public class MainActivity extends AppCompatActivity {
     //  API: DASHBOARD SUMMARY (name, stats, pregnancy)
     // ─────────────────────────────────────────────
     private void fetchDashboardSummary() {
+        int tenantId = prefs.getInt("tenant_id", 1);
+        String role = prefs.getString("role", "patient");
         String email = prefs.getString("email", "");
+        String username = prefs.getString("username", "");
         if (email.isEmpty()) {
             loadFallbackStats();
             return;
         }
 
-        apiService.getSummary("stats", "true", email)
+        apiService.getSummary("stats", "true", email, username, role, tenantId)
                 .enqueue(new Callback<SummaryResponse>() {
                     @Override
                     public void onResponse(Call<SummaryResponse> call, Response<SummaryResponse> response) {
@@ -400,6 +433,13 @@ public class MainActivity extends AppCompatActivity {
                         if (tvStatValue2 != null) tvStatValue2.setText(fmt(data.upcoming_appointments));
                         if (tvStatValue3 != null) tvStatValue3.setText(fmt(data.getPendingBills()));
                         if (tvStatValue4 != null) tvStatValue4.setText(fmt(data.records_count));
+                        if (tvStatValuePending != null) tvStatValuePending.setText(fmt(data.pending_count));
+                        if (tvStatValueTotal != null) tvStatValueTotal.setText(fmt(data.total_appointments));
+                        
+                        // ── Wallet Balance ──────────────────
+                        if (tvNavWalletBalance != null) {
+                            tvNavWalletBalance.setText(formatPeso(data.wallet_balance));
+                        }
 
                         // ── Pregnancy Tracker (ORBIT) ─────────
                         SummaryResponse.PregnancyStats ps = data.pregnancy_stats;
@@ -444,6 +484,8 @@ public class MainActivity extends AppCompatActivity {
         if (tvStatValue2 != null) tvStatValue2.setText("0");
         if (tvStatValue3 != null) tvStatValue3.setText("0");
         if (tvStatValue4 != null) tvStatValue4.setText("0");
+        if (tvStatValuePending != null) tvStatValuePending.setText("0");
+        if (tvStatValueTotal != null) tvStatValueTotal.setText("0");
         String cached = prefs.getString("fullname", "");
         if (tvWelcomeName != null && !cached.isEmpty()) tvWelcomeName.setText(cached.toLowerCase());
     }
@@ -452,7 +494,12 @@ public class MainActivity extends AppCompatActivity {
     //  API: UPCOMING APPOINTMENTS PREVIEW
     // ─────────────────────────────────────────────
     private void fetchUpcomingAppointments() {
-        apiService.getBookingsRaw("list", "true").enqueue(new Callback<okhttp3.ResponseBody>() {
+        String email = prefs.getString("email", "");
+        String username = prefs.getString("username", "");
+        int tenantId = prefs.getInt("tenant_id", 1);
+        String role = prefs.getString("role", "patient");
+
+        apiService.getBookingsRaw("list", "true", email, username, role, tenantId).enqueue(new Callback<okhttp3.ResponseBody>() {
             @Override
             public void onResponse(Call<okhttp3.ResponseBody> call,
                                    Response<okhttp3.ResponseBody> response) {
@@ -462,12 +509,33 @@ public class MainActivity extends AppCompatActivity {
                         return;
                     }
                     String raw = response.body().string();
-                    if (!raw.trim().startsWith("[")) { clearApptPreview(); return; }
+                    
+                    // Robust JSON start detection (strips any PHP warnings)
+                    int objStart = raw.indexOf('{');
+                    int arrStart = raw.indexOf('[');
+                    if (objStart < 0 && arrStart < 0) { clearApptPreview(); return; }
+                    
+                    if (arrStart >= 0 && (objStart < 0 || arrStart < objStart)) {
+                        raw = raw.substring(arrStart);
+                    } else {
+                        raw = raw.substring(objStart);
+                    }
 
-                    AppointmentResponse.Appointment[] arr =
-                            new com.google.gson.Gson().fromJson(raw, AppointmentResponse.Appointment[].class);
+                    AppointmentResponse.Appointment[] arr = null;
 
-                    if (arr == null || arr.length == 0) { clearApptPreview(); return; }
+                    if (raw.startsWith("[")) {
+                        arr = new com.google.gson.Gson().fromJson(raw, AppointmentResponse.Appointment[].class);
+                    } else {
+                        AppointmentResponse wrapped = new com.google.gson.Gson().fromJson(raw, AppointmentResponse.class);
+                        if (wrapped != null && wrapped.success && wrapped.data != null) {
+                            arr = wrapped.data.toArray(new AppointmentResponse.Appointment[0]);
+                        }
+                    }
+
+                    if (arr == null || arr.length == 0) {
+                        clearApptPreview();
+                        return;
+                    }
 
                     bindApptPreviewCard(1, arr.length > 0 ? arr[0] : null);
                     bindApptPreviewCard(2, arr.length > 1 ? arr[1] : null);
@@ -509,10 +577,26 @@ public class MainActivity extends AppCompatActivity {
             if (tvTitle  != null) tvTitle.setText(appt.serviceType  != null ? appt.serviceType  : "Appointment");
             if (tvTime   != null) tvTime.setText((appt.time != null ? appt.time : "–") + " · Dr. Cruz");
             if (tvStatus != null) {
-                String status = appt.status != null ? appt.status : "Pending";
-                tvStatus.setText(status);
-                tvStatus.setTextColor("Confirmed".equalsIgnoreCase(status)
-                        ? Color.parseColor("#34D399") : Color.parseColor("#FB923C"));
+                String statusToDisplay = appt.status != null ? appt.status : "Pending";
+                String colorStr = "#FB923C"; // Default Orange (Pending)
+
+                if ("Confirmed".equalsIgnoreCase(statusToDisplay)) {
+                    colorStr = "#34D399"; // Green
+                } else if ("pending".equalsIgnoreCase(statusToDisplay)) {
+                    // Refined logic for Pending status: check if proof submitted
+                    if (appt.downpaymentStatus != null && !"unpaid".equalsIgnoreCase(appt.downpaymentStatus)) {
+                        statusToDisplay = "UNDER REVIEW";
+                        colorStr = "#FB923C"; // Orange
+                    } else {
+                        statusToDisplay = "AWAITING DEPOSIT";
+                        colorStr = "#EF4444"; // Red
+                    }
+                } else if ("completed".equalsIgnoreCase(statusToDisplay)) {
+                    colorStr = "#A855F7"; // Purple (Completed)
+                }
+
+                tvStatus.setText(statusToDisplay.toUpperCase());
+                tvStatus.setTextColor(Color.parseColor(colorStr));
             }
         } catch (Exception e) {
             Log.w(TAG, "appt bind error: " + e.getMessage());
@@ -562,6 +646,10 @@ public class MainActivity extends AppCompatActivity {
     // ─────────────────────────────────────────────
     private String fmt(int value) {
         return String.valueOf(value);
+    }
+
+    private String formatPeso(double amount) {
+        return "₱" + String.format(Locale.getDefault(), "%,.2f", amount);
     }
 
     private TextView getTextById(String name) {

@@ -34,6 +34,7 @@ import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.ResponseBody;
 import okio.BufferedSource;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,11 +60,18 @@ public class AppointmentsActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     private List<AppointmentResponse.Appointment> fullList = new ArrayList<>();
     private TextView tvReminderDate, tvReminderAdvice;
+    
+    // NEW: Premium Filters
+    private TextView filterAll, filterPending, filterConfirmed, filterRejected, filterCompleted;
+    private String currentFilter = "ALL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointments);
+
+        prefs = getSharedPreferences("AlagwaPrefs", MODE_PRIVATE);
+        initNetworking();
 
         recyclerView = findViewById(R.id.recyclerViewAppointments);
         calendarRecyclerView = findViewById(R.id.calendarRecyclerView);
@@ -76,8 +84,17 @@ public class AppointmentsActivity extends AppCompatActivity {
         layoutLoading = findViewById(R.id.layoutLoading);
         btnBookFloating = findViewById(R.id.btnBookFloating);
         
-        tvReminderDate = findViewById(R.id.tvReminderDate);
         tvReminderAdvice = findViewById(R.id.tvReminderAdvice);
+        
+        // NEW: Premium Filters
+        filterAll = findViewById(R.id.filterAll);
+        filterPending = findViewById(R.id.filterPending);
+        filterConfirmed = findViewById(R.id.filterConfirmed);
+        filterRejected = findViewById(R.id.filterRejected);
+        filterCompleted = findViewById(R.id.filterCompleted);
+        filterAll.setSelected(true); // Default
+        
+        setupFilterListeners();
         
         // Queue Status has been moved to Dashboard
 
@@ -107,26 +124,25 @@ public class AppointmentsActivity extends AppCompatActivity {
             startActivity(intent);
         });
         
-        // Express Booking Cards setup
-        View cardExpress1 = findViewById(R.id.cardExpress1);
-        View cardExpress2 = findViewById(R.id.cardExpress2);
-        View cardExpress3 = findViewById(R.id.cardExpress3);
-        View cardExpress4 = findViewById(R.id.cardExpress4);
-        
-        if (cardExpress1 != null) cardExpress1.setOnClickListener(v -> showPremiumTimeslotSheet("MAR 27", "Tomorrow", new String[]{"09:00 AM", "09:30 AM", "11:00 AM", "01:30 PM", "03:00 PM"}));
-        if (cardExpress2 != null) cardExpress2.setOnClickListener(v -> showPremiumTimeslotSheet("MAR 28", "Wednesday", new String[]{"10:30 AM", "11:00 AM", "02:00 PM"}));
-        if (cardExpress3 != null) cardExpress3.setOnClickListener(v -> showPremiumTimeslotSheet("MAR 29", "Thursday", new String[]{"02:00 PM", "03:30 PM", "04:00 PM"}));
-        if (cardExpress4 != null) cardExpress4.setOnClickListener(v -> showPremiumTimeslotSheet("MAR 30", "Friday", new String[]{"08:30 AM", "04:15 PM"}));
+        setupExpressBookingCards();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new AppointmentAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
-        prefs = getSharedPreferences("AlagwaPrefs", MODE_PRIVATE);
-        
-        initNetworking();
         fetchAppointments();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh data when returning to this screen so status updates (e.g. confirmed) show instantly
+        if (apiService != null) {
+            fetchAppointments();
+            setupExpressBookingCards();
+        }
+    }
+
 
     private void setupCalendar() {
         if (calendarRecyclerView != null) {
@@ -165,11 +181,18 @@ public class AppointmentsActivity extends AppCompatActivity {
         // Update dots based on fullList
         for (CalendarDate d : days) {
             d.hasDots = false;
+            d.hasConfirmed = false;
+            d.hasPending = false;
             String dStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(d.date.getTime());
             for (AppointmentResponse.Appointment a : fullList) {
                 if (dStr.equals(a.date)) {
                     d.hasDots = true;
-                    break;
+                    String status = (a.status != null) ? a.status.toLowerCase().trim() : "";
+                    if (status.equals("confirmed")) {
+                        d.hasConfirmed = true;
+                    } else if (status.equals("pending") || status.isEmpty()) {
+                        d.hasPending = true;
+                    }
                 }
             }
         }
@@ -181,24 +204,106 @@ public class AppointmentsActivity extends AppCompatActivity {
         selectedDate = (Calendar) date.clone();
         updateCalendarView(); // To refresh selected state
         
-        String formattedDate = new SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(selectedDate.getTime());
-        if (tvSelectedDateAppointments != null) tvSelectedDateAppointments.setText("APPOINTMENTS FOR " + formattedDate.toUpperCase());
-        
+        updateFilterHeaderText();
         filterAppointmentsBySelectedDate();
+    }
+
+    private void updateFilterHeaderText() {
+        if (tvSelectedDateAppointments == null) return;
+        
+        if (currentFilter.equals("ALL")) {
+            tvSelectedDateAppointments.setText("ALL APPOINTMENTS");
+        } else if (currentFilter.equals("PENDING")) {
+            tvSelectedDateAppointments.setText("ALL PENDING REQUESTS");
+        } else if (currentFilter.equals("CONFIRMED")) {
+            tvSelectedDateAppointments.setText("ALL CONFIRMED SCHEDULES");
+        } else if (currentFilter.equals("REJECTED")) {
+            tvSelectedDateAppointments.setText("ALL REJECTED / ACTION REQUIRED");
+        } else if (currentFilter.equals("COMPLETED")) {
+            tvSelectedDateAppointments.setText("ALL COMPLETED VISITS");
+        }
+    }
+
+    private void setupFilterListeners() {
+        View.OnClickListener listener = v -> {
+            // Reset all
+            filterAll.setSelected(false);
+            filterPending.setSelected(false);
+            filterConfirmed.setSelected(false);
+            filterRejected.setSelected(false);
+            filterCompleted.setSelected(false);
+            
+            // Set selected
+            v.setSelected(true);
+            
+            if (v.getId() == R.id.filterAll) currentFilter = "ALL";
+            else if (v.getId() == R.id.filterPending) currentFilter = "PENDING";
+            else if (v.getId() == R.id.filterConfirmed) currentFilter = "CONFIRMED";
+            else if (v.getId() == R.id.filterRejected) currentFilter = "REJECTED";
+            else if (v.getId() == R.id.filterCompleted) currentFilter = "COMPLETED";
+            
+            updateFilterHeaderText();
+            filterAppointmentsBySelectedDate();
+        };
+        
+        filterAll.setOnClickListener(listener);
+        filterPending.setOnClickListener(listener);
+        filterConfirmed.setOnClickListener(listener);
+        filterRejected.setOnClickListener(listener);
+        filterCompleted.setOnClickListener(listener);
     }
 
     private void filterAppointmentsBySelectedDate() {
         String targetDateStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedDate.getTime());
-        String currentUser = prefs.getString("fullname", "").trim();
         List<AppointmentResponse.Appointment> filtered = new ArrayList<>();
         
         for (AppointmentResponse.Appointment a : fullList) {
-            if (targetDateStr.equals(a.date)) {
-                // Filter specifically for the logged-in user if patientName is provided
-                if (currentUser.isEmpty() || currentUser.equalsIgnoreCase(a.patientName)) {
-                    filtered.add(a);
-                }
+            String status = (a.status != null) ? a.status.toLowerCase().trim() : "";
+            String dpStatus = (a.downpaymentStatus != null) ? a.downpaymentStatus.toLowerCase().trim() : "";
+
+            // 1. PIXEL-PERFECT REJECTION CHECK (Sync with Adapter)
+            boolean isApptRejected = status.equals("declined") || status.equals("rejected") || status.equals("cancelled");
+            boolean isPaymentRejected = dpStatus.equals("declined") || dpStatus.equals("rejected") || dpStatus.equals("cancelled");
+            
+            boolean isRejected = isApptRejected || isPaymentRejected;
+            
+            // SPECIAL: Filter out pure system-auto-cancelled duplicates
+            if (status.equals("cancelled")) {
+                boolean hadSubmittedPayment = dpStatus.equals("for_verification")
+                        || dpStatus.equals("paid")
+                        || dpStatus.equals("applied")
+                        || dpStatus.equals("pending");
+                if (!hadSubmittedPayment) continue;
             }
+            
+            // Handle blank status as "pending"
+            boolean isPending = (status.equals("pending") || status.isEmpty()) && !isRejected;
+
+            // 2. ULTRA SMART FILTERING (Global Search)
+            if (currentFilter.equals("ALL")) {
+                // Global list for the selected day
+                if (!a.date.equals(targetDateStr)) continue;
+                if (isRejected) a.status = "declined"; 
+            } else if (currentFilter.equals("PENDING")) {
+                // Pending for the selected day
+                if (!isPending) continue;
+                if (!a.date.equals(targetDateStr)) continue;
+            } else if (currentFilter.equals("CONFIRMED")) {
+                // Confirmed for the selected day
+                if (!status.equals("confirmed")) continue;
+                if (!a.date.equals(targetDateStr)) continue;
+            } else if (currentFilter.equals("REJECTED")) {
+                // Rejected/Cancelled for the selected day
+                if (!isRejected) continue;
+                if (!a.date.equals(targetDateStr)) continue;
+                a.status = "declined"; 
+            } else if (currentFilter.equals("COMPLETED")) {
+                // Completed for the selected day
+                if (!status.equals("completed")) continue;
+                if (!a.date.equals(targetDateStr)) continue;
+            }
+
+            filtered.add(a);
         }
         adapter.updateList(filtered);
         
@@ -218,50 +323,84 @@ public class AppointmentsActivity extends AppCompatActivity {
 
     private void fetchAppointments() {
         layoutLoading.setVisibility(View.VISIBLE);
-        
-        apiService.getBookingsRaw("list", "true").enqueue(new Callback<okhttp3.ResponseBody>() {
+        String email = prefs.getString("email", "");
+        String username = prefs.getString("username", "");
+        int tenantId = prefs.getInt("tenant_id", 1);
+        String role = prefs.getString("role", "patient"); // Default to patient for mobile
+
+        apiService.getBookingsRaw("list", "true", email, username, role, tenantId).enqueue(new Callback<okhttp3.ResponseBody>() {
             @Override
             public void onResponse(Call<okhttp3.ResponseBody> call, Response<okhttp3.ResponseBody> response) {
                 layoutLoading.setVisibility(View.GONE);
                 try {
                     if (response.isSuccessful() && response.body() != null) {
                         String raw = response.body().string();
-                        if (raw.trim().startsWith("[")) {
-                            AppointmentResponse.Appointment[] arr = new com.google.gson.Gson().fromJson(raw, AppointmentResponse.Appointment[].class);
-                            fullList.clear();
-                            for (AppointmentResponse.Appointment a : arr) fullList.add(a);
-                            
-                            // UPDATE REMINDER LOGIC (Match Maternity Old Flow)
-                            updateRemindersFromHistory();
 
-                            if (fullList.isEmpty()) {
-                                layoutEmpty.setVisibility(View.VISIBLE);
-                                recyclerView.setVisibility(View.GONE);
-                            }
-                            updateCalendarView();
-                            filterAppointmentsBySelectedDate();
-                        } else {
-                            updateCalendarView();
-                            filterAppointmentsBySelectedDate();
+                        // Strip any PHP warnings/notices before the JSON
+                        int objStart = raw.indexOf('{');
+                        int arrStart = raw.indexOf('[');
+                        if (objStart < 0 && arrStart < 0) {
+                            Log.e("AlagwaBookings", "No JSON in bookings response");
+                            updateCalendarView(); filterAppointmentsBySelectedDate(); return;
                         }
-                    } else {
+                        // Pick whichever comes first
+                        if (arrStart >= 0 && (objStart < 0 || arrStart < objStart)) {
+                            raw = raw.substring(arrStart);
+                        } else {
+                            raw = raw.substring(objStart);
+                        }
+
+                        Log.d("AlagwaBookings", "Response (first 300): " + raw.substring(0, Math.min(300, raw.length())));
+
+                        AppointmentResponse.Appointment[] arr = null;
+                        if (raw.startsWith("[")) {
+                            // Legacy bare-array format
+                            arr = new com.google.gson.Gson().fromJson(raw, AppointmentResponse.Appointment[].class);
+                        } else {
+                            // Standard wrapped format: {"success":true,"data":[...]}
+                            AppointmentResponse wrapped = new com.google.gson.Gson().fromJson(raw, AppointmentResponse.class);
+                            if (wrapped != null && wrapped.success && wrapped.data != null) {
+                                arr = wrapped.data.toArray(new AppointmentResponse.Appointment[0]);
+                            } else {
+                                Log.w("AlagwaBookings", "success=false or empty data");
+                            }
+                        }
+
+                        fullList.clear();
+                        if (arr != null) {
+                            for (AppointmentResponse.Appointment a : arr) fullList.add(a);
+                        }
+                        Log.d("AlagwaBookings", "Total appointments loaded: " + fullList.size());
+
+                        updateRemindersFromHistory();
+
+                        if (fullList.isEmpty()) {
+                            layoutEmpty.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                        } else {
+                            layoutEmpty.setVisibility(View.GONE);
+                        }
                         updateCalendarView();
                         filterAppointmentsBySelectedDate();
+                    } else {
+                        Log.w("AlagwaBookings", "HTTP error: " + response.code());
+                        updateCalendarView(); filterAppointmentsBySelectedDate();
                     }
                 } catch (Exception e) {
-                    updateCalendarView();
-                    filterAppointmentsBySelectedDate();
+                    Log.e("AlagwaBookings", "fetchAppointments error: " + e.getMessage());
+                    updateCalendarView(); filterAppointmentsBySelectedDate();
                 }
             }
 
             @Override
             public void onFailure(Call<okhttp3.ResponseBody> call, Throwable t) {
+                Log.e("AlagwaBookings", "Network failure: " + t.getMessage());
                 layoutLoading.setVisibility(View.GONE);
-                updateCalendarView();
-                filterAppointmentsBySelectedDate();
+                updateCalendarView(); filterAppointmentsBySelectedDate();
             }
         });
     }
+
 
     private void updateRemindersFromHistory() {
         // Find most recent appointment with a next visit date
@@ -302,7 +441,67 @@ public class AppointmentsActivity extends AppCompatActivity {
 
     private View selectedTimeSlotView = null; // Track selected slot
 
-    private void showPremiumTimeslotSheet(String title, String subtitle, String[] slots) {
+    private void setupExpressBookingCards() {
+        String email = getSharedPreferences("AlagwaPrefs", MODE_PRIVATE).getString("email", "");
+        String username = getSharedPreferences("AlagwaPrefs", MODE_PRIVATE).getString("username", "");
+        int tenantId = getSharedPreferences("AlagwaPrefs", MODE_PRIVATE).getInt("tenant_id", 1);
+        
+        // Fetch the first available slot for the next 4 non-Sunday days
+        apiService.getExpressSlots("express_slots", "true", email, username, tenantId).enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                try {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String raw = response.body().string();
+                        org.json.JSONObject json = new org.json.JSONObject(raw);
+                        if (json.getBoolean("success")) {
+                            org.json.JSONArray data = json.getJSONArray("data");
+                            for (int i = 0; i < data.length() && i < 4; i++) {
+                                org.json.JSONObject slot = data.getJSONObject(i);
+                                updateExpressCardUI(i + 1, slot);
+                            }
+                        }
+                    }
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+            @Override
+            public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {}
+        });
+    }
+
+    private void updateExpressCardUI(int index, org.json.JSONObject slotData) {
+        try {
+            String dateIdStr = "tvExpressDate" + index;
+            String dayIdStr = "tvExpressDay" + index;
+            String timeIdStr = "tvExpressTime" + index;
+            String cardIdStr = "cardExpress" + index;
+
+            int dateId = getResources().getIdentifier(dateIdStr, "id", getPackageName());
+            int dayId = getResources().getIdentifier(dayIdStr, "id", getPackageName());
+            int timeId = getResources().getIdentifier(timeIdStr, "id", getPackageName());
+            int cardId = getResources().getIdentifier(cardIdStr, "id", getPackageName());
+
+            TextView tvDate = findViewById(dateId);
+            TextView tvDay = findViewById(dayId);
+            TextView tvTime = findViewById(timeId);
+            View card = findViewById(cardId);
+
+            String displayDate = slotData.getString("display_date").toUpperCase();
+            String dayName = slotData.getString("day_name");
+            String firstTime = slotData.getString("time");
+            String fullDate = slotData.getString("date");
+
+            if (tvDate != null) tvDate.setText(displayDate);
+            if (tvDay != null) tvDay.setText(dayName);
+            if (tvTime != null) tvTime.setText(firstTime);
+
+            if (card != null) {
+                card.setOnClickListener(v -> showPremiumTimeslotSheet(displayDate, dayName, fullDate));
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    private void showPremiumTimeslotSheet(String title, String subtitle, String fullDate) {
         BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
         View sheet = getLayoutInflater().inflate(R.layout.layout_premium_timeslot_sheet, null);
         dialog.setContentView(sheet);
@@ -313,64 +512,72 @@ public class AppointmentsActivity extends AppCompatActivity {
         View btnConfirmSlot = sheet.findViewById(R.id.btnConfirmSlot);
 
         tvSheetDate.setText(title + " • " + subtitle);
-
         btnSheetClose.setOnClickListener(v -> dialog.dismiss());
+        
+        final String[] clickedTime = {null};
         btnConfirmSlot.setOnClickListener(v -> {
-            if (selectedTimeSlotView != null) {
-                Toast.makeText(this, "Proceeding to book " + title + " at selected time", Toast.LENGTH_SHORT).show();
+            if (clickedTime[0] != null) {
                 dialog.dismiss();
+                Intent intent = new Intent(this, BookingActivity.class);
+                intent.putExtra("selected_date", fullDate);
+                intent.putExtra("selected_time", clickedTime[0]);
+                startActivity(intent);
             } else {
                 Toast.makeText(this, "Please select an available time slot", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Populate slots with 3D animation
-        selectedTimeSlotView = null;
-        for (int i = 0; i < slots.length; i++) {
-            View slotView = getLayoutInflater().inflate(R.layout.item_premium_timeslot, gridTimeSlots, false);
-            TextView tvTime = slotView.findViewById(R.id.tvTime);
-            tvTime.setText(slots[i]);
-            
-            // Staggered pop-in animation
-            slotView.setScaleX(0f);
-            slotView.setScaleY(0f);
-            slotView.setAlpha(0f);
-            slotView.animate()
-                .scaleX(1f).scaleY(1f).alpha(1f)
-                .setDuration(400)
-                .setStartDelay(i * 50L) // Stagger effect
-                .setInterpolator(new android.view.animation.OvershootInterpolator(1.2f))
-                .start();
-
-            slotView.setOnClickListener(v -> {
-                // Tactile push animation
-                v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(100).withEndAction(() -> {
-                    v.animate().scaleX(1f).scaleY(1f).setDuration(150).start();
-                }).start();
-
-                // Deselect previous
-                if (selectedTimeSlotView != null && selectedTimeSlotView != v) {
-                    selectedTimeSlotView.setBackgroundResource(R.drawable.bg_timeslot_3d_unselected);
-                    ((TextView) selectedTimeSlotView.findViewById(R.id.tvTime)).setTextColor(0xFF9CA3AF); // Light gray text
-                    selectedTimeSlotView.setElevation(6f); // Restore base 3D shadow
-                }
-
-                // Select current
-                selectedTimeSlotView = v;
-                v.setBackgroundResource(R.drawable.bg_timeslot_3d_selected); // Ultra premium cyan neon 3D
-                ((TextView) v.findViewById(R.id.tvTime)).setTextColor(0xFF001B3B); // Deep contrast dark blue
-                v.setElevation(14f); // Extreme neon glow effect
-            });
-
-            gridTimeSlots.addView(slotView);
-        }
-
-        // Apply visual bounce to root container when sheet opens
-        sheet.animate().translationY(50f).setDuration(0).withEndAction(() -> {
-            sheet.animate().translationY(0f).setDuration(500)
-                .setInterpolator(new android.view.animation.OvershootInterpolator(0.8f))
-                .start();
-        }).start();
+        // ══════════════════════════════════════════
+        //  FETCH LIVE SLOTS FROM API
+        // ══════════════════════════════════════════
+        String email = getSharedPreferences("AlagwaPrefs", MODE_PRIVATE).getString("email", "");
+        String username = getSharedPreferences("AlagwaPrefs", MODE_PRIVATE).getString("username", "");
+        int tenantId = getSharedPreferences("AlagwaPrefs", MODE_PRIVATE).getInt("tenant_id", 1);
+        String role = getSharedPreferences("AlagwaPrefs", MODE_PRIVATE).getString("role", "patient");
+        
+        apiService.getAvailableSlots("available_slots", "true", email, username, role, tenantId, fullDate).enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                try {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String raw = response.body().string();
+                        org.json.JSONObject json = new org.json.JSONObject(raw);
+                        if (json.getBoolean("success")) {
+                            org.json.JSONArray slots = json.getJSONArray("data");
+                            gridTimeSlots.removeAllViews();
+                            
+                            for (int i = 0; i < slots.length(); i++) {
+                                org.json.JSONObject slot = slots.getJSONObject(i);
+                                String displayTime = slot.getString("display").split("-")[0].trim();
+                                boolean available = slot.getBoolean("available");
+                                
+                                View slotView = getLayoutInflater().inflate(R.layout.item_premium_timeslot, gridTimeSlots, false);
+                                TextView tvTime = slotView.findViewById(R.id.tvTime);
+                                tvTime.setText(displayTime);
+                                
+                                if (!available) {
+                                    slotView.setAlpha(0.3f);
+                                    slotView.setEnabled(false);
+                                } else {
+                                    final String finalTime = displayTime;
+                                    slotView.setOnClickListener(v -> {
+                                        if (selectedTimeSlotView != null) {
+                                            selectedTimeSlotView.setBackgroundResource(R.drawable.bg_timeslot_3d_unselected);
+                                        }
+                                        selectedTimeSlotView = v;
+                                        clickedTime[0] = finalTime;
+                                        v.setBackgroundResource(R.drawable.bg_timeslot_3d_selected);
+                                    });
+                                }
+                                gridTimeSlots.addView(slotView);
+                            }
+                        }
+                    }
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+            @Override
+            public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {}
+        });
 
         dialog.show();
     }
@@ -390,13 +597,39 @@ public class AppointmentsActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             AppointmentResponse.Appointment appointment = list.get(position);
             
+            // IRON WALL PRIVACY CHECK (Frontend Guard)
+            // Ensure Dustin Pogi ONLY sees Dustin Pogi.
+            SharedPreferences userPrefs = holder.itemView.getContext().getSharedPreferences("AlagwaPrefs", MODE_PRIVATE);
+            String loggedInEmail = userPrefs.getString("email", "");
+            String loggedInFullname = userPrefs.getString("fullname", "");
+            String currentPatientName = appointment.getFullName();
+            
+            boolean isOwner = false;
+            if (appointment.email != null && !loggedInEmail.isEmpty() && appointment.email.equalsIgnoreCase(loggedInEmail)) {
+                isOwner = true;
+            } else if (currentPatientName != null && !loggedInFullname.isEmpty() && currentPatientName.equalsIgnoreCase(loggedInFullname)) {
+                isOwner = true;
+            }
+            
+            if (!isOwner) {
+                // If not the owner, hide the item completely
+                holder.itemView.setVisibility(View.GONE);
+                holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
+                return;
+            } else {
+                holder.itemView.setVisibility(View.VISIBLE);
+                holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
+
+            // Always set correct patient name to replace 'Maria Santos' placeholder
+            holder.tvPatient.setText(currentPatientName);
+            holder.tvService.setText(appointment.serviceType);
+
             String timeStr = (appointment.time != null) ? appointment.time : "09:00 AM";
             holder.tvDateTime.setText(timeStr + " - " + timeStr); 
 
             // PIXEL-PERFECT STATE MAPPING (MATCHING WEB)
             if ("Confirmed".equalsIgnoreCase(appointment.status)) {
-                holder.tvPatient.setText(appointment.patientName);
-                holder.tvService.setText(appointment.serviceType);
                 holder.tvDoctor.setText("Assigned: Dr. Cruz");
                 holder.tvStatus.setText("CONFIRMED");
                 holder.tvStatus.setTextColor(0xFF75FF68);
@@ -404,33 +637,164 @@ public class AppointmentsActivity extends AppCompatActivity {
                 holder.statusPulse.setBackgroundColor(0xFF75FF68);
                 holder.layoutActionsConfirmed.setVisibility(View.VISIBLE);
                 holder.layoutActionsPending.setVisibility(View.GONE);
+                holder.layoutActionsCompleted.setVisibility(View.GONE);
+                holder.layoutActionsRejected.setVisibility(View.GONE);
                 holder.ivTimeIcon.setImageTintList(android.content.res.ColorStateList.valueOf(0xFF00FBFB));
                 holder.tvDateTime.setTextColor(0xFF00FBFB);
                 holder.nodeCore.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFF00FBFB));
-            } else {
-                holder.tvPatient.setText(appointment.patientName);
-                holder.tvService.setText(appointment.serviceType);
-                holder.tvDoctor.setText("Assigned: Dr. Reyes");
-                holder.tvStatus.setText("PENDING");
-                holder.tvStatus.setTextColor(0xFF7701D0);
-                holder.containerStatus.setBackgroundResource(R.drawable.bg_status_pending);
-                holder.statusPulse.setBackgroundColor(0xFF7701D0);
+            } else if ("completed".equalsIgnoreCase(appointment.status)) {
+                holder.tvDoctor.setText("Assigned: Dr. Cruz");
+                holder.tvStatus.setText("COMPLETED");
+                holder.tvStatus.setTextColor(0xFFA855F7); // Purple
+                holder.containerStatus.setBackgroundResource(R.drawable.bg_status_confirmed);
+                holder.containerStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0x1AA855F7));
+                holder.statusPulse.setBackgroundColor(0xFFA855F7);
                 holder.layoutActionsConfirmed.setVisibility(View.GONE);
+                holder.layoutActionsPending.setVisibility(View.GONE);
+                holder.layoutActionsCompleted.setVisibility(View.VISIBLE);
+                holder.layoutActionsRejected.setVisibility(View.GONE);
+                holder.ivTimeIcon.setImageTintList(android.content.res.ColorStateList.valueOf(0xFFA855F7));
+                holder.tvDateTime.setTextColor(0xFFA855F7);
+                holder.nodeCore.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFA855F7));
+                
+                String nextVisit = (appointment.nextVisitDate != null && !appointment.nextVisitDate.isEmpty() && !appointment.nextVisitDate.equals("0000-00-00"))
+                        ? appointment.nextVisitDate : "NO FOLLOW-UP";
+                holder.tvNextVisitText.setText("NEXT VISIT: " + nextVisit);
+            } else if ("declined".equalsIgnoreCase(appointment.status) || "rejected".equalsIgnoreCase(appointment.status) || "cancelled".equalsIgnoreCase(appointment.status)) {
+                holder.tvDoctor.setText("Assigned: N/A");
+                holder.tvStatus.setText("REJECTED / CANCELLED");
+                holder.tvStatus.setTextColor(0xFFFF3B30); // Red
+                holder.containerStatus.setBackgroundResource(R.drawable.bg_status_pending);
+                holder.containerStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0x1AFF3B30));
+                holder.statusPulse.setBackgroundColor(0xFFFF3B30);
+                
+                holder.layoutActionsConfirmed.setVisibility(View.GONE);
+                holder.layoutActionsPending.setVisibility(View.GONE);
+                holder.layoutActionsCompleted.setVisibility(View.GONE);
+                holder.layoutActionsRejected.setVisibility(View.VISIBLE);
+                
+                holder.ivTimeIcon.setImageTintList(android.content.res.ColorStateList.valueOf(0xFFFF3B30));
+                holder.tvDateTime.setTextColor(0xFFFF3B30);
+                holder.nodeCore.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFFF3B30));
+                
+                holder.btnRebookRejected.setOnClickListener(v -> {
+                    Intent intent = new Intent(v.getContext(), BookingActivity.class);
+                    v.getContext().startActivity(intent);
+                });
+            } else {
+                // DEFAULT / PENDING
+                holder.tvDoctor.setText("Assigned: Dr. Cruz");
+                holder.tvStatus.setText("PENDING");
+                holder.tvStatus.setTextColor(0xFF00FFFF); // Neon Cyan
+                holder.containerStatus.setBackgroundResource(R.drawable.bg_status_pending);
+                holder.containerStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0x2200FFFF));
+                holder.statusPulse.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFF00FFFF));
+
                 holder.layoutActionsPending.setVisibility(View.VISIBLE);
-                holder.ivTimeIcon.setImageTintList(android.content.res.ColorStateList.valueOf(0x66FFFFFF));
-                holder.tvDateTime.setTextColor(0x66FFFFFF);
-                holder.nodeCore.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0x33B9CAC9));
+                holder.layoutActionsConfirmed.setVisibility(View.GONE);
+                holder.layoutActionsCompleted.setVisibility(View.GONE);
+                holder.layoutActionsRejected.setVisibility(View.GONE);
+            }
+
+            // DOWNPAYMENT CHECK
+            String dpStatus = (appointment.downpaymentStatus != null) ? appointment.downpaymentStatus.toLowerCase().trim() : "";
+            boolean isApptRejected = "declined".equalsIgnoreCase(appointment.status) || "rejected".equalsIgnoreCase(appointment.status) || "cancelled".equalsIgnoreCase(appointment.status);
+            
+            // CRITICAL FIX: Include 'cancelled' as a rejection state for downpayments.
+            // When an admin 'Declines' proof of payment in the billing dashboard, it sets status to 'cancelled'.
+            boolean isPaymentRejected = "declined".equals(dpStatus) || "rejected".equals(dpStatus) || "cancelled".equals(dpStatus);
+            
+            // If payment or appt is rejected, show Pick New Schedule instead of Pay
+            if (isApptRejected || isPaymentRejected) {
+                holder.tvStatus.setText("REJECTED / DECLINED");
+                holder.tvStatus.setTextColor(0xFFFF3B30); // RED GLOW
+                holder.containerStatus.setBackgroundResource(R.drawable.bg_glass_pill);
+                holder.containerStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0x26FF3B30));
+                holder.statusPulse.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFFF3B30));
+                
+                holder.layoutActionsConfirmed.setVisibility(View.GONE);
+                holder.layoutActionsPending.setVisibility(View.GONE);
+                holder.layoutActionsPayment.setVisibility(View.GONE);
+                holder.layoutActionsCompleted.setVisibility(View.GONE);
+                holder.layoutActionsRejected.setVisibility(View.VISIBLE);
+                
+                holder.ivTimeIcon.setImageTintList(android.content.res.ColorStateList.valueOf(0xFFFF3B30));
+                holder.tvDateTime.setTextColor(0xFFFF3B30);
+                holder.nodeCore.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFFF3B30));
+                
+                holder.btnRebookRejected.setOnClickListener(v -> {
+                    Intent intent = new Intent(v.getContext(), BookingActivity.class);
+                    v.getContext().startActivity(intent);
+                });
+            } else {
+                // Not rejected, continue with payment/approval logic
+                boolean needsPay    = ("unpaid".equals(dpStatus)) && appointment.downpaymentId != null;
+                boolean underReview = ("pending".equals(dpStatus) || "for_verification".equals(dpStatus)) && appointment.downpaymentId != null;
+
+                if (needsPay) {
+                    holder.layoutActionsPayment.setVisibility(View.VISIBLE);
+                    holder.layoutActionsConfirmed.setVisibility(View.GONE);
+                    holder.layoutActionsPending.setVisibility(View.GONE);
+                    holder.layoutActionsRejected.setVisibility(View.GONE);
+
+                    holder.tvStatus.setText("AWAITING DEPOSIT");
+                holder.tvStatus.setTextColor(0xFFFF4B8B);
+                holder.containerStatus.setBackgroundResource(R.drawable.bg_status_pending);
+                holder.containerStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0x1AFF4B8B));
+                holder.statusPulse.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFFF4B8B));
+
+                holder.btnPayDownpayment.setOnClickListener(v -> {
+                    // Refresh the downpayment ID from the passed intent extra
+                    Intent intent = new Intent(v.getContext(), BillingActivity.class);
+                    intent.putExtra("auto_pay_id", appointment.downpaymentId);
+                    v.getContext().startActivity(intent);
+                });
+            } else if (underReview) {
+                holder.layoutActionsPayment.setVisibility(View.GONE);
+                holder.layoutActionsConfirmed.setVisibility(View.GONE);
+                holder.layoutActionsPending.setVisibility(View.GONE);
+
+                holder.tvStatus.setText("UNDER REVIEW");
+                holder.tvStatus.setTextColor(0xFF4299F0);
+                holder.containerStatus.setBackgroundResource(R.drawable.bg_status_pending);
+                holder.containerStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0x1A4299F0));
+                holder.statusPulse.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFF4299F0));
+            } else {
+                holder.layoutActionsPayment.setVisibility(View.GONE);
+                    if (!isApptRejected) {
+                        holder.layoutActionsRejected.setVisibility(View.GONE);
+                    }
+                }
             }
             
+            holder.btnNextVisit.setOnClickListener(v -> {
+                String nextVisit = (appointment.nextVisitDate != null && !appointment.nextVisitDate.isEmpty() && !appointment.nextVisitDate.equals("0000-00-00"))
+                        ? appointment.nextVisitDate : "Not yet scheduled.";
+                String notes = (appointment.checkupNotes != null && !appointment.checkupNotes.isEmpty())
+                        ? appointment.checkupNotes : "Visit completed. No specific notes provided.";
+
+                new com.google.android.material.dialog.MaterialAlertDialogBuilder(v.getContext(), R.style.BottomSheetDialogTheme)
+                    .setTitle("Check-up Completed")
+                    .setMessage("Next Schedule: " + nextVisit + "\n\nDoctor's Notes:\n" + notes)
+                    .setPositiveButton("GOT IT", null)
+                    .show();
+            });
+
             holder.btnCancel.setOnClickListener(v -> Toast.makeText(v.getContext(), "Cancel requested", Toast.LENGTH_SHORT).show());
-            holder.btnReschedule.setOnClickListener(v -> Toast.makeText(v.getContext(), "Reschedule requested", Toast.LENGTH_SHORT).show());
+            holder.btnReschedule.setOnClickListener(v -> {
+                Intent intent = new Intent(v.getContext(), BookingActivity.class);
+                intent.putExtra("reschedule_booking_id", appointment.bookingId);
+                intent.putExtra("selected_date", appointment.date);
+                intent.putExtra("service_type", appointment.serviceType);
+                v.getContext().startActivity(intent);
+            });
         }
 
         @Override public int getItemCount() { return list.size(); }
         static class ViewHolder extends RecyclerView.ViewHolder {
-            TextView tvService, tvDoctor, tvDateTime, tvStatus, tvPatient;
-            View nodeCore, containerStatus, statusPulse, layoutActionsConfirmed, layoutActionsPending;
-            View btnCancel, btnReschedule;
+            TextView tvService, tvDoctor, tvDateTime, tvStatus, tvPatient, tvNextVisitText;
+            View nodeCore, containerStatus, statusPulse, layoutActionsConfirmed, layoutActionsPending, layoutActionsPayment, layoutActionsCompleted, layoutActionsRejected;
+            View btnCancel, btnReschedule, btnPayDownpayment, btnNextVisit, btnRebookRejected;
             ImageView ivTimeIcon;
             ViewHolder(View v) { super(v); 
                 tvService = v.findViewById(R.id.tvServiceType);
@@ -443,9 +807,16 @@ public class AppointmentsActivity extends AppCompatActivity {
                 statusPulse = v.findViewById(R.id.statusPulse);
                 layoutActionsConfirmed = v.findViewById(R.id.layoutActionsConfirmed);
                 layoutActionsPending = v.findViewById(R.id.layoutActionsPending);
+                layoutActionsPayment = v.findViewById(R.id.layoutActionsPayment);
+                layoutActionsCompleted = v.findViewById(R.id.layoutActionsCompleted);
+                layoutActionsRejected = v.findViewById(R.id.layoutActionsRejected);
                 ivTimeIcon = v.findViewById(R.id.ivTimeIcon);
                 btnCancel = v.findViewById(R.id.btnCancel);
                 btnReschedule = v.findViewById(R.id.btnReschedule);
+                btnPayDownpayment = v.findViewById(R.id.btnPayDownpayment);
+                btnNextVisit = v.findViewById(R.id.btnNextVisit);
+                btnRebookRejected = v.findViewById(R.id.btnRebookRejected);
+                tvNextVisitText = v.findViewById(R.id.tvNextVisitText);
             }
         }
     }

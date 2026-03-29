@@ -3,57 +3,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="32dp">
+    android:paddingBottom="48dp"
+    android:clipToPadding="false">
 
-    <!-- VERTICAL TIMELINE: QUANTUM NEBULA GLOW -->
+    <!-- ══════════════════════════════════════════ -->
+    <!--  VERTICAL TIMELINE LINE                    -->
+    <!-- ══════════════════════════════════════════ -->
     <View
         android:id="@+id/timelineLine"
-        android:layout_width="2.5dp"
+        android:layout_width="2dp"
         android:layout_height="0dp"
-        android:layout_marginStart="24dp"
-        android:background="@drawable/bg_pill_gradient_cyan"
-        android:alpha="0.2"
+        android:layout_marginStart="30dp"
+        android:background="#1AFFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- QUANTUM NODE: ORBITAL GLOW -->
     <RelativeLayout
         android:id="@+id/nodeContainer"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:layout_marginStart="7dp"
+        android:layout_marginStart="13dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/cardContent"
-        app:layout_constraintBottom_toBottomOf="@id/cardContent"
-        app:layout_constraintVertical_bias="0.5">
-        
+        app:layout_constraintBottom_toBottomOf="@id/cardContent">
         <View
             android:id="@+id/nodePulse"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg_glass_circle"
-            android:alpha="0.3"
-            android:backgroundTint="@color/neo_cyan" />
-
+            android:alpha="0.1"
+            android:backgroundTint="#00F2FF" />
         <View
             android:id="@+id/nodeCore"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:layout_centerInParent="true"
             android:background="@drawable/bg_glass_circle"
-            android:backgroundTint="@color/neo_cyan"
-            android:elevation="6dp" />
+            android:backgroundTint="#00F2FF" />
     </RelativeLayout>
 
+    <!-- ══════════════════════════════════════════ -->
+    <!--  SLIM-FINITY GLASS CARD: ULTRA AESTHETIC   -->
+    <!-- ══════════════════════════════════════════ -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginTop="12dp"
         app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="28dp"
+        app:cardCornerRadius="20dp"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/nodeContainer"
@@ -62,64 +63,186 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_glass_card_billing"
+            android:background="@drawable/bg_glass_card_navy_premium"
             android:orientation="vertical"
-            android:padding="22dp">
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="14dp">
 
-            <!-- HEADER: HI-FI GLOW -->
-            <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="18dp">
-                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical">
-                    <ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@android:drawable/ic_menu_recent_history" android:id="@+id/ivTimeIcon" app:tint="#00F2FF" />
-                    <TextView android:id="@+id/tvDateTime" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="10dp" android:fontFamily="sans-serif-black" android:text="9:00 AM - 9:30 AM" android:textColor="#00F2FF" android:textSize="10.5sp" android:letterSpacing="0.05" />
+            <!-- HEADER ROWS -->
+            <RelativeLayout 
+                android:layout_width="match_parent" 
+                android:layout_height="wrap_content" 
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout 
+                    android:layout_width="wrap_content" 
+                    android:layout_height="wrap_content" 
+                    android:gravity="center_vertical"
+                    android:layout_centerVertical="true">
+                    <ImageView 
+                        android:id="@+id/ivTimeIcon"
+                        android:layout_width="12dp" 
+                        android:layout_height="12dp" 
+                        android:src="@android:drawable/ic_menu_recent_history" 
+                        app:tint="#88FFFFFF" />
+                    <TextView 
+                        android:id="@+id/tvDateTime" 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" 
+                        android:layout_marginStart="8dp" 
+                        android:fontFamily="sans-serif-medium" 
+                        android:text="09:00 AM" 
+                        android:textColor="#88FFFFFF" 
+                        android:textSize="10sp" />
                 </LinearLayout>
 
-                <LinearLayout android:id="@+id/containerStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:background="@drawable/bg_glass_pill" android:backgroundTint="#1A00FF87" android:paddingHorizontal="12dp" android:paddingVertical="5dp" android:gravity="center">
-                    <View android:id="@+id/statusPulse" android:layout_width="5dp" android:layout_height="5dp" android:background="@drawable/bg_mocha_circle" android:backgroundTint="#00FF87" />
-                    <TextView android:id="@+id/tvStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:fontFamily="sans-serif-black" android:text="CONFIRMED" android:textColor="#00FF87" android:textSize="8.5sp" android:letterSpacing="0.08" />
+                <LinearLayout 
+                    android:id="@+id/containerStatus" 
+                    android:layout_width="wrap_content" 
+                    android:layout_height="wrap_content" 
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/bg_glass_pill" 
+                    android:backgroundTint="#0DFFFFFF" 
+                    android:paddingHorizontal="10dp" 
+                    android:paddingVertical="4.5dp" 
+                    android:gravity="center">
+                    <View 
+                        android:id="@+id/statusPulse" 
+                        android:layout_width="4dp" 
+                        android:layout_height="4dp" 
+                        android:background="@drawable/bg_circle_white" 
+                        android:backgroundTint="#00F2FF" />
+                    <TextView 
+                        android:id="@+id/tvStatus" 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" 
+                        android:layout_marginStart="6dp" 
+                        android:fontFamily="sans-serif-black" 
+                        android:text="PENDING" 
+                        android:textColor="#00F2FF" 
+                        android:textSize="8sp" 
+                        android:letterSpacing="0.05" />
                 </LinearLayout>
             </RelativeLayout>
 
-            <!-- PATIENT: PRO TYPOGRAPHY -->
-            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical">
-                <RelativeLayout android:layout_width="44dp" android:layout_height="44dp" android:background="@drawable/bg_glass_circle" android:backgroundTint="#1AFFFFFF">
-                    <ImageView android:layout_width="20dp" android:layout_height="20dp" android:layout_centerInParent="true" android:src="@android:drawable/ic_menu_myplaces" app:tint="@color/white" android:alpha="0.9" />
+            <!-- MAIN INFO -->
+            <LinearLayout 
+                android:layout_width="match_parent" 
+                android:layout_height="wrap_content" 
+                android:gravity="center_vertical">
+                
+                <RelativeLayout 
+                    android:layout_width="38dp" 
+                    android:layout_height="38dp" 
+                    android:background="@drawable/bg_glass_circle" 
+                    android:backgroundTint="#1AFFFFFF">
+                    <ImageView 
+                        android:layout_width="15dp" 
+                        android:layout_height="15dp" 
+                        android:layout_centerInParent="true" 
+                        android:src="@android:drawable/ic_menu_myplaces" 
+                        app:tint="@color/white" />
                 </RelativeLayout>
                 
-                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:orientation="vertical">
-                    <TextView android:id="@+id/tvPatientName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="sans-serif-black" android:text="Maria Santos" android:textColor="@color/white" android:textSize="18sp" android:letterSpacing="-0.01" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="REGISTERED PATIENT • 2026" android:textColor="#BBFFD8" android:textSize="8.5sp" android:fontFamily="sans-serif-bold" android:letterSpacing="0.1" android:alpha="0.6" />
+                <LinearLayout 
+                    android:layout_width="wrap_content" 
+                    android:layout_height="wrap_content" 
+                    android:layout_marginStart="14dp" 
+                    android:orientation="vertical">
+                    <TextView 
+                        android:id="@+id/tvPatientName" 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" 
+                        android:fontFamily="sans-serif-black" 
+                        android:text="Patient Name" 
+                        android:textColor="@color/white" 
+                        android:textSize="16sp" />
+                    <TextView 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" 
+                        android:text="REGISTERED PATIENT" 
+                        android:textColor="#80FFFFFF" 
+                        android:textSize="8sp" 
+                        android:fontFamily="sans-serif-bold" />
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- DETAILS GRID -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:orientation="vertical">
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginBottom="10dp" android:background="@drawable/bg_glass_pill" android:backgroundTint="#0DFFFFFF" android:paddingHorizontal="14dp" android:paddingVertical="8dp">
-                    <ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@android:drawable/ic_menu_send" app:tint="#00F2FF" />
-                    <TextView android:id="@+id/tvServiceType" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:fontFamily="sans-serif-medium" android:text="Prenatal Check-up" android:textColor="@color/white" android:textSize="11.5sp" android:alpha="0.9" />
+            <!-- SLIM DETAILS -->
+            <LinearLayout 
+                android:layout_width="match_parent" 
+                android:layout_height="wrap_content" 
+                android:layout_marginTop="14dp" 
+                android:orientation="vertical">
+                <LinearLayout 
+                    android:layout_width="match_parent" 
+                    android:layout_height="wrap_content" 
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="5dp">
+                    <ImageView 
+                        android:layout_width="10dp" 
+                        android:layout_height="10dp" 
+                        android:src="@android:drawable/ic_menu_send" 
+                        app:tint="#00F2FF" />
+                    <TextView 
+                        android:id="@+id/tvServiceType" 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" 
+                        android:layout_marginStart="8dp" 
+                        android:fontFamily="sans-serif-medium" 
+                        android:text="Service Type" 
+                        android:textColor="#CCFFFFFF" 
+                        android:textSize="11sp" />
                 </LinearLayout>
-                
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:background="@drawable/bg_glass_pill" android:backgroundTint="#0DFFFFFF" android:paddingHorizontal="14dp" android:paddingVertical="8dp">
-                    <ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@android:drawable/ic_menu_help" app:tint="#BFFF69" />
-                    <TextView android:id="@+id/tvDoctorName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:fontFamily="sans-serif-medium" android:text="Assigned: Dr. Cruz" android:textColor="@color/white" android:textSize="11.5sp" android:alpha="0.8" />
+                <LinearLayout 
+                    android:layout_width="match_parent" 
+                    android:layout_height="wrap_content" 
+                    android:gravity="center_vertical">
+                    <ImageView 
+                        android:layout_width="10dp" 
+                        android:layout_height="10dp" 
+                        android:src="@android:drawable/ic_menu_help" 
+                        app:tint="#BFFF69" />
+                    <TextView 
+                        android:id="@+id/tvDoctorName" 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" 
+                        android:layout_marginStart="8dp" 
+                        android:fontFamily="sans-serif-medium" 
+                        android:text="Assigned Doctor" 
+                        android:textColor="#99FFFFFF" 
+                        android:textSize="11sp" />
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- HI-FI ACTIONS: PRO 3D -->
-            <LinearLayout android:id="@+id/layoutActionsConfirmed" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="24dp" android:orientation="horizontal">
-                <RelativeLayout android:id="@+id/btnCancel" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="10dp" android:background="@drawable/bg_button_ultra_3d" android:backgroundTint="@color/neo_cyan" android:clickable="true" android:focusable="true">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:text="CANCEL" android:textColor="@color/white" android:textSize="10sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
-                </RelativeLayout>
-                
-                <RelativeLayout android:id="@+id/btnReschedule" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1.2" android:background="@drawable/bg_3d_real_glass" android:clickable="true" android:focusable="true">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:text="RESCHEDULE" android:textColor="@color/white" android:textSize="10sp" android:fontFamily="sans-serif-black" android:letterSpacing="0.1" />
-                </RelativeLayout>
-            </LinearLayout>
+            <!-- ACTIONS COMPATIBILITY LAYER -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
 
-            <!-- ACTIONS FOR PENDING -->
-            <LinearLayout android:id="@+id/layoutActionsPending" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="24dp" android:orientation="horizontal" android:visibility="gone">
-                <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="10dp" android:background="@drawable/bg_button_schedule_neon" android:gravity="center" android:text="CONFIRM" android:textColor="@color/white" android:textSize="10sp" android:fontFamily="sans-serif-black" />
-                <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@drawable/bg_3d_real_glass" android:gravity="center" android:text="CLOSE" android:textColor="@color/white" android:textSize="10sp" android:fontFamily="sans-serif-black" />
-            </LinearLayout>
+                <LinearLayout android:id="@+id/layoutActionsPending" android:layout_width="match_parent" android:layout_height="36dp" android:orientation="horizontal" android:visibility="gone">
+                    <RelativeLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="8dp" android:background="@drawable/bg_pro_max_button" android:backgroundTint="#FFFFFF"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:text="SECURE SLOT" android:textColor="#0A0F1F" android:textSize="9.5sp" android:fontFamily="sans-serif-black" /></RelativeLayout>
+                    <RelativeLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="0.8" android:background="@drawable/bg_glass_pill" android:backgroundTint="#0DFFFFFF"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:text="MODIFY" android:textColor="@color/white" android:textSize="9.5sp" android:fontFamily="sans-serif-bold" /></RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/layoutActionsRejected" android:layout_width="match_parent" android:layout_height="36dp" android:visibility="gone">
+                    <RelativeLayout android:id="@+id/btnRebookRejected" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/bg_pro_max_button" android:backgroundTint="#FF3B30"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:text="PICK NEW SCHEDULE" android:textColor="@color/white" android:textSize="9.5sp" android:fontFamily="sans-serif-black" /></RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/layoutActionsPayment" android:layout_width="match_parent" android:layout_height="36dp" android:visibility="gone">
+                    <RelativeLayout android:id="@+id/btnPayDownpayment" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/bg_pro_max_button" android:backgroundTint="#FF3B8E"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:text="SEND ₱300 DEPOSIT" android:textColor="@color/white" android:textSize="9.5sp" android:fontFamily="sans-serif-black" /></RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/layoutActionsCompleted" android:layout_width="match_parent" android:layout_height="36dp" android:visibility="gone">
+                    <RelativeLayout android:id="@+id/btnNextVisit" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/bg_pro_max_button" android:backgroundTint="#A855F7"><TextView android:id="@+id/tvNextVisitText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:text="VIEW RECOMMENDATIONS" android:textColor="@color/white" android:textSize="9.5sp" android:fontFamily="sans-serif-black" /></RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/layoutActionsConfirmed" android:layout_width="match_parent" android:layout_height="36dp" android:orientation="horizontal" android:visibility="gone">
+                    <RelativeLayout android:id="@+id/btnCancel" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="8dp" android:background="@drawable/bg_glass_pill" android:backgroundTint="#0DFFFFFF"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:text="CANCEL" android:textColor="@color/white" android:textSize="9.5sp" android:fontFamily="sans-serif-bold" /></RelativeLayout>
+                    <RelativeLayout android:id="@+id/btnReschedule" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1.2" android:background="@drawable/bg_pro_max_button" android:backgroundTint="#00F2FF"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:text="RESCHEDULE" android:textColor="#0A0F1F" android:textSize="9.5sp" android:fontFamily="sans-serif-black" /></RelativeLayout>
+                </LinearLayout>
+
+            </FrameLayout>
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

@@ -25,11 +25,14 @@ public class RecordsActivity extends AppCompatActivity implements CheckupAdapter
     private TextView tvLatestWeight, tvLatestBP, tvLatestFHT, tvLatestAOG;
     
     private ApiService apiService;
+    private android.content.SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_records);
+        
+        prefs = getSharedPreferences("AlagwaPrefs", MODE_PRIVATE);
         
         // 1. Navigation Setup
         NavigationHelper.setupBottomNav(this);
@@ -37,8 +40,8 @@ public class RecordsActivity extends AppCompatActivity implements CheckupAdapter
         // 2. Bind Views
         bindViews();
         
-        // 3. Initialize Networking
-        apiService = RetrofitClient.getClient().create(ApiService.class);
+        // 3. Initialize Networking (Automatic AES challenge solver)
+        apiService = InfinityFreeClient.buildRetrofit(prefs).create(ApiService.class);
         
         // 4. Setup RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -58,13 +61,39 @@ public class RecordsActivity extends AppCompatActivity implements CheckupAdapter
     }
 
     private void fetchCheckupHistory() {
-        apiService.getCheckupHistory("get_checkup_history", "true")
-                .enqueue(new Callback<CheckupHistoryResponse>() {
+        String email = prefs.getString("email", "");
+        String username = prefs.getString("username", "");
+        String role = prefs.getString("role", "patient");
+        int tenantId = prefs.getInt("tenant_id", 1);
+        apiService.getCheckupHistoryRaw("get_checkup_history", "true", email, username, role, tenantId)
+                .enqueue(new Callback<okhttp3.ResponseBody>() {
                     @Override
-                    public void onResponse(Call<CheckupHistoryResponse> call, Response<CheckupHistoryResponse> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            CheckupHistoryResponse history = response.body();
-                            if (history.success && history.data != null) {
+                    public void onResponse(Call<okhttp3.ResponseBody> call, Response<okhttp3.ResponseBody> response) {
+                        try {
+                            if (!response.isSuccessful() || response.body() == null) {
+                                Log.e(TAG, "API Response Fail: " + response.code());
+                                return;
+                            }
+                            
+                            String raw = response.body().string();
+                            
+                            // ── SENSITIVE RESPONSE CLEANING ────────────────────
+                            // If we still see common HTML/JS artifacts, it means the challenge was missed
+                            if (raw.contains("<html>") || raw.contains("slowAES")) {
+                                Log.e(TAG, "Network blocked by host (Challenge not solved).");
+                                return;
+                            }
+
+                            int start = raw.indexOf('{');
+                            if (start < 0) {
+                                Log.e(TAG, "No JSON found: " + raw.substring(0, Math.min(100, raw.length())));
+                                return;
+                            }
+                            raw = raw.substring(start);
+                            Log.d(TAG, "CLEANED RAW: " + raw);
+                            
+                            CheckupHistoryResponse history = new com.google.gson.Gson().fromJson(raw, CheckupHistoryResponse.class);
+                            if (history != null && history.success && history.data != null) {
                                 checkupList.clear();
                                 checkupList.addAll(history.data);
                                 adapter.notifyDataSetChanged();
@@ -74,15 +103,15 @@ public class RecordsActivity extends AppCompatActivity implements CheckupAdapter
                                     updateLatestVitals(checkupList.get(0));
                                 }
                             } else {
-                                Log.e(TAG, "API Success False: " + history.message);
+                                Log.e(TAG, "API Success False: " + (history != null ? history.message : "null"));
                             }
-                        } else {
-                            Log.e(TAG, "API Response Fail: " + response.code());
+                        } catch (Exception e) {
+                            Log.e(TAG, "Parse Error: " + e.getMessage());
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<CheckupHistoryResponse> call, Throwable t) {
+                    public void onFailure(Call<okhttp3.ResponseBody> call, Throwable t) {
                         Log.e(TAG, "API Connect Fail: " + t.getMessage());
                         Toast.makeText(RecordsActivity.this, "Connection Error", Toast.LENGTH_SHORT).show();
                     }
@@ -96,11 +125,7 @@ public class RecordsActivity extends AppCompatActivity implements CheckupAdapter
         
         // For AOG, we use BPD as a placeholder if AOG field isn't explicitly in the Checkup yet
         if (tvLatestAOG != null) {
-            if (latest.bpd != null && !latest.bpd.isEmpty()) {
-                tvLatestAOG.setText(latest.bpd + " mil");
-            } else {
-                tvLatestAOG.setText(latest.checkupTime);
-            }
+            tvLatestAOG.setText(latest.aogWeeks != null ? latest.aogWeeks + " Weeks" : "--");
         }
     }
 
@@ -130,7 +155,7 @@ public class RecordsActivity extends AppCompatActivity implements CheckupAdapter
         if (tvDetailWeight != null) tvDetailWeight.setText(checkup.weight != null ? checkup.weight + " kg" : "--");
         if (tvDetailBP != null) tvDetailBP.setText(checkup.bloodPressure != null ? checkup.bloodPressure : "--/--");
         if (tvDetailFHT != null) tvDetailFHT.setText(checkup.fht != null ? checkup.fht + " bpm" : "--");
-        if (tvDetailAOG != null) tvDetailAOG.setText(checkup.checkupDate);
+        if (tvDetailAOG != null) tvDetailAOG.setText(checkup.aogWeeks != null ? checkup.aogWeeks + " Weeks" : "N/A");
         
         if (tvBPD != null) tvBPD.setText(checkup.bpd != null && !checkup.bpd.isEmpty() ? checkup.bpd + " mm" : "N/A");
         if (tvAC != null) tvAC.setText(checkup.ac != null && !checkup.ac.isEmpty() ? checkup.ac + " mm" : "N/A");

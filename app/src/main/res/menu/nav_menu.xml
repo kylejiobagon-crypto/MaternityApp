@@ -6,6 +6,10 @@
             android:icon="@android:drawable/stat_notify_chat"
             android:title="Chat" />
         <item
+            android:id="@+id/nav_wallet"
+            android:icon="@android:drawable/ic_menu_agenda"
+            android:title="Downpayments Wallet" />
+        <item
             android:id="@+id/nav_logout"
             android:icon="@android:drawable/ic_lock_power_off"
             android:title="Log Out" />

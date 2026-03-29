@@ -32,11 +32,33 @@ public class AppointmentResponse {
         @SerializedName("status")
         public String status;
 
+        @SerializedName("downpayment_status")
+        public String downpaymentStatus;
+
+        @SerializedName("downpayment_id")
+        public Integer downpaymentId;
+
         @SerializedName("notes")
         public String notes;
 
         @SerializedName("patient_name")
         public String patientName;
+
+        @SerializedName("email")
+        public String email;
+
+        @SerializedName("first_name")
+        public String firstName;
+
+        @SerializedName("last_name")
+        public String lastName;
+
+        public String getFullName() {
+            if (patientName != null && !patientName.isEmpty()) return patientName;
+            if (firstName != null && lastName != null) return firstName + " " + lastName;
+            if (firstName != null) return firstName;
+            return "Unknown Patient";
+        }
 
         @SerializedName("next_visit_date")
         public String nextVisitDate;
